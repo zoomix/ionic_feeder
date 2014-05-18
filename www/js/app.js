@@ -21,13 +21,12 @@ angular.module('starter', ['ionic'])
 .controller('CounterCtrl', function($scope, $timeout) {
   $scope.feedings = [];
 
-setTimeout(function(){
-  $scope.$apply(function() {
+  setTimeout(function(){
       storage.allData(function (rows) {
         $scope.feedings = rows;
+        $scope.$apply();
       });
-  });
-});
+  }, 1);
 
   $scope.currentFeeding = false;
   var mytimeout = null;
