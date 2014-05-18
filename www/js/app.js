@@ -20,11 +20,20 @@ angular.module('starter', ['ionic'])
 
 .controller('CounterCtrl', function($scope, $timeout) {
   $scope.feedings = [];
+
+setTimeout(function(){
+  $scope.$apply(function() {
+      storage.allData(function (rows) {
+        $scope.feedings = rows;
+      });
+  });
+});
+
   $scope.currentFeeding = false;
   var mytimeout = null;
 
   $scope.onTimeout = function(){
-    $scope.currentFeeding.duration++;
+    $scope.currentFeeding.duration += 1000;
     mytimeout = $timeout($scope.onTimeout,1000);
   };
 
@@ -32,10 +41,11 @@ angular.module('starter', ['ionic'])
     console.log("toggleFeeding with supplier " + supplier);
     if($scope.currentFeeding) {
       $timeout.cancel(mytimeout);
-      $scope.feedings.push($scope.currentFeeding);
+      storage.store($scope.currentFeeding);
+      $scope.feedings.unshift($scope.currentFeeding);
       $scope.currentFeeding = false;
     } else {
-      $scope.currentFeeding = { supplier: supplier, startTime: new Date().format(DATE_FORMAT), duration: 0, volume: 0 };
+      $scope.currentFeeding = { supplier: supplier, startTime: new Date(), duration: 0, volume: 0 };
       mytimeout = $timeout($scope.onTimeout,1000);
     }
   };

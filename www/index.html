@@ -24,30 +24,29 @@
   </head>
   <body ng-app="starter">
 
-    <ion-pane  ng-controller="CounterCtrl">
-      <ion-header-bar class="bar-stable">
-        <h1 class="title">Ionic Blank Starter</h1>
-      </ion-header-bar>
+    <ion-pane ng-controller="CounterCtrl">
       <ion-content>
-        <button ng-click="toggleFeeding('L')">Left</button> 
-        <button ng-click="toggleFeeding('R')">Right</button> 
+        <div class="suppliers">
+          <a class="button button-large breastL" ng-click="toggleFeeding('L')">L</a> 
+          <a class="button button-large breastR" ng-click="toggleFeeding('R')">R</a> 
+        </div>
 
-<!--        <ion-scroll> -->
+       <!-- <ion-scroll> -->
           <ion-list>
             <div class="ongoing">
               <span class="supplier">{{currentFeeding.supplier}}</span>
-              <span class="starttime">{{currentFeeding.startTime}}</span>
-              <span class="duration">{{currentFeeding.duration}}</span>
+              <span class="starttime">{{currentFeeding.startTime | date:'yyyy-MM-dd HH:mm'}}</span>
+              <span class="duration">{{currentFeeding.duration | date:'mm:ss'}}</span>
               <!-- <span class="volume">{{currentFeeding.volume}}</span> -->
             </div>
             <ion-item ng-repeat="feeding in feedings">
               <span class="supplier">{{feeding.supplier}}</span>
-              <span class="starttime">{{feeding.startTime}}</span>
-              <span class="duration">{{feeding.duration}}</span>
+              <span class="starttime">{{feeding.startTime | date:'yyyy-MM-dd HH:mm'}}</span>
+              <span class="duration">{{feeding.duration | date:'mm:ss'}}</span>
               <!-- <span class="volume">{{feeding.volume}}</span> -->
             </ion-item>
           </ion-list>
-<!--        </ion-scroll> -->
+       <!-- </ion-scroll> -->
 
       </ion-content>
     </ion-pane>

@@ -1,3 +1,9 @@
 /* Empty. Add your own CSS if you like */
 
-.ongoing { font-size: 24px}
+.ongoing { font-size: 24px }
+
+.supplier {
+	width: 100%;
+	height: 150px;
+	position: relative;
+}
