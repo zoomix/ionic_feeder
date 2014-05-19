@@ -120,10 +120,10 @@ var storage = {
 
   allData: function(resultCB) {
     if(!this.db) {
-      resultCB([ {id: 1, startTime: new Date(), supplier: 'L', duration: 123000, volume: 0} ]);
+      // Give some test data back
+      resultCB([ {id: 1, startTime: new Date().getTime(), supplier: 'L', duration: 123000, volume: 0} ]);
       return;
     }
-    alert("allData");
     this.db.transaction(function(tx) {
       tx.executeSql('SELECT * FROM DEMO', [], function(tx, results) {
         var rows = []
@@ -143,7 +143,6 @@ var storage = {
       console.log("Could not store. Db not initialized");
       return;
     }
-    alert("storing");
     this.db.transaction(function(tx) {
       tx.executeSql('INSERT INTO DEMO (id,                                     startTime,               supplier,               duration,               volume) VALUES ' + 
                                      '(' + Math.round(Math.random()*1000) + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '")');

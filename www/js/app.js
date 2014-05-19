@@ -44,7 +44,7 @@ angular.module('starter', ['ionic'])
       $scope.feedings.unshift($scope.currentFeeding);
       $scope.currentFeeding = false;
     } else {
-      $scope.currentFeeding = { supplier: supplier, startTime: new Date(), duration: 0, volume: 0 };
+      $scope.currentFeeding = { supplier: supplier, startTime: new Date().getTime(), duration: 0, volume: 0 };
       mytimeout = $timeout($scope.onTimeout,1000);
     }
   };

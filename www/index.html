@@ -35,14 +35,14 @@
           <ion-list>
             <div class="ongoing">
               <span class="supplier">{{currentFeeding.supplier}}</span>
-              <span class="starttime">{{currentFeeding.startTime | date:'yyyy-MM-dd HH:mm'}}</span>
-              <span class="duration">{{currentFeeding.duration | date:'mm:ss'}}</span>
+              <span class="starttime">{{currentFeeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
+              <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
               <!-- <span class="volume">{{currentFeeding.volume}}</span> -->
             </div>
             <ion-item ng-repeat="feeding in feedings">
               <span class="supplier">{{feeding.supplier}}</span>
-              <span class="starttime">{{feeding.startTime | date:'yyyy-MM-dd HH:mm'}}</span>
-              <span class="duration">{{feeding.duration | date:'mm:ss'}}</span>
+              <span class="starttime">{{feeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
+              <span class="duration">{{feeding.duration | date:'m:ss'}}</span>
               <!-- <span class="volume">{{feeding.volume}}</span> -->
             </ion-item>
           </ion-list>
