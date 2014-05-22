@@ -21,6 +21,8 @@ angular.module('starter', ['ionic'])
 .controller('CounterCtrl', function($scope, $timeout) {
   $scope.feedings = [];
   $scope.currentFeeding = false;
+  $scope.leftSign = "L";
+  $scope.rightSign= "R";
 
   setTimeout(function(){
       storage.allData(function (rows) {
@@ -28,8 +30,7 @@ angular.module('starter', ['ionic'])
           var lastRow = rows[rows.length - 1];
           if(lastRow.ongoing) {
             rows.pop();
-            $scope.currentFeeding = lastRow;
-            mytimeout = $timeout($scope.onTimeout,1000);
+            $scope.continue(lastRow);
           }
         }
         $scope.feedings = rows;
@@ -43,23 +44,42 @@ angular.module('starter', ['ionic'])
     $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
     mytimeout = $timeout($scope.onTimeout,1000);
     storage.store($scope.currentFeeding);
-    if ($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
+    if($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
       $scope.toggleFeeding($scope.currentFeeding.supplier);
     }
   };
 
   $scope.toggleFeeding = function(supplier) {
-    console.log("toggleFeeding with supplier " + supplier);
     if($scope.currentFeeding) {
-      $timeout.cancel(mytimeout);
-      $scope.feedings.unshift($scope.currentFeeding);
-      $scope.currentFeeding.ongoing = false;
-      storage.store($scope.currentFeeding);
-      $scope.currentFeeding = false;
+      $scope.finnish(supplier);
     } else {
-      $scope.currentFeeding = { supplier: supplier, startTime: new Date().getTime(), duration: 0, volume: 0, ongoing: true };
-      mytimeout = $timeout($scope.onTimeout,1000);
+      $scope.begin(supplier);
     }
   };
+
+  $scope.begin = function(supplier) {
+    $scope.continue({ supplier: supplier, startTime: new Date().getTime(), duration: 0, volume: 0, ongoing: true });
+  }
+
+  $scope.continue = function(feeding) {
+    $scope.currentFeeding = feeding;    
+    mytimeout = $timeout($scope.onTimeout,1000);
+    if(feeding.supplier === 'L') {
+      $scope.leftSign = "...";
+    } else if(feeding.supplier === 'R') {
+      $scope.rightSign = "...";
+    }
+  }
+
+  $scope.finnish = function(supplier) {
+    $timeout.cancel(mytimeout);
+    $scope.feedings.unshift($scope.currentFeeding);
+    $scope.currentFeeding.ongoing = false;
+    storage.store($scope.currentFeeding);
+    $scope.currentFeeding = false;
+    $scope.leftSign = 'L';
+    $scope.rightSign= 'R';
+  }
+
 
 })
