@@ -23,30 +23,56 @@ angular.module('starter', ['ionic'])
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
+  $scope.timeSinceLast = "";
+  $scope.timeSinceLastSuffix = "";
+
+  $scope.setTimeSinceLast = function() {
+    if($scope.feedings.length == 0) {
+      $scope.timeSinceLast = ".. well.. never";
+      $scope.timeSinceLastSuffix = ".";
+    } else {
+      var latestRow = $scope.feedings[0]; //Remember. The rows are in reverse order.
+      var feedingTooRecent = ((new Date().getTime()) - latestRow.startTime) < 60 * 1000; 
+      if (feedingTooRecent) {
+        $scope.timeSinceLast = "just now";
+        $scope.timeSinceLastSuffix = ".";
+      } else {
+        var sinceLastStart = app.getTimeAgo((new Date().getTime()) - latestRow.startTime);
+        var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - latestRow.startTime - latestRow.duration);
+        $scope.timeSinceLast = sinceLastStart + " (" + sinceLastEnd + ") ";
+        $scope.timeSinceLastSuffix = "ago.";
+      }
+    }
+  }
 
   setTimeout(function(){
       storage.allData(function (rows) {
         if(rows.length > 0) {
-          var lastRow = rows[rows.length - 1];
-          if(lastRow.ongoing) {
-            rows.pop();
-            $scope.continue(lastRow);
+          var latestRow = rows[0]; //Remember. The rows are in reverse order.
+          if(latestRow.ongoing) {
+            rows.shift();
+            $scope.continue(latestRow);
           }
         }
         $scope.feedings = rows;
+        $scope.setTimeSinceLast();
         $scope.$apply();
+        mytimeout = $timeout($scope.onTimeout,1000);
       });
   }, 1);
 
   var mytimeout = null;
 
   $scope.onTimeout = function(){
-    $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
-    mytimeout = $timeout($scope.onTimeout,1000);
-    storage.store($scope.currentFeeding);
-    if($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
-      $scope.toggleFeeding($scope.currentFeeding.supplier);
+    if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
+      $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
+      storage.store($scope.currentFeeding);
+      if($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
+        $scope.toggleFeeding($scope.currentFeeding.supplier);
+      }
     }
+    $scope.setTimeSinceLast();  
+    mytimeout = $timeout($scope.onTimeout,1000);
   };
 
   $scope.toggleFeeding = function(supplier) {
@@ -63,7 +89,6 @@ angular.module('starter', ['ionic'])
 
   $scope.continue = function(feeding) {
     $scope.currentFeeding = feeding;    
-    mytimeout = $timeout($scope.onTimeout,1000);
     if(feeding.supplier === 'L') {
       $scope.leftSign = "...";
     } else if(feeding.supplier === 'R') {
@@ -72,7 +97,6 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.finnish = function(supplier) {
-    $timeout.cancel(mytimeout);
     $scope.feedings.unshift($scope.currentFeeding);
     $scope.currentFeeding.ongoing = false;
     storage.store($scope.currentFeeding);

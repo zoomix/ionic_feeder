@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Time since last feeding
 * Only scroll the list, not the buttons
 * Style a bit.
 * Sync with google apps.
@@ -23,5 +22,6 @@ Ionic Feeder
 * Store status of row, continues on resume.
 * Max feeding time.
 * Buttons change content when toggled.
+* Time since last feeding
 
 

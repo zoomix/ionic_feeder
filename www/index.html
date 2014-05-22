@@ -39,6 +39,7 @@
               <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
               <!-- <span class="volume">{{currentFeeding.volume}}</span> -->
             </div>
+            <div class="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
             <ion-item ng-repeat="feeding in feedings">
               <span class="supplier">{{feeding.supplier}}</span>
               <span class="starttime">{{feeding.startTime | date:'EEE dd/MM HH:mm'}}</span>

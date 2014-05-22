@@ -150,7 +150,15 @@ var storage = {
                                                 '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '")');
     }, this.errorCB, this.successCB);
   }
-
 }
+
+var app = {
+  getTimeAgo: function(timeInMs) {
+    var hours = Math.floor(timeInMs / 1000 / 60 / 60);
+    var minutes = Math.floor((timeInMs / 1000 / 60) % 60);
+    return hours + "h " + minutes + "m";
+  }
+}
+
 
 document.addEventListener('deviceready', storage.initialize(), false);
