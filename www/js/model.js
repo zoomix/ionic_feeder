@@ -119,8 +119,9 @@ var storage = {
   allData: function(resultCB) {
     if(!this.db) {
       // Give some test data back
-      resultCB([ {id: 1421, startTime: new Date().getTime() - 4000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
-                 {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true} ]);
+      resultCB([ {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true},
+                 {id: 1421, startTime: new Date().getTime() - 4000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
+                 ]);
       return;
     }
     this.db.transaction(function(tx) {
@@ -129,7 +130,7 @@ var storage = {
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
           var item = results.rows.item(i)
-          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing}
+          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing === 'true'}
           rows.unshift(row);
         }
         resultCB(rows);
