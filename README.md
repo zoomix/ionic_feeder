@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Max feeding time.
 * Buttons change content when toggled.
 * Only scroll the list, not the buttons
 * Style a bit.
@@ -21,5 +20,7 @@ Ionic Feeder
 * Run in backgrund.
 * Re-enter continues timer.
 * Rename app
+* Store status of row, continues on resume.
+* Max feeding time.
 
 

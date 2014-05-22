@@ -84,6 +84,7 @@ Date.prototype.format = function(f) {
   );
 };
 var DATE_FORMAT = "yyyy-MM-dd HH:mm";
+var MAX_TIME_MINUTES = 30;
 
 var storage = {
   db: null,
@@ -100,8 +101,7 @@ var storage = {
   // Populate the database 
   //
   populateDB: function(tx) {
-    //         tx.executeSql('DROP TABLE IF EXISTS DEMO');
-    tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, startTime, supplier, duration, volume)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, startTime, supplier, duration, volume, ongoing)');
   },
 
   // Transaction error callback
@@ -119,7 +119,8 @@ var storage = {
   allData: function(resultCB) {
     if(!this.db) {
       // Give some test data back
-      resultCB([ {id: 1, startTime: new Date().getTime(), supplier: 'L', duration: 123000, volume: 0} ]);
+      resultCB([ {id: 1421, startTime: new Date().getTime() - 4000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
+                 {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true} ]);
       return;
     }
     this.db.transaction(function(tx) {
@@ -128,7 +129,7 @@ var storage = {
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
           var item = results.rows.item(i)
-          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume}
+          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing}
           rows.unshift(row);
         }
         resultCB(rows);
@@ -145,8 +146,8 @@ var storage = {
       if(!row.id) {
         row.id = Math.round(Math.random()*1000000);
       }
-      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume) VALUES ' + 
-                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '")');
+      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing) VALUES ' + 
+                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '")');
     }, this.errorCB, this.successCB);
   }
 
