@@ -102,8 +102,6 @@ var storage = {
   populateDB: function(tx) {
     //         tx.executeSql('DROP TABLE IF EXISTS DEMO');
     tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, startTime, supplier, duration, volume)');
-    // tx.executeSql('INSERT INTO DEMO (id,                                     time,                                            source, duration, volume) VALUES ' + 
-    //                                '(' + Math.round(Math.random()*1000) + ', "' + new Date().format(DATE_FORMAT) + '", "L",    "12",     "30ml")');
   },
 
   // Transaction error callback
@@ -144,70 +142,14 @@ var storage = {
       return;
     }
     this.db.transaction(function(tx) {
-      tx.executeSql('INSERT INTO DEMO (id,                                     startTime,               supplier,               duration,               volume) VALUES ' + 
-                                     '(' + Math.round(Math.random()*1000) + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '")');
+      if(!row.id) {
+        row.id = Math.round(Math.random()*1000000);
+      }
+      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume) VALUES ' + 
+                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '")');
     }, this.errorCB, this.successCB);
   }
 
 }
 
 document.addEventListener('deviceready', storage.initialize(), false);
-
-// var app = {
-//   // Application Constructor
-//   initialize: function() {
-//     this.bindEvents();
-//   },
-//   // Bind Event Listeners
-//   //
-//   // Bind any events that are required on startup. Common events are:
-//   // 'load', 'deviceready', 'offline', and 'online'.
-//   bindEvents: function() {
-//     document.addEventListener('deviceready', this.onDeviceReady, false);
-//   },
-//   // deviceready Event Handler
-//   //
-//   // The scope of 'this' is the event. In order to call the 'receivedEvent'
-//   // function, we must explicity call 'app.receivedEvent(...);'
-//   onDeviceReady: function() {
-//     app.receivedEvent('deviceready');
-//     storage.initialize();
-//     storage.allData(function(rows) {
-//       var len = rows.length;
-//       var lista = document.getElementById("tidlista");
-//       for (var i = 0; i < len; i++) {
-//         var element = app.htmlifyRow(rows[i].id, rows[i].time, rows[i].source, rows[i].duration, rows[i].volume);
-//         lista.innerHTML = element + lista.innerHTML;
-//       }
-//     })
-//   },
-//   // Update DOM on a Received Event
-//   receivedEvent: function(id) {
-//     var parentElement = document.getElementById(id);
-//     /*        var listeningElement = parentElement.querySelector('.listening');
-//         var receivedElement = parentElement.querySelector('.received');
-
-//         listeningElement.setAttribute('style', 'display:none;');
-//         receivedElement.setAttribute('style', 'display:block;');
-// */
-//     console.log('Received Event: ' + id);
-//   },
-
-//   play_pause: function(knapp_id) {
-//     var lista = document.getElementById("tidlista");
-//     var element = app.htmlifyRow(123, new Date().format(DATE_FORMAT), (knapp_id == 'left') ? 'L' : 'R', '17m', '20ml')
-//     lista.innerHTML = element + lista.innerHTML;
-
-//   },
-
-//   htmlifyRow: function(id, time, source, duration, volume) {
-//     var element = "<li id='rad_" + id + "'>";
-//     element += '<span class="time">' + time + '</span>';
-//     element += '<span class="tutte tutte_' + source + '">' + source + '</span>';
-//     element += '<span class="duration" id="timer_' + id + '">' + duration + '</span>';
-//     element += '<span class="volym">' + volume + '</span>';
-//     element += '</li>';
-//     return element;
-//   }
-
-// };

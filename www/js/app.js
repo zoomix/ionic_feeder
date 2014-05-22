@@ -32,15 +32,15 @@ angular.module('starter', ['ionic'])
   var mytimeout = null;
 
   $scope.onTimeout = function(){
-    $scope.currentFeeding.duration += 1000;
+    $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
     mytimeout = $timeout($scope.onTimeout,1000);
+    storage.store($scope.currentFeeding);
   };
 
   $scope.toggleFeeding = function(supplier) {
     console.log("toggleFeeding with supplier " + supplier);
     if($scope.currentFeeding) {
       $timeout.cancel(mytimeout);
-      storage.store($scope.currentFeeding);
       $scope.feedings.unshift($scope.currentFeeding);
       $scope.currentFeeding = false;
     } else {
