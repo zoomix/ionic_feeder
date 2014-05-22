@@ -32,7 +32,7 @@ angular.module('starter', ['ionic'])
       $scope.timeSinceLastSuffix = ".";
     } else {
       var latestRow = $scope.feedings[0]; //Remember. The rows are in reverse order.
-      var feedingTooRecent = ((new Date().getTime()) - latestRow.startTime) < 60 * 1000; 
+      var feedingTooRecent = ((new Date().getTime()) - latestRow.startTime - latestRow.duration) < 60 * 1000; 
       if (feedingTooRecent) {
         $scope.timeSinceLast = "just now";
         $scope.timeSinceLastSuffix = ".";
