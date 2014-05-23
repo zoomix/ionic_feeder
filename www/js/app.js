@@ -66,7 +66,6 @@ angular.module('starter', ['ionic'])
   $scope.onTimeout = function(){
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
       $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
-      storage.store($scope.currentFeeding);
       if($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
         $scope.toggleFeeding($scope.currentFeeding.supplier);
       }
@@ -94,6 +93,7 @@ angular.module('starter', ['ionic'])
     } else if(feeding.supplier === 'R') {
       $scope.rightSign = "...";
     }
+    storage.store($scope.currentFeeding);
   }
 
   $scope.finnish = function(supplier) {
