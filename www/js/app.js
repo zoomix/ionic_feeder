@@ -115,4 +115,8 @@ angular.module('starter', ['ionic'])
     }
   }
 
+  $scope.postFeeding = function() {
+    app.postAllFeedings();
+  }
+
 })

@@ -82,7 +82,7 @@ var storage = {
       }
       tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing) VALUES ' + 
                                                 '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '")');
-      app.postFeeding($scope.currentFeeding);
+      app.postFeeding(row);
     }, this.errorCB, this.successCB);
   }
 }
@@ -114,22 +114,40 @@ var app = {
     request.send();
   },
 
-  postFeeding: function(feeding) {
+  postFeeding: function(feeding, successCB) {
     var data = JSON.stringify(feeding)
     var request = new XMLHttpRequest();
     request.open("POST", BASE_URL + USER, true);
     request.onreadystatechange = function() {
-      if (request.readyState == 4) {
+      if(request.readyState == 4) {
         console.log("postFeeding: " + request.responseText);
-      } else {
-        console.log("no postFeeding. " + request.readyState);
+        if(successCB) {
+          successCB();
+        }
       }
     }
     request.setRequestHeader( "Content-Type", "text/plain");
     console.log("Posting: " + data);
     request.send(data);
-  }
+  },
 
+  postAllFeedings: function(allRows, atIndex) {
+    if(!allRows) {
+      storage.allData(function(rows) {
+        app.postAllFeedings(rows, rows.length - 1);
+      });
+    } else {
+
+      if(atIndex < 0) {
+        console.log("Posted all feedings");
+      } else {
+        app.postFeeding(allRows[atIndex], function() {
+          console.log("postAllFeedings " + atIndex + ".")
+          app.postAllFeedings(allRows, atIndex - 1);
+        });
+      }
+    }
+  }
 
 
 }
