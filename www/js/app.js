@@ -68,6 +68,7 @@ angular.module('starter', ['ionic'])
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
       $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
       if($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
+        $scope.currentFeeding.duration = MAX_TIME_MINUTES * 60 * 1000;
         $scope.toggleFeeding($scope.currentFeeding.supplier);
       }
     }

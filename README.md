@@ -16,7 +16,6 @@ Ionic Feeder
 * ...
 
 ##BUGS:
-* Resuming app after a long sleep doesnt set duration to max time, it just pinches it off
 * Are timezones going to be a real problem in using timestamps? Cross device?
 
 ##DONE:
@@ -33,4 +32,5 @@ Ionic Feeder
 * "Push all" button to sync all current feedings.
 * Store syncs
 * Merge sync better. Go back. 
+* Resuming app after a long sleep doesnt set duration to max time, it just pinches it off
 
