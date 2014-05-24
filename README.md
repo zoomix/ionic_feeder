@@ -5,13 +5,17 @@ Ionic Feeder
 
 ##TODO:
 
+* Sync with the interwebs.
 * Only scroll the list, not the buttons
 * Style a bit.
-* Sync with google apps.
 * Vibrate on 5 minute mark.
 * Modify old eeding.
 * Update counter in notifications.
 * ...
+
+##BUGS:
+* Resuming app after a long sleep doesnt set duration to max time, it just pinches it off
+* Are timezones going to be a real problem in using timestamps? Cross device?
 
 ##DONE:
 * Store partials in db.
