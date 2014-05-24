@@ -109,7 +109,11 @@ angular.module('starter', ['ionic'])
   $scope.mergeNewItems = function(newItems) {
     if (newItems && newItems.length > 0) {
       for (var i = 0; i < newItems.length; i++) {
-        $scope.feedings.unshift(newItems[i]);
+        var feeding = newItems[i];
+        $scope.feedings.unshift(feeding);
+        if( !(feeding.ongoing === 'true' || feeding.ongoing === true) ) { //Dont store ongoing feedings
+          storage.store(feeding);
+        }
       }
       $scope.setTimeSinceLast();
     }

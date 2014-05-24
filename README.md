@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* "Push all" button to sync all current feedings.
 * Merge sync better. Go back. 
 * Decide how many feedings to sync (what time period)
 * Only scroll the list, not the buttons
@@ -13,6 +12,7 @@ Ionic Feeder
 * Vibrate on 5 minute mark.
 * Modify old feeding.
 * Update counter in notifications.
+* Show off ongoing feedings in sync
 * ...
 
 ##BUGS:
@@ -30,5 +30,6 @@ Ionic Feeder
 * Buttons change content when toggled.
 * Time since last feeding
 * Sync with the interwebs.
-
+* "Push all" button to sync all current feedings.
+* Store syncs
 
