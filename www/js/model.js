@@ -99,7 +99,7 @@ var app = {
     var request = new XMLHttpRequest();
     var fromTime = 0;
     if(latestFeeding) {
-      fromTime = latestFeeding.startTime - 2 * 3600 * 1000; //Allways refetch a bit longer
+      fromTime = latestFeeding.startTime - 4 * 3600 * 1000; //Allways refetch a bit
     }
     request.open("GET", BASE_URL + USER + "/" + fromTime, true);
     request.onreadystatechange = function() {

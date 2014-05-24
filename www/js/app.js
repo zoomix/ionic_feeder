@@ -110,8 +110,11 @@ angular.module('starter', ['ionic'])
     if (newItems && newItems.length > 0) {
       for (var i = 0; i < newItems.length; i++) {
         var feeding = newItems[i];
-        $scope.feedings.unshift(feeding);
-        if( !(feeding.ongoing === 'true' || feeding.ongoing === true) ) { //Dont store ongoing feedings
+        if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
+          console.log("ongoing feeding: " + feeding.id);
+          $scope.continue(feeding);
+        } else if($scope.hasId(feeding.id)) {
+          $scope.feedings.unshift(feeding);
           storage.store(feeding);
         }
       }
@@ -121,6 +124,15 @@ angular.module('starter', ['ionic'])
 
   $scope.postFeeding = function() {
     app.postAllFeedings();
+  }
+
+  $scope.hasId = function(id) {
+    for (var i = 0; i < $scope.feedings.length; i++) {
+      if($scope.feedings[i] === id) {
+        return true;
+      }
+    };
+    return false;
   }
 
 })

@@ -5,7 +5,7 @@ Ionic Feeder
 
 ##TODO:
 
-* Merge sync better. Go back. 
+* Quit doublesyncing
 * Decide how many feedings to sync (what time period)
 * Only scroll the list, not the buttons
 * Style a bit.
@@ -32,4 +32,5 @@ Ionic Feeder
 * Sync with the interwebs.
 * "Push all" button to sync all current feedings.
 * Store syncs
+* Merge sync better. Go back. 
 
