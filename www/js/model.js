@@ -82,6 +82,7 @@ var storage = {
       }
       tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing) VALUES ' + 
                                                 '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '")');
+      app.postFeeding($scope.currentFeeding);
     }, this.errorCB, this.successCB);
   }
 }
@@ -94,19 +95,43 @@ var app = {
   },
 
 
-  getSyncedItems: function(newItemsCB) {
+  getNewFeedings: function(latestFeeding, newItemsCB) {
     var request = new XMLHttpRequest();
-    request.open("GET", "http://echo.jsontest.com/id/15/startTime/1400919546556/supplier/L/duration/42000/volume/0/ongoing/false", true);
-    request.onreadystatechange = function() { //Call a function when the state changes.
+    var fromTime = 0;
+    if(latestFeeding) {
+      fromTime = latestFeeding.startTime;
+    }
+    request.open("GET", BASE_URL + USER + "/" + fromTime, true);
+    request.onreadystatechange = function() {
       if (request.readyState == 4) {
-        console.log("Synced");
-        var items = [JSON.parse(request.responseText)];
-        // newItemsCB(items);
-        newItemsCB([]);
+        console.log("Synced. Got: '" + request.responseText + "'");
+        if (request.responseText && request.responseText.length > 0) {
+          var items = JSON.parse(request.responseText);
+          newItemsCB(items);
+        }
       }
     }
     request.send();
+  },
+
+  postFeeding: function(feeding) {
+    var data = JSON.stringify(feeding)
+    var request = new XMLHttpRequest();
+    request.open("POST", BASE_URL + USER, true);
+    request.onreadystatechange = function() {
+      if (request.readyState == 4) {
+        console.log("postFeeding: " + request.responseText);
+      } else {
+        console.log("no postFeeding. " + request.readyState);
+      }
+    }
+    request.setRequestHeader( "Content-Type", "text/plain");
+    console.log("Posting: " + data);
+    request.send(data);
   }
+
+
+
 }
 
 

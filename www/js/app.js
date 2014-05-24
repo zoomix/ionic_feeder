@@ -47,16 +47,16 @@ angular.module('starter', ['ionic'])
 
   setTimeout(function(){
       storage.allData(function (rows) {
+        var latestRow = false;
         if(rows.length > 0) {
-          var latestRow = rows[0]; //Remember. The rows are in reverse order.
+          latestRow = rows[0]; //Remember. The rows are in reverse order.
           if(latestRow.ongoing) {
             rows.shift();
             $scope.continue(latestRow);
           }
         }
         $scope.feedings = rows;
-        app.getSyncedItems($scope.mergeNewItems);
-        $scope.setTimeSinceLast();
+        app.getNewFeedings(latestRow, $scope.mergeNewItems); $scope.setTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
       });
