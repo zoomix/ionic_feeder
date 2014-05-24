@@ -55,6 +55,7 @@ angular.module('starter', ['ionic'])
           }
         }
         $scope.feedings = rows;
+        app.getSyncedItems($scope.mergeNewItems);
         $scope.setTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
@@ -105,5 +106,13 @@ angular.module('starter', ['ionic'])
     $scope.rightSign= 'R';
   }
 
+  $scope.mergeNewItems = function(newItems) {
+    if (newItems && newItems.length > 0) {
+      for (var i = 0; i < newItems.length; i++) {
+        $scope.feedings.unshift(newItems[i]);
+      }
+      $scope.setTimeSinceLast();
+    }
+  }
 
 })

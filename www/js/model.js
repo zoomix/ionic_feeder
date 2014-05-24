@@ -91,6 +91,21 @@ var app = {
     var hours = Math.floor(timeInMs / 1000 / 60 / 60);
     var minutes = Math.floor((timeInMs / 1000 / 60) % 60);
     return hours + "h " + minutes + "m";
+  },
+
+
+  getSyncedItems: function(newItemsCB) {
+    var request = new XMLHttpRequest();
+    request.open("GET", "http://echo.jsontest.com/id/15/startTime/1400919546556/supplier/L/duration/42000/volume/0/ongoing/false", true);
+    request.onreadystatechange = function() { //Call a function when the state changes.
+      if (request.readyState == 4) {
+        console.log("Synced");
+        var items = [JSON.parse(request.responseText)];
+        // newItemsCB(items);
+        newItemsCB([]);
+      }
+    }
+    request.send();
   }
 }
 
