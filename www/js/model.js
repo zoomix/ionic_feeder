@@ -72,11 +72,13 @@ var storage = {
   },
 
   storeAndSync: function(row) {
-    $storage.store(row);
+    console.log("storeAndSync");
+    storage.store(row);
     app.postFeeding(row);
   },
 
   store: function(row) {
+    console.log("store");
     if(!this.db) {
       console.log("Could not store. Db not initialized");
       return;
@@ -119,6 +121,7 @@ var app = {
   },
 
   postFeeding: function(feeding, successCB) {
+    console.log("postFeeding");
     var data = JSON.stringify(feeding)
     var request = new XMLHttpRequest();
     request.open("POST", BASE_URL + USER, true);
@@ -136,6 +139,7 @@ var app = {
   },
 
   postAllFeedings: function(allRows, atIndex) {
+    console.log("postAllFeedings");
     if(!allRows) {
       storage.allData(function(rows) {
         app.postAllFeedings(rows, rows.length - 1);

@@ -129,7 +129,7 @@ angular.module('starter', ['ionic'])
 
   $scope.hasId = function(id) {
     for (var i = 0; i < $scope.feedings.length; i++) {
-      if($scope.feedings[i] === id) {
+      if($scope.feedings[i].id === id) {
         return true;
       }
     };
