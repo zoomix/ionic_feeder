@@ -114,7 +114,7 @@ angular.module('starter', ['ionic'])
         if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
           console.log("ongoing feeding: " + feeding.id);
           $scope.continue(feeding);
-        } else if($scope.hasId(feeding.id)) {
+        } else if(!$scope.hasId(feeding.id)) {
           $scope.feedings.unshift(feeding);
           storage.store(feeding);
         }
