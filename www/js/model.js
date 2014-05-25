@@ -72,23 +72,25 @@ var storage = {
   },
 
   storeAndSync: function(row) {
-    console.log("storeAndSync");
-    storage.store(row);
-    app.postFeeding(row);
+    console.log("storeAndSync: " + (row && row.id));
+    storage.store(row, true);
   },
 
-  store: function(row) {
-    console.log("store");
+  store: function(row, alsoSync) {
+    console.log("store: " + (row && row.id));
     if(!this.db) {
       console.log("Could not store. Db not initialized");
       return;
     }
     this.db.transaction(function(tx) {
-      if(!row.id) {
+      if(!row.id && row.id != 0) {
         row.id = Math.round(Math.random()*1000000);
       }
       tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing) VALUES ' + 
                                                 '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '")');
+      if(alsoSync) {
+        app.postFeeding(row);
+      }      
     }, this.errorCB, this.successCB);
   }
 }
@@ -121,7 +123,7 @@ var app = {
   },
 
   postFeeding: function(feeding, successCB) {
-    console.log("postFeeding");
+    console.log("postFeeding: " + (feeding && feeding.id));
     var data = JSON.stringify(feeding)
     var request = new XMLHttpRequest();
     request.open("POST", BASE_URL + USER, true);
