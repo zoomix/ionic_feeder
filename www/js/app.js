@@ -56,9 +56,11 @@ angular.module('starter', ['ionic'])
           }
         }
         $scope.feedings = rows;
-        app.getNewFeedings(latestRow, $scope.mergeNewItems); $scope.setTimeSinceLast();
+        app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        $scope.setTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
+        document.addEventListener('resume', function () { app.getNewFeedings(latestRow, $scope.mergeNewItems); }, false);
       });
   }, 1);
 

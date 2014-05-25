@@ -5,13 +5,13 @@ Ionic Feeder
 
 ##TODO:
 
-* Resync on resume
-* Quit doublesyncing
 * Decide how many feedings to sync (what time period)
 * Only scroll the list, not the buttons
 * Style a bit.
+* Throw up some toasters when syncing.
 * Vibrate on 5 minute mark.
 * Modify old feeding.
+* Use a better ID
 * Update counter in notifications.
 * Show off ongoing feedings in sync
 * ...
@@ -34,4 +34,6 @@ Ionic Feeder
 * Store syncs
 * Merge sync better. Go back. 
 * Resuming app after a long sleep doesnt set duration to max time, it just pinches it off
+* Resync on resume
+* Quit doublesyncing
 
