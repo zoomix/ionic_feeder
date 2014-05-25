@@ -71,6 +71,11 @@ var storage = {
     }, this.errorCB);
   },
 
+  storeAndSync: function(row) {
+    $storage.store(row);
+    app.postFeeding(row);
+  },
+
   store: function(row) {
     if(!this.db) {
       console.log("Could not store. Db not initialized");
@@ -82,7 +87,6 @@ var storage = {
       }
       tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing) VALUES ' + 
                                                 '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '")');
-      app.postFeeding(row);
     }, this.errorCB, this.successCB);
   }
 }

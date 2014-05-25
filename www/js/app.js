@@ -86,7 +86,7 @@ angular.module('starter', ['ionic'])
 
   $scope.begin = function(supplier) {
     $scope.continue({ supplier: supplier, startTime: new Date().getTime(), duration: 0, volume: 0, ongoing: true });
-    storage.store($scope.currentFeeding);
+    storage.storeAndSync($scope.currentFeeding);
   }
 
   $scope.continue = function(feeding) {
@@ -101,7 +101,7 @@ angular.module('starter', ['ionic'])
   $scope.finnish = function(supplier) {
     $scope.feedings.unshift($scope.currentFeeding);
     $scope.currentFeeding.ongoing = false;
-    storage.store($scope.currentFeeding);
+    storage.storeAndSync($scope.currentFeeding);
     $scope.currentFeeding = false;
     $scope.leftSign = 'L';
     $scope.rightSign= 'R';
