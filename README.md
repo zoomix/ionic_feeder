@@ -5,6 +5,7 @@ Ionic Feeder
 
 ##TODO:
 
+* Resync on resume
 * Quit doublesyncing
 * Decide how many feedings to sync (what time period)
 * Only scroll the list, not the buttons

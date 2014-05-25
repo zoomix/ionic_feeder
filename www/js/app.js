@@ -86,6 +86,7 @@ angular.module('starter', ['ionic'])
 
   $scope.begin = function(supplier) {
     $scope.continue({ supplier: supplier, startTime: new Date().getTime(), duration: 0, volume: 0, ongoing: true });
+    storage.store($scope.currentFeeding);
   }
 
   $scope.continue = function(feeding) {
@@ -95,7 +96,6 @@ angular.module('starter', ['ionic'])
     } else if(feeding.supplier === 'R') {
       $scope.rightSign = "...";
     }
-    storage.store($scope.currentFeeding);
   }
 
   $scope.finnish = function(supplier) {
