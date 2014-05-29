@@ -5,8 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Feeding duration in minutes
-* Time between feedings
 * Decide how many feedings to sync (what time period)
 * Only scroll the list, not the buttons
 * Style a bit.
@@ -38,6 +36,8 @@ Ionic Feeder
 * Resync on resume
 * Quit doublesyncing
 * Throw up some toasters when syncing.
+* Feeding duration in minutes
+* Time between feedings
 
 
 ##Used plugins

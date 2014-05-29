@@ -139,4 +139,15 @@ angular.module('starter', ['ionic'])
     return false;
   }
 
+  $scope.timeToPrevFeeding = function(index) {
+    if(index < 1) {
+      return "";
+    }
+    var next = $scope.feedings[index - 1];
+    var curr = $scope.feedings[index ];
+    if(next && curr) {
+      return app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
+    }
+  }
+
 })

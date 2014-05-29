@@ -55,6 +55,7 @@ var storage = {
       // Give some test data back
       resultCB([ {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true},
                  {id: 1421, startTime: new Date().getTime() - 4000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
+                 {id: 1321, startTime: new Date().getTime() - 6000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
                  ]);
       return;
     }
