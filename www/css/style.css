@@ -28,6 +28,11 @@
 	font-size: 34px;
 }
 
+.selected {
+	border-width: 10px;
+	line-height: 58px;
+}
+
 .suppliers {
 	text-align: center;
 	padding: 8px;

@@ -29,8 +29,8 @@
     <ion-pane ng-controller="CounterCtrl">
       <ion-content>
         <div class="suppliers">
-          <a class="button button-round" id="breastL" ng-click="toggleFeeding('L')">{{leftSign}}</a> 
-          <a class="button button-round" id="breastR" ng-click="toggleFeeding('R')">{{rightSign}}</a> 
+          <a class="button button-round {{lClass}}" id="breastL" ng-click="toggleFeeding('L')" ng-bind-html="leftSign"></a> 
+          <a class="button button-round {{rClass}}" id="breastR" ng-click="toggleFeeding('R')" ng-bind-html="rightSign"></a> 
         </div>
 
        <!-- <ion-scroll> -->

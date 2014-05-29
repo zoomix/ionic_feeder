@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Mark next feeding
 * Decide how many feedings to sync (what time period)
 * Only scroll the list, not the buttons
 * Vibrate on 5 minute mark.
@@ -39,6 +38,7 @@ Ionic Feeder
 * Feeding duration in minutes
 * Time between feedings
 * Style a bit.
+* Mark next feeding
 
 
 ##Used plugins

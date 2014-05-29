@@ -18,6 +18,7 @@
  */
 var DATE_FORMAT = "yyyy-MM-dd HH:mm";
 var MAX_TIME_MINUTES = 30;
+var STOP_SIGN="<i class='ion-stop'></i>";
 
 var storage = {
   db: null,
@@ -170,7 +171,7 @@ var app = {
     } else {
       console.log("Toasting: " + message);
     }
-  } 
+  }
 
 }
 

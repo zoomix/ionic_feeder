@@ -23,6 +23,8 @@ angular.module('starter', ['ionic'])
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
+  $scope.lClass="";
+  $scope.rClass="";
   $scope.timeSinceLast = "";
   $scope.timeSinceLastSuffix = "";
 
@@ -54,6 +56,7 @@ angular.module('starter', ['ionic'])
             rows.shift();
             $scope.continue(latestRow);
           }
+          $scope.setPredictedSupplier(latestRow);
         }
         $scope.feedings = rows;
         app.getNewFeedings(latestRow, $scope.mergeNewItems);
@@ -94,16 +97,18 @@ angular.module('starter', ['ionic'])
   $scope.continue = function(feeding) {
     $scope.currentFeeding = feeding;    
     if(feeding.supplier === 'L') {
-      $scope.leftSign = "...";
+      $scope.leftSign = STOP_SIGN;
     } else if(feeding.supplier === 'R') {
-      $scope.rightSign = "...";
+      $scope.rightSign = STOP_SIGN;
     }
+    $scope.setPredictedSupplier(feeding);
   }
 
   $scope.finnish = function(supplier) {
     $scope.feedings.unshift($scope.currentFeeding);
     $scope.currentFeeding.ongoing = false;
     storage.storeAndSync($scope.currentFeeding);
+    $scope.setPredictedSupplier($scope.currentFeeding);
     $scope.currentFeeding = false;
     $scope.leftSign = 'L';
     $scope.rightSign= 'R';
@@ -122,6 +127,7 @@ angular.module('starter', ['ionic'])
         }
       }
       $scope.setTimeSinceLast();
+      $scope.setPredictedSupplier(latestRow);
     }
   }
 
@@ -147,6 +153,19 @@ angular.module('starter', ['ionic'])
     var curr = $scope.feedings[index ];
     if(next && curr) {
       return app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
+    }
+  }
+
+  $scope.setPredictedSupplier = function(feeding) {
+    $scope.lClass = "";
+    $scope.rClass = "";
+    var previousSupplier = feeding.supplier;
+    if(!feeding.ongoing) {
+      if(previousSupplier === 'L') {
+        $scope.rClass = "selected";
+      } else if(previousSupplier === 'R') {
+        $scope.lClass = "selected";
+      }
     }
   }
 
