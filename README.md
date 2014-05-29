@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Throw up some toasters when syncing.
 * Feeding duration in minutes
 * Time between feedings
 * Decide how many feedings to sync (what time period)
@@ -38,6 +37,7 @@ Ionic Feeder
 * Resuming app after a long sleep doesnt set duration to max time, it just pinches it off
 * Resync on resume
 * Quit doublesyncing
+* Throw up some toasters when syncing.
 
 
 ##Used plugins
