@@ -18,3 +18,22 @@
 	color: #fff;
 	background-color: #222;
 }
+
+.button-round {
+	border-radius: 50%;
+	border-width: 2px;
+	width: 80px;
+	height: 80px;
+	line-height: 80px;
+	font-size: 34px;
+}
+
+.suppliers {
+	text-align: center;
+	padding: 8px;
+
+}
+
+.between {
+	color: #777
+}

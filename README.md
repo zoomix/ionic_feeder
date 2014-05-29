@@ -5,9 +5,9 @@ Ionic Feeder
 
 ##TODO:
 
+* Mark next feeding
 * Decide how many feedings to sync (what time period)
 * Only scroll the list, not the buttons
-* Style a bit.
 * Vibrate on 5 minute mark.
 * Modify old feeding.
 * Use a better ID
@@ -38,6 +38,7 @@ Ionic Feeder
 * Throw up some toasters when syncing.
 * Feeding duration in minutes
 * Time between feedings
+* Style a bit.
 
 
 ##Used plugins
