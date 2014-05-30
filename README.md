@@ -5,8 +5,9 @@ Ionic Feeder
 
 ##TODO:
 
-* Decide how many feedings to sync (what time period)
-* Only scroll the list, not the buttons
+* Create user-id on startup if not created.
+* Send user id by email
+* Input user-id
 * Vibrate on 5 minute mark.
 * Modify old feeding.
 * Use a better ID
