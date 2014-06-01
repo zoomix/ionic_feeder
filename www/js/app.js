@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $ionicSlideBoxDelegate) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -27,6 +27,7 @@ angular.module('starter', ['ionic'])
   $scope.rClass="";
   $scope.timeSinceLast = "";
   $scope.timeSinceLastSuffix = "";
+  $scope.activeSlide = 7;
 
   $scope.setTimeSinceLast = function() {
     if($scope.feedings.length == 0) {
@@ -48,7 +49,7 @@ angular.module('starter', ['ionic'])
   }
 
   setTimeout(function(){
-      storage.allData(function (rows) {
+      storage.getDataForDay(0, function (rows) {
         var latestRow = false;
         if(rows.length > 0) {
           latestRow = rows[0]; //Remember. The rows are in reverse order.
@@ -59,7 +60,7 @@ angular.module('starter', ['ionic'])
           $scope.setPredictedSupplier(latestRow);
         }
         $scope.feedings = rows;
-        app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        // app.getNewFeedings(latestRow, $scope.mergeNewItems);
         $scope.setTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
@@ -170,6 +171,10 @@ angular.module('starter', ['ionic'])
         $scope.lClass = "selected";
       }
     }
+  }
+
+  $scope.slideHasChanged = function(index) {
+    console.log("Slide changed to " + index);
   }
 
 })

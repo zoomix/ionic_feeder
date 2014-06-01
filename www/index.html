@@ -30,13 +30,14 @@
 
     <ion-pane ng-controller="CounterCtrl">
       <ion-content>
-        <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false"> <!--  active-slide="activeSlide"> -->
-          <ion-slide>
-              <ng-include src="'list.html'" />
-          </ion-slide>
-          <ion-slide>
-              <ng-include src="'list.html'" />
-          </ion-slide>
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
+          <ion-slide><ng-include src="'list.html'" /></ion-slide>
+          <ion-slide><ng-include src="'list.html'" /></ion-slide>
+          <ion-slide><ng-include src="'list.html'" /></ion-slide>
+          <ion-slide><ng-include src="'list.html'" /></ion-slide>
+          <ion-slide><ng-include src="'list.html'" /></ion-slide>
+          <ion-slide><ng-include src="'list.html'" /></ion-slide>
+          <ion-slide><ng-include src="'list.html'" /></ion-slide>
           <ion-slide>
 
             <div class="suppliers">
