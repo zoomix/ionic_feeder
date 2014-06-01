@@ -41,13 +41,44 @@ var storage = {
   // Transaction error callback
   //
   errorCB: function(err) {
-    alert("Error processing SQL: " + err);
+    console.log(err);
+    console.log(err.message);
   },
 
   // Transaction success callback
   //
   successCB: function() {
 
+  },
+
+  getDataForDay: function(day, resultCB) {
+    app.showToast('Loading...');
+    if(!this.db) {
+      // Give some test data back
+      resultCB([ {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true},
+                 {id: 1421, startTime: new Date().getTime() - 4000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
+                 {id: 1321, startTime: new Date().getTime() - 6000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
+                 ]);
+      return;
+    }
+    var fromTime = app.getToday(day);
+    var toTime = app.getToday(day + 1);
+    if (day === -7) {
+      fromTime = 0;
+    }
+    console.log("getDataForDay from " + fromTime + " to " + toTime);
+    this.db.transaction(function(tx) {
+      tx.executeSql('SELECT * FROM DEMO where startTime > ? and startTime < ?', [fromTime, toTime], function(tx, results) {
+        var rows = []
+        var len = results.rows.length;
+        for (var i = 0; i < len; i++) {
+          var item = results.rows.item(i)
+          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing === 'true'}
+          rows.unshift(row);
+        }
+        resultCB(rows);
+      }, this.errorCB);
+    }, this.errorCB);
   },
 
   allData: function(resultCB) {
@@ -171,6 +202,17 @@ var app = {
     } else {
       console.log("Toasting: " + message);
     }
+  },
+
+  getToday: function(offset) {
+    var now = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    console.log("Date for " + offset + " was " + new Date((now.getTime() + offset * 1000 * 60 * 60 * 24)));
+    return "" + (now.getTime() + offset * 1000 * 60 * 60 * 24);
   }
 
 }

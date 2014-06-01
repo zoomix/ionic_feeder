@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $ionicSlideBoxDelegate) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,7 +19,9 @@ angular.module('starter', ['ionic'])
 })
 
 .controller('CounterCtrl', function($scope, $timeout) {
-  $scope.feedings = [];
+  $scope.feedings = new Array(8);
+  $scope.todaysFeedings = [];
+  $scope.feedings[7] = $scope.todaysFeedings;
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
@@ -27,13 +29,14 @@ angular.module('starter', ['ionic'])
   $scope.rClass="";
   $scope.timeSinceLast = "";
   $scope.timeSinceLastSuffix = "";
+  $scope.activeSlide = 7;
 
   $scope.setTimeSinceLast = function() {
-    if($scope.feedings.length == 0) {
+    if($scope.todaysFeedings.length == 0) {
       $scope.timeSinceLast = ".. well.. never";
       $scope.timeSinceLastSuffix = ".";
     } else {
-      var latestRow = $scope.feedings[0]; //Remember. The rows are in reverse order.
+      var latestRow = $scope.todaysFeedings[0]; //Remember. The rows are in reverse order.
       var feedingTooRecent = ((new Date().getTime()) - latestRow.startTime - latestRow.duration) < 60 * 1000; 
       if (feedingTooRecent) {
         $scope.timeSinceLast = "just now";
@@ -47,8 +50,10 @@ angular.module('starter', ['ionic'])
     }
   }
 
-  setTimeout(function(){
-      storage.allData(function (rows) {
+  var mytimeout = null;
+
+  $scope.reloadTodaysFeedings = function() {
+      storage.getDataForDay(0, function (rows) {
         var latestRow = false;
         if(rows.length > 0) {
           latestRow = rows[0]; //Remember. The rows are in reverse order.
@@ -58,16 +63,16 @@ angular.module('starter', ['ionic'])
           }
           $scope.setPredictedSupplier(latestRow);
         }
-        $scope.feedings = rows;
-        app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        $scope.feedings[7] = rows;
+        $scope.todaysFeedings = $scope.feedings[7];
         $scope.setTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () { app.getNewFeedings(latestRow, $scope.mergeNewItems); }, false);
+        app.getNewFeedings(latestRow, $scope.mergeNewItems);
       });
-  }, 1);
-
-  var mytimeout = null;
+  }
+  setTimeout($scope.reloadTodaysFeedings, 1);
 
   $scope.onTimeout = function(){
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
@@ -105,7 +110,7 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.finnish = function(supplier) {
-    $scope.feedings.unshift($scope.currentFeeding);
+    $scope.todaysFeedings.unshift($scope.currentFeeding);
     $scope.currentFeeding.ongoing = false;
     storage.storeAndSync($scope.currentFeeding);
     $scope.setPredictedSupplier($scope.currentFeeding);
@@ -116,6 +121,7 @@ angular.module('starter', ['ionic'])
 
   $scope.mergeNewItems = function(newItems) {
     if (newItems && newItems.length > 0) {
+      var needReloading = false;
       var feeding = false;
       for (var i = 0; i < newItems.length; i++) {
         feeding = newItems[i];
@@ -123,13 +129,16 @@ angular.module('starter', ['ionic'])
           console.log("ongoing feeding: " + feeding.id);
           $scope.continue(feeding);
         } else if(!$scope.hasId(feeding.id)) {
-          $scope.feedings.unshift(feeding);
+          needReloading = true;
           storage.store(feeding);
         }
       }
       $scope.setTimeSinceLast();
       if(feeding && !$scope.currentFeeding) {
         $scope.setPredictedSupplier(feeding);
+      }
+      if (needReloading) {
+        $scope.reloadTodaysFeedings();
       }
     }
   }
@@ -140,9 +149,13 @@ angular.module('starter', ['ionic'])
 
   $scope.hasId = function(id) {
     for (var i = 0; i < $scope.feedings.length; i++) {
-      if($scope.feedings[i].id === id) {
-        console.log("Turns out " + $scope.feedings[i].id + " === " + id );
-        return true;
+      if($scope.feedings[i]) {
+        for (var j = 0; j < $scope.feedings[i].length; j++) {
+          if($scope.feedings[i][j].id === id) {
+            console.log("Turns out " + $scope.feedings[i][j].id + " === " + id );
+            return true;
+          }
+        }
       }
     };
     return false;
@@ -152,8 +165,8 @@ angular.module('starter', ['ionic'])
     if(index < 1) {
       return "";
     }
-    var next = $scope.feedings[index - 1];
-    var curr = $scope.feedings[index ];
+    var next = $scope.feedings[$scope.activeSlide][index - 1];
+    var curr = $scope.feedings[$scope.activeSlide][index ];
     if(next && curr) {
       return app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
     }
@@ -169,6 +182,19 @@ angular.module('starter', ['ionic'])
       } else if(previousSupplier === 'R') {
         $scope.lClass = "selected";
       }
+    }
+  }
+
+  $scope.slideHasChanged = function(index) {
+    console.log("Slide changed to " + index);
+    if (! $scope.feedings[index]) {
+      var dayOffset = index - 7;
+      console.log("Fetching data for " + dayOffset);
+      storage.getDataForDay(dayOffset, function (rows) {
+        console.log("Setting fetched data");
+        $scope.feedings[index] = rows;
+        $scope.$apply();
+      });
     }
   }
 

@@ -26,35 +26,35 @@
   </head>
   <body ng-app="starter">
 
+
+
     <ion-pane ng-controller="CounterCtrl">
       <ion-content>
         <div class="suppliers">
           <a class="button button-round {{lClass}}" id="breastL" ng-click="toggleFeeding('L')" ng-bind-html="leftSign"></a> 
           <a class="button button-round {{rClass}}" id="breastR" ng-click="toggleFeeding('R')" ng-bind-html="rightSign"></a> 
         </div>
+        <div class="ongoing">
+          <span class="supplier">{{currentFeeding.supplier}}</span>
+          <span class="starttime">{{currentFeeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
+          <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
+          <!-- <span class="volume">{{currentFeeding.volume}}</span> -->
+        </div>
+        <div class="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
 
-       <!-- <ion-scroll> -->
-          <ion-list>
-            <div class="ongoing">
-              <span class="supplier">{{currentFeeding.supplier}}</span>
-              <span class="starttime">{{currentFeeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
-              <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
-              <!-- <span class="volume">{{currentFeeding.volume}}</span> -->
-            </div>
-            <div class="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
-            <ion-item ng-repeat="feeding in feedings">
-              <span class="supplier">{{feeding.supplier}}</span>
-              <span class="starttime">{{feeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
-              <span class="duration">{{feeding.duration | date:'m'}} min</span>
-              <span class="between">{{timeToPrevFeeding($index)}}</span>
-              <!-- <span class="volume">{{feeding.volume}}</span> -->
-            </ion-item>
-          </ion-list>
-       <!-- </ion-scroll> -->
-
-       <div class="suppliers">
-         <a class="button button-large" ng-click="postFeeding()">Upload all</a> 
-       </div>
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[0]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[1]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[2]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[3]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[4]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[5]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[6]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[7]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+        </ion-slide-box>
+        <div class="suppliers">
+          <a class="button button-large" ng-click="postFeeding()">Upload all</a> 
+        </div>
       </ion-content>
     </ion-pane>
   </body>
