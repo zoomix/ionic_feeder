@@ -19,7 +19,7 @@ angular.module('starter', ['ionic'])
 })
 
 .controller('CounterCtrl', function($scope, $timeout) {
-  $scope.feedings = [];
+  $scope.feedings = new Array(8);
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
@@ -34,7 +34,7 @@ angular.module('starter', ['ionic'])
       $scope.timeSinceLast = ".. well.. never";
       $scope.timeSinceLastSuffix = ".";
     } else {
-      var latestRow = $scope.feedings[0]; //Remember. The rows are in reverse order.
+      var latestRow = $scope.feedings[7][0]; //Remember. The rows are in reverse order.
       var feedingTooRecent = ((new Date().getTime()) - latestRow.startTime - latestRow.duration) < 60 * 1000; 
       if (feedingTooRecent) {
         $scope.timeSinceLast = "just now";
@@ -59,7 +59,7 @@ angular.module('starter', ['ionic'])
           }
           $scope.setPredictedSupplier(latestRow);
         }
-        $scope.feedings = rows;
+        $scope.feedings[7] = rows;
         // app.getNewFeedings(latestRow, $scope.mergeNewItems);
         $scope.setTimeSinceLast();
         $scope.$apply();
@@ -175,6 +175,15 @@ angular.module('starter', ['ionic'])
 
   $scope.slideHasChanged = function(index) {
     console.log("Slide changed to " + index);
+    if (! $scope.feedings[index]) {
+      var dayOffset = index - 7;
+      console.log("Fetching data for " + dayOffset);
+      storage.getDataForDay(dayOffset, function (rows) {
+        console.log("Setting fetched data");
+        $scope.feedings[index] = rows;
+        $scope.$apply();
+      });
+    }
   }
 
 })
