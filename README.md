@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Make loading of slides dynamic instead of hardcoded
 * Make a generic menu and move "upload all" button there
 * Create user-id on startup if not created.
 * Send user id by email
@@ -17,6 +16,7 @@ Ionic Feeder
 * Split up controllers
 * Sanitize models.js
 * Move resync to model and have it throw events
+* Make loading of slides dynamic instead of hardcoded (bug in ionic, see weird_auto_slides_bug branch)
 * ...
 
 ##BUGS:
