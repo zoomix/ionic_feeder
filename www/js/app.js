@@ -116,8 +116,9 @@ angular.module('starter', ['ionic'])
 
   $scope.mergeNewItems = function(newItems) {
     if (newItems && newItems.length > 0) {
+      var feeding = false;
       for (var i = 0; i < newItems.length; i++) {
-        var feeding = newItems[i];
+        feeding = newItems[i];
         if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
           console.log("ongoing feeding: " + feeding.id);
           $scope.continue(feeding);
@@ -127,7 +128,9 @@ angular.module('starter', ['ionic'])
         }
       }
       $scope.setTimeSinceLast();
-      $scope.setPredictedSupplier(latestRow);
+      if(feeding && !$scope.currentFeeding) {
+        $scope.setPredictedSupplier(feeding);
+      }
     }
   }
 
