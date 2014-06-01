@@ -19,7 +19,8 @@ angular.module('starter', ['ionic'])
 })
 
 .controller('CounterCtrl', function($scope, $timeout) {
-  $scope.feedings = new Array(8);
+  // $scope.feedings = new Array(8);
+  $scope.feedings = [[],[],[],[],[],[],[],[]];
   $scope.todaysFeedings = [];
   $scope.feedings[7] = $scope.todaysFeedings;
   $scope.currentFeeding = false;
@@ -187,7 +188,7 @@ angular.module('starter', ['ionic'])
 
   $scope.slideHasChanged = function(index) {
     console.log("Slide changed to " + index);
-    if (! $scope.feedings[index]) {
+    if ($scope.feedings[index].length === 0) {
       var dayOffset = index - 7;
       console.log("Fetching data for " + dayOffset);
       storage.getDataForDay(dayOffset, function (rows) {
