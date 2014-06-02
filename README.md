@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Create user-id on startup if not created.
 * Send user id by email
 * Input user-id
 * Vibrate on 5 minute mark.
@@ -16,6 +15,7 @@ Ionic Feeder
 * Sanitize models.js
 * Move resync to model and have it throw events
 * Make loading of slides dynamic instead of hardcoded (bug in ionic, see weird_auto_slides_bug branch)
+* Rename the database. Demo? Really?
 * ...
 
 ##BUGS:
@@ -45,9 +45,11 @@ Ionic Feeder
 * Style a bit.
 * Mark next feeding
 * Make a generic menu and move "upload all" button there
+* Create user-id on startup if not created.
 
 ##Used plugins
 
     cordova plugin add org.apache.cordova.dialogs
     cordova plugin add https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git
+    cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git
 

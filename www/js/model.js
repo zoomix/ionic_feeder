@@ -20,6 +20,12 @@ var DATE_FORMAT = "yyyy-MM-dd HH:mm";
 var MAX_TIME_MINUTES = 30;
 var STOP_SIGN="<i class='ion-stop'></i>";
 
+var util = {
+  randomness: function() {
+    return (Math.round(Math.random()*Math.pow(2,60))).toString(36)
+  }
+}
+
 var storage = {
   db: null,
 
@@ -126,6 +132,24 @@ var storage = {
         app.postFeeding(row);
       }      
     }, this.errorCB, this.successCB);
+  },
+
+  getUserId: function() {
+    var userId = window.localStorage.getItem("userId");
+    console.log("stored used id: " + userId);
+    if (userId) { return userId; }
+    if (USER) {
+      storage.storeUserId(USER);
+    } else {
+      storage.storeUserId(randomness + randomness);
+    }
+    console.log("new store used id: " + window.localStorage.getItem("userId"));
+    return window.localStorage.getItem("userId");
+  },
+
+  storeUserId: function(userId) {
+    console.log("setting: userId " + userId);
+    window.localStorage.setItem("userId", userId);
   }
 }
 
