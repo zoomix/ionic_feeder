@@ -2,6 +2,6 @@
                 <span class="supplier">{{feeding.supplier}}</span>
                 <span class="starttime">{{feeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
                 <span class="duration">{{feeding.duration | date:'m'}} min</span>
-                <span class="between">{{timeToPrevFeeding($index)}}</span>
+                <span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span>
                 <!-- <span class="volume">{{feeding.volume}}</span> -->
               

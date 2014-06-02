@@ -161,12 +161,12 @@ angular.module('starter', ['ionic'])
     return false;
   }
 
-  $scope.timeToPrevFeeding = function(index) {
+  $scope.timeToPrevFeeding = function(activeSlide, index) {
     if(index < 1) {
       return "";
     }
-    var next = $scope.feedings[$scope.activeSlide][index - 1];
-    var curr = $scope.feedings[$scope.activeSlide][index ];
+    var next = $scope.feedings[activeSlide][index - 1];
+    var curr = $scope.feedings[activeSlide][index ];
     if(next && curr) {
       return app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
     }
