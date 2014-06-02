@@ -23,13 +23,22 @@
     <script src="js/protos.js"></script>
     <script src="js/model.js"></script>
     <script src="js/app.js"></script>
+
+    <script>
+    function ContentController($scope, $ionicSideMenuDelegate) {
+  $scope.toggleLeft = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+  };
+}
+
+</script>
   </head>
   <body ng-app="starter">
+  <ion-side-menus>
 
-
-
-    <ion-pane ng-controller="CounterCtrl">
-      <ion-content>
+    <!-- Center content -->
+    <ion-side-menu-content>
+      <ion-content ng-controller="CounterCtrl">
         <div class="suppliers">
           <a class="button button-round {{lClass}}" id="breastL" ng-click="toggleFeeding('L')" ng-bind-html="leftSign"></a> 
           <a class="button button-round {{rClass}}" id="breastR" ng-click="toggleFeeding('R')" ng-bind-html="rightSign"></a> 
@@ -38,7 +47,6 @@
           <span class="supplier">{{currentFeeding.supplier}}</span>
           <span class="starttime">{{currentFeeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
           <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
-          <!-- <span class="volume">{{currentFeeding.volume}}</span> -->
         </div>
         <div class="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
 
@@ -52,10 +60,22 @@
           <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[6]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
           <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[7]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
         </ion-slide-box>
-        <div class="suppliers">
-          <a class="button button-large" ng-click="postFeeding()">Upload all</a> 
-        </div>
       </ion-content>
-    </ion-pane>
+    </ion-side-menu-content>
+
+    <!-- Left menu -->
+    <ion-side-menu side="left">
+      <ion-content ng-controller="MenuCtrl">
+        <ion-list>
+          <ion-item ng-click="about()">About</ion-item>
+          <ion-item ng-click="share()">Share code</ion-item>
+          <ion-item ng-click="enterCode()">Enter code</ion-item>
+          <ion-item ng-click="postAllFeedings()">Upload all</ion-item>
+        </ion-list>
+      </ion-content>
+    </ion-side-menu>
+
+  </ion-side-menus>
+
   </body>
 </html>

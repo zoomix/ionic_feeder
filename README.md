@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Make a generic menu and move "upload all" button there
 * Create user-id on startup if not created.
 * Send user id by email
 * Input user-id
@@ -45,7 +44,7 @@ Ionic Feeder
 * Time between feedings
 * Style a bit.
 * Mark next feeding
-* 
+* Make a generic menu and move "upload all" button there
 
 ##Used plugins
 

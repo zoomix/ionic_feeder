@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
-.run(function($ionicPlatform, $ionicSlideBoxDelegate) {
+.run(function($ionicPlatform, $ionicSlideBoxDelegate, $ionicSideMenuDelegate, $ionicNavBarDelegate) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -16,6 +16,24 @@ angular.module('starter', ['ionic'])
       StatusBar.styleDefault();
     }
   });
+})
+
+.controller('MenuCtrl', function($scope) {
+  $scope.about = function() {
+    alert("about");
+  }
+
+  $scope.share = function() {
+    alert("Share code");
+  }
+
+  $scope.enterCode = function() {
+    alert("Enter code");
+  }
+
+  $scope.postAllFeedings = function() {
+    app.postAllFeedings();
+  }
 })
 
 .controller('CounterCtrl', function($scope, $timeout) {
@@ -69,7 +87,7 @@ angular.module('starter', ['ionic'])
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () { app.getNewFeedings(latestRow, $scope.mergeNewItems); }, false);
-        app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        // app.getNewFeedings(latestRow, $scope.mergeNewItems);
       });
   }
   setTimeout($scope.reloadTodaysFeedings, 1);
@@ -141,10 +159,6 @@ angular.module('starter', ['ionic'])
         $scope.reloadTodaysFeedings();
       }
     }
-  }
-
-  $scope.postFeeding = function() {
-    app.postAllFeedings();
   }
 
   $scope.hasId = function(id) {
