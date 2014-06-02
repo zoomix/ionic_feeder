@@ -68,13 +68,13 @@ var storage = {
     }
     console.log("getDataForDay from " + fromTime + " to " + toTime);
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM DEMO where startTime > ? and startTime < ?', [fromTime, toTime], function(tx, results) {
+      tx.executeSql('SELECT * FROM DEMO where startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
         var rows = []
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
           var item = results.rows.item(i)
           var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing === 'true'}
-          rows.unshift(row);
+          rows.push(row);
         }
         resultCB(rows);
       }, this.errorCB);
