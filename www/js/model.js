@@ -138,10 +138,10 @@ var storage = {
     var userId = window.localStorage.getItem("userId");
     console.log("stored used id: " + userId);
     if (userId) { return userId; }
-    if (USER) {
+    if (typeof USER !== 'undefined' && USER) {
       storage.storeUserId(USER);
     } else {
-      storage.storeUserId(randomness + randomness);
+      storage.storeUserId(util.randomness() + util.randomness());
     }
     console.log("new store used id: " + window.localStorage.getItem("userId"));
     return window.localStorage.getItem("userId");
