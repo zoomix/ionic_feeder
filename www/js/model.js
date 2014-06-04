@@ -134,10 +134,17 @@ var storage = {
     }, this.errorCB, this.successCB);
   },
 
+  userId: null, 
   getUserId: function() {
+    if(storage.userId) {
+      return storage.userId;
+    }
     var userId = window.localStorage.getItem("userId");
     console.log("stored used id: " + userId);
-    if (userId) { return userId; }
+    if (userId) {
+      storage.userId = userId;
+      return userId;
+    }
     if (typeof USER !== 'undefined' && USER) {
       storage.storeUserId(USER);
     } else {
@@ -150,6 +157,7 @@ var storage = {
   storeUserId: function(userId) {
     console.log("setting: userId " + userId);
     window.localStorage.setItem("userId", userId);
+    storage.userId = userId;
   }
 }
 
