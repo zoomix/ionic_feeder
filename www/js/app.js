@@ -18,7 +18,7 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller('MenuCtrl', function($scope) {
+.controller('MenuCtrl', function($scope, $ionicModal) {
   $scope.about = function() {
     alert("about");
   }
@@ -26,17 +26,52 @@ angular.module('starter', ['ionic'])
   $scope.share = function() {
     var userId = storage.getUserId();
     if (window.plugins && window.plugins.socialsharing) {
-      window.plugins.socialsharing.share("Click the link or copy-paste this code into the 'Enter code' menu in the application: " + userId, "Ionic feeder share key");
+      window.plugins.socialsharing.share("Copy-paste this code into the 'Enter code' menu in the application: " + userId, "Ionic feeder share code");
     }
   }
 
+  $scope.enteredCode = "";
   $scope.enterCode = function() {
-    alert("Enter code");
+    $scope.modal.show();
+  }
+  $scope.storeEnteredCode = function(enteredCode) {
+    if(!enteredCode || enteredCode.length < 10) {
+      alert("Code '" + enteredCode + "' seems invalid. Please try again.");
+    } else {
+      storage.storeUserId(enteredCode);
+      $scope.closeModal();
+    }
   }
 
   $scope.postAllFeedings = function() {
     app.postAllFeedings();
   }
+
+  $scope.userId = function() {
+    return storage.getUserId();
+  }
+
+  $ionicModal.fromTemplateUrl('enterCodeModal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal) {
+    $scope.modal = modal;
+  });
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+  //Cleanup the modal when we're done with it!
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  });
+  // Execute action on hide modal
+  $scope.$on('modal.hide', function() {
+    // Execute action
+  });
+  // Execute action on remove modal
+  $scope.$on('modal.removed', function() {
+    // Execute action
+  });
 })
 
 .controller('CounterCtrl', function($scope, $timeout) {
@@ -90,7 +125,7 @@ angular.module('starter', ['ionic'])
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () { app.getNewFeedings(latestRow, $scope.mergeNewItems); }, false);
-        // app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        app.getNewFeedings(latestRow, $scope.mergeNewItems);
       });
   }
   setTimeout($scope.reloadTodaysFeedings, 1);
