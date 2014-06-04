@@ -24,7 +24,10 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.share = function() {
-    alert("Share code");
+    var userId = storage.getUserId();
+    if (window.plugins && window.plugins.socialsharing) {
+      window.plugins.socialsharing.share("Click the link or copy-paste this code into the 'Enter code' menu in the application: " + userId, "Ionic feeder share key");
+    }
   }
 
   $scope.enterCode = function() {

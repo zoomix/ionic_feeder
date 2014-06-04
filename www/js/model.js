@@ -241,5 +241,10 @@ var app = {
 
 }
 
+function handleOpenURL(url) {
+  setTimeout(function() {
+    alert("received url: " + url);
+  }, 0);
+}
 
 document.addEventListener('deviceready', storage.initialize(), false);
