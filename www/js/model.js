@@ -176,7 +176,7 @@ var app = {
     if(latestFeeding) {
       fromTime = latestFeeding.startTime - 4 * 3600 * 1000; //Allways refetch a bit
     }
-    request.open("GET", BASE_URL + USER + "/" + fromTime, true);
+    request.open("GET", BASE_URL + storage.getUserId() + "/" + fromTime, true);
     request.onreadystatechange = function() {
       if (request.readyState == 4) {
         console.log("Synced. Got: '" + request.responseText + "'");
@@ -194,7 +194,7 @@ var app = {
     console.log("postFeeding: " + (feeding && feeding.id));
     var data = JSON.stringify(feeding)
     var request = new XMLHttpRequest();
-    request.open("POST", BASE_URL + USER, true);
+    request.open("POST", BASE_URL + storage.getUserId(), true);
     request.onreadystatechange = function() {
       if(request.readyState == 4) {
         console.log("postFeeding: " + request.responseText);
