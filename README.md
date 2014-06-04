@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Input user-id
 * Vibrate on 5 minute mark.
 * Modify old feeding.
 * Use a better ID
@@ -46,6 +45,8 @@ Ionic Feeder
 * Make a generic menu and move "upload all" button there
 * Create user-id on startup if not created.
 * Send user id by email
+* Input user-id
+
 
 ##Used plugins
 
