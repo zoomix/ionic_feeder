@@ -20,6 +20,10 @@ angular.module('starter', ['ionic'])
 
 .controller('MenuCtrl', function($scope, $ionicModal) {
 
+  $scope.vibrate = function() {
+    
+  }
+
   $scope.version = "0.0.1";
   $scope.about = function() {
     alert("Ionic Feeder, version " + $scope.version);
