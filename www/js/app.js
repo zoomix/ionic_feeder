@@ -20,9 +20,11 @@ angular.module('starter', ['ionic'])
 
 .controller('MenuCtrl', function($scope, $ionicModal) {
 
+  $scope.vibrateOn = vibrations.getVibrateInteral();
   $scope.toggleVibrate = function() {
     var vibrateInterval = vibrations.getVibrateInteral();
     vibrateInterval = (vibrateInterval ? 0 : VIBRATE_INTERVAL);
+    $scope.vibrateOn = vibrateInterval;
     vibrations.setVibrateInterval(vibrateInterval);
   }
 
