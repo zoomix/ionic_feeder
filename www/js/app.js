@@ -20,6 +20,14 @@ angular.module('starter', ['ionic'])
 
 .controller('MenuCtrl', function($scope, $ionicModal) {
 
+  $scope.vibrateOn = vibrations.getVibrateInteral();
+  $scope.toggleVibrate = function() {
+    var vibrateInterval = vibrations.getVibrateInteral();
+    vibrateInterval = (vibrateInterval ? 0 : VIBRATE_INTERVAL);
+    $scope.vibrateOn = vibrateInterval;
+    vibrations.setVibrateInterval(vibrateInterval);
+  }
+
   $scope.version = "0.0.1";
   $scope.about = function() {
     alert("Ionic Feeder, version " + $scope.version);
@@ -138,6 +146,7 @@ angular.module('starter', ['ionic'])
       });
   }
   setTimeout($scope.reloadTodaysFeedings, 1);
+  setTimeout(function() {vibrations.getVibrateInteral()}, 1);
 
   $scope.onTimeout = function(){
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
@@ -146,6 +155,7 @@ angular.module('starter', ['ionic'])
         $scope.currentFeeding.duration = MAX_TIME_MINUTES * 60 * 1000;
         $scope.toggleFeeding($scope.currentFeeding.supplier);
       }
+      vibrations.doVibrate($scope.currentFeeding.duration);
     }
     $scope.setTimeSinceLast();  
     mytimeout = $timeout($scope.onTimeout,1000);
@@ -178,6 +188,7 @@ angular.module('starter', ['ionic'])
     $scope.todaysFeedings.unshift($scope.currentFeeding);
     $scope.currentFeeding.ongoing = false;
     storage.storeAndSync($scope.currentFeeding);
+    vibrations.reset();
     $scope.setPredictedSupplier($scope.currentFeeding);
     $scope.currentFeeding = false;
     $scope.leftSign = 'L';
