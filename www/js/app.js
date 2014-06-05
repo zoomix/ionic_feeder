@@ -250,11 +250,13 @@ angular.module('starter', ['ionic'])
   $scope.slideHasChanged = function(index) {
     console.log("Slide changed to " + index);
     if (! $scope.feedings[index]) {
+      $scope.loading += 1; //Start loading
       var dayOffset = index - 7;
       console.log("Fetching data for " + dayOffset);
       storage.getDataForDay(dayOffset, function (rows) {
         console.log("Setting fetched data");
         $scope.feedings[index] = rows;
+        $scope.loading -= 1; //Stop loading
         $scope.$apply();
       });
     }
