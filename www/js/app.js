@@ -19,8 +19,10 @@ angular.module('starter', ['ionic'])
 })
 
 .controller('MenuCtrl', function($scope, $ionicModal) {
+
+  $scope.version = "0.0.1";
   $scope.about = function() {
-    alert("about");
+    alert("Ionic Feeder, version " + $scope.version);
   }
 
   $scope.share = function() {
