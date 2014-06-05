@@ -19,6 +19,7 @@
 var DATE_FORMAT = "yyyy-MM-dd HH:mm";
 var MAX_TIME_MINUTES = 30;
 var STOP_SIGN="<i class='ion-stop'></i>";
+var VIBRATE_INTERVAL = 5 * 60 * 1000;
 
 var util = {
   randomness: function() {
@@ -247,6 +248,52 @@ var app = {
     return "" + (now.getTime() + offset * 1000 * 60 * 60 * 24);
   }
 
+}
+
+var vibrations = {
+  interval: 0,
+  ticked: 0,
+  isVibrateEnabled: typeof navigator.notification !== 'undefined',
+
+  doVibrate: function(elapsed) {
+    if(!vibrations.interval) { return; }
+
+    var tick = Math.floor(elapsed / vibrations.interval);
+    if (tick > vibrations.ticked) {
+      vibrations.ticked = tick;
+      vibrations.vibrate(tick, true);
+    }
+  },
+
+  vibrate: function(tick, first) {
+    console.log("bzzzt: " + tick);
+    if (first) {
+      vibrations.isVibrateEnabled && navigator.notification.vibrate(500); 
+      setTimeout(function() {vibrations.vibrate(tick, false)}, 150);
+    } else {
+      vibrations.isVibrateEnabled && navigator.notification.vibrate(50); 
+      if(tick > 1) {
+        setTimeout(function() {vibrations.vibrate(tick - 1, false)}, 150);
+      }
+    }
+  },
+
+  setVibrateInterval: function(interval) {
+    console.log("setting vibrate interval: " + interval);
+    vibrations.interval = interval;
+    window.localStorage.setItem("vibrate", interval);
+  },
+
+  getVibrateInteral: function() {
+    var storedInterval = window.localStorage.getItem("vibrate");
+    console.log("getting stored vibrate interval: " + storedInterval);
+    vibrations.interval = storedInterval && parseInt(storedInterval) || 0;
+    return vibrations.interval; 
+  },
+
+  reset: function() {
+    vibrations.ticked = 0;
+  }
 }
 
 function handleOpenURL(url) {

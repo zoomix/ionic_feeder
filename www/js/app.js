@@ -20,8 +20,10 @@ angular.module('starter', ['ionic'])
 
 .controller('MenuCtrl', function($scope, $ionicModal) {
 
-  $scope.vibrate = function() {
-    
+  $scope.toggleVibrate = function() {
+    var vibrateInterval = vibrations.getVibrateInteral();
+    vibrateInterval = (vibrateInterval ? 0 : VIBRATE_INTERVAL);
+    vibrations.setVibrateInterval(vibrateInterval);
   }
 
   $scope.version = "0.0.1";
@@ -142,6 +144,7 @@ angular.module('starter', ['ionic'])
       });
   }
   setTimeout($scope.reloadTodaysFeedings, 1);
+  setTimeout(function() {vibrations.getVibrateInteral()}, 1);
 
   $scope.onTimeout = function(){
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
@@ -150,6 +153,7 @@ angular.module('starter', ['ionic'])
         $scope.currentFeeding.duration = MAX_TIME_MINUTES * 60 * 1000;
         $scope.toggleFeeding($scope.currentFeeding.supplier);
       }
+      vibrations.doVibrate($scope.currentFeeding.duration);
     }
     $scope.setTimeSinceLast();  
     mytimeout = $timeout($scope.onTimeout,1000);
