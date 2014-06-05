@@ -30,14 +30,13 @@
     <!-- Center content -->
     <ion-side-menu-content>
       <ion-content ng-controller="CounterCtrl">
-        <div class="suppliers">
+        <div class="ongoing">
+          <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
+        </div>
+
+		<div class="suppliers">
           <a class="button button-round {{lClass}}" id="breastL" ng-click="toggleFeeding('L')" ng-bind-html="leftSign"></a> 
           <a class="button button-round {{rClass}}" id="breastR" ng-click="toggleFeeding('R')" ng-bind-html="rightSign"></a> 
-        </div>
-        <div class="ongoing">
-          <span class="supplier">{{currentFeeding.supplier}}</span>
-          <span class="starttime">{{currentFeeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
-          <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
         </div>
         <div class="timeSinceLast" ng-show="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
         <div class="loader" ng-show="loading"><i class="ion-loading-c"></i></div>

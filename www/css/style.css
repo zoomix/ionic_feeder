@@ -1,6 +1,12 @@
 /* Empty. Add your own CSS if you like */
 
-.ongoing { font-size: 24px }
+.ongoing { 
+font-size: 80px;
+line-height: 80px;
+text-align: center;
+margin-top: 40px;
+}
+
 
 .supplier {
 	width: 100%;
