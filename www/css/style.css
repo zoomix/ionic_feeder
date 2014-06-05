@@ -36,7 +36,7 @@ margin-top: 40px;
 
 .selected {
 	border-width: 10px;
-	line-height: 58px;
+	line-height: 30px;
 }
 
 .suppliers {
@@ -66,3 +66,7 @@ h1, h2, h3, h4 { color: #fff;}
     color: aqua;
 }
 
+.day {
+    text-align: center;
+	margin: 10px;
+}
