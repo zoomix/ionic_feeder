@@ -55,3 +55,14 @@ margin-top: 40px;
 h1, h2, h3, h4 { color: #fff;}
 
 .loader {text-align: center; line-height: 26px}
+
+.timeSinceLast {
+    text-align: center;
+    margin-bottom: 20px;
+	color: darkgray;
+}
+
+.time {
+    color: aqua;
+}
+
