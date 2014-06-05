@@ -58,7 +58,7 @@ var storage = {
   },
 
   getDataForDay: function(day, resultCB) {
-    app.showToast('Loading...');
+    // app.showToast('Loading...');
     if(!this.db) {
       // Give some test data back
       resultCB([ {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true},
@@ -88,7 +88,7 @@ var storage = {
   },
 
   allData: function(resultCB) {
-    app.showToast('Loading...');
+    // app.showToast('Loading...');
     if(!this.db) {
       // Give some test data back
       resultCB([ {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true},
@@ -170,7 +170,7 @@ var app = {
 
 
   getNewFeedings: function(latestFeeding, newItemsCB) {
-    app.showToast('Syncing...');
+    // app.showToast('Syncing...');
     var request = new XMLHttpRequest();
     var fromTime = 0;
     if(latestFeeding) {
@@ -183,7 +183,7 @@ var app = {
         if (request.responseText && request.responseText.length > 0) {
           var items = JSON.parse(request.responseText);
           newItemsCB(items);
-          app.showToast('Syncing done.');
+          // app.showToast('Syncing done.');
         }
       }
     }
@@ -209,7 +209,7 @@ var app = {
   },
 
   postAllFeedings: function(allRows, atIndex) {
-    app.showToast("Uploading all..");
+    // app.showToast("Uploading all..");
     console.log("postAllFeedings");
     if(!allRows) {
       storage.allData(function(rows) {

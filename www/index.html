@@ -39,7 +39,8 @@
           <span class="starttime">{{currentFeeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
           <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
         </div>
-        <div class="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
+        <div class="timeSinceLast" ng-show="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
+        <div class="loader" ng-show="loading"><i class="ion-loading-c"></i></div>
 
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
           <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[0]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>

@@ -88,11 +88,12 @@ angular.module('starter', ['ionic'])
   $scope.timeSinceLast = "";
   $scope.timeSinceLastSuffix = "";
   $scope.activeSlide = 7;
+  $scope.loading=0;
 
   $scope.setTimeSinceLast = function() {
     if($scope.todaysFeedings.length == 0) {
-      $scope.timeSinceLast = ".. well.. never";
-      $scope.timeSinceLastSuffix = ".";
+      $scope.timeSinceLast = null;
+      $scope.timeSinceLastSuffix = null;
     } else {
       var latestRow = $scope.todaysFeedings[0]; //Remember. The rows are in reverse order.
       var feedingTooRecent = ((new Date().getTime()) - latestRow.startTime - latestRow.duration) < 60 * 1000; 
@@ -111,6 +112,7 @@ angular.module('starter', ['ionic'])
   var mytimeout = null;
 
   $scope.reloadTodaysFeedings = function() {
+      $scope.loading += 1; //Start loading
       storage.getDataForDay(0, function (rows) {
         var latestRow = false;
         if(rows.length > 0) {
@@ -126,8 +128,13 @@ angular.module('starter', ['ionic'])
         $scope.setTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
-        document.addEventListener('resume', function () { app.getNewFeedings(latestRow, $scope.mergeNewItems); }, false);
+        document.addEventListener('resume', function () {
+          $scope.loading += 1; //Start syncing on resume
+          app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        }, false);
+        $scope.loading += 1; //Start syncing
         app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        $scope.loading -= 1; //Stop loading
       });
   }
   setTimeout($scope.reloadTodaysFeedings, 1);
@@ -199,6 +206,7 @@ angular.module('starter', ['ionic'])
         $scope.reloadTodaysFeedings();
       }
     }
+    $scope.loading -= 1;//Stop syncing
   }
 
   $scope.hasId = function(id) {
