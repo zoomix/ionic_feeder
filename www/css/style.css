@@ -26,12 +26,12 @@ margin-top: 40px;
 }
 
 .button-round {
-	border-radius: 50%;
-	border-width: 2px;
-	width: 80px;
-	height: 80px;
-	line-height: 80px;
-	font-size: 34px;
+	border-radius: 50px;
+    border-width: 2px;
+    width: 130px;
+    height: 46px;
+    line-height: 46px;
+    font-size: 21px;
 }
 
 .selected {
@@ -41,8 +41,9 @@ margin-top: 40px;
 
 .suppliers {
 	text-align: center;
-	padding: 8px;
-
+    padding: 8px;
+    margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 .between {
