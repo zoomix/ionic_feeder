@@ -253,7 +253,6 @@ var app = {
 var vibrations = {
   interval: 0,
   ticked: 0,
-  isVibrateEnabled: typeof navigator.notification !== 'undefined',
 
   doVibrate: function(elapsed) {
     if(!vibrations.interval) { return; }
@@ -268,12 +267,12 @@ var vibrations = {
   vibrate: function(tick, first) {
     console.log("bzzzt: " + tick);
     if (first) {
-      vibrations.isVibrateEnabled && navigator.notification.vibrate(500); 
-      setTimeout(function() {vibrations.vibrate(tick, false)}, 150);
+      try {navigator.notification.vibrate(500); } catch (e) {}
+      setTimeout(function() {vibrations.vibrate(tick, false)}, 600);
     } else {
-      vibrations.isVibrateEnabled && navigator.notification.vibrate(50); 
+      try {navigator.notification.vibrate(200); } catch (e) {}
       if(tick > 1) {
-        setTimeout(function() {vibrations.vibrate(tick - 1, false)}, 150);
+        setTimeout(function() {vibrations.vibrate(tick - 1, false)}, 300);
       }
     }
   },

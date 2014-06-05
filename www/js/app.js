@@ -188,6 +188,7 @@ angular.module('starter', ['ionic'])
     $scope.todaysFeedings.unshift($scope.currentFeeding);
     $scope.currentFeeding.ongoing = false;
     storage.storeAndSync($scope.currentFeeding);
+    vibrations.reset();
     $scope.setPredictedSupplier($scope.currentFeeding);
     $scope.currentFeeding = false;
     $scope.leftSign = 'L';

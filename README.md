@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Vibrate on 5 minute mark.
 * Put a menu button for manual sync of latest day
 * Modify old feeding.
 * Move .hasId to model where it belongs (bug)
@@ -48,6 +47,7 @@ Ionic Feeder
 * Create user-id on startup if not created.
 * Send user id by email
 * Input user-id
+* Vibrate on 5 minute mark.
 
 
 ##Used plugins
@@ -55,6 +55,10 @@ Ionic Feeder
     cordova plugin add https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git
     cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git
 
+    cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-vibration.git
+    cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-dialogs.git
+    cordova plugin rm org.apache.cordova.core.dialogs
+    cordova plugin rm org.apache.cordova.core.vibration
 
 ##Tried..
 
