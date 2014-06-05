@@ -31,7 +31,8 @@
     <ion-side-menu-content>
       <ion-content ng-controller="CounterCtrl">
         <div class="ongoing">
-          <span class="duration">{{currentFeeding.duration | date:'m:ss'}}</span>
+          <span class="duration" ng-show="currentFeeding">{{currentFeeding.duration | date:'m:ss'}}</span>
+          <span class="duration" ng-show="!currentFeeding">0:00</span>
         </div>
 
 		<div class="suppliers">
