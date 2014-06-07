@@ -43,14 +43,54 @@
         <div class="loader" ng-show="loading"><i class="ion-loading-c"></i></div>
 
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[0]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[1]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[2]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[3]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[4]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[5]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[6]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
-          <ion-slide><ion-list><ion-item ng-repeat="feeding in feedings[7]"><ng-include src="'list.html'" /></ion-item></ion-list></ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">{{feedings[0][0].startTime | date:'EEEE'}}</div>
+              <div ng-repeat="feeding in feedings[0]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">{{feedings[1][0].startTime | date:'EEEE'}}</div>
+              <div ng-repeat="feeding in feedings[1]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">{{feedings[2][0].startTime | date:'EEEE'}}</div>
+              <div ng-repeat="feeding in feedings[2]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">{{feedings[3][0].startTime | date:'EEEE'}}</div>
+              <div ng-repeat="feeding in feedings[3]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">{{feedings[4][0].startTime | date:'EEEE'}}</div>
+              <div ng-repeat="feeding in feedings[4]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">{{feedings[5][0].startTime | date:'EEEE'}}</div>
+              <div ng-repeat="feeding in feedings[5]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">Yesterday</div>
+              <div ng-repeat="feeding in feedings[6]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
+          <ion-slide>
+            <ion-list>
+              <div class="day">Today</div>
+              <div ng-repeat="feeding in feedings[7]"><ng-include src="'list.html'" /></div>
+            </ion-list>
+          </ion-slide>
         </ion-slide-box>
       </ion-content>
     </ion-side-menu-content>

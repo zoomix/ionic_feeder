@@ -1,7 +1,9 @@
-              
-                <span class="supplier">{{feeding.supplier}}</span>
+<div class="durations"><span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span></div>
+<div class="times"><span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span> - <span class="endtime">{{feeding.startTime | date:'HH:mm'}}</span> <span class="duration">{{feeding.duration | date:'m'}} min</span></div>
+<!--                 <span class="supplier">{{feeding.supplier}}</span>
                 <span class="starttime">{{feeding.startTime | date:'EEE dd/MM HH:mm'}}</span>
                 <span class="duration">{{feeding.duration | date:'m'}} min</span>
                 <span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span>
-                <!-- <span class="volume">{{feeding.volume}}</span> -->
+ -->                <!-- <span class="volume">{{feeding.volume}}</span> -->
+
               
