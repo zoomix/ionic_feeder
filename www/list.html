@@ -1,6 +1,6 @@
 <div class="durations" ng-show="{{timeToPrevFeeding(activeSlide, $index)}}"><span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span></div>
 <div class="times"><span class="supplier">{{feeding.supplier}}</span> 
   <span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span> - 
-  <span class="endtime">{{feeding.startTime | date:'HH:mm'}}</span> 
+  <span class="endtime">{{feeding.startTime + feeding.duration | date:'HH:mm'}}</span> 
   <span class="item-note duration">{{feeding.duration | date:'m'}} min</span>
 </div>
