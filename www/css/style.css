@@ -1,4 +1,5 @@
-/* Empty. Add your own CSS if you like */
+/* Empty. Add your o
+wn CSS if you like */
 
 .ongoing { 
   font-size: 80px;
@@ -9,10 +10,18 @@
 
 
 .supplier {
-	width: 100%;
+	/*width: 100%;
 	height: 150px;
-  position: relative; 
-  color: aqua;
+  position: relative; */
+  color: black;
+  background-color: white;
+  border-radius: 100%;
+  padding-top:2px;
+  padding-bottom: 2px;
+  padding-left: 4px;
+  padding-right:4px;
+font-weight: bold;  
+  
 }
 
 *, body, .item, .bar {
@@ -49,12 +58,6 @@
 
 .between {
   color: aqua;
-  background-color: rgb(31, 31, 31);
-  border-radius: 100px;
-  padding-top: 4px;
-  padding-bottom: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
 }
 
 .input-label { color: #fff;}
@@ -71,6 +74,7 @@ h1, h2, h3, h4 { color: #fff;}
 
 .time {
   color: aqua;
+  font-size: 18px;
 }
 
 .day {
@@ -84,4 +88,12 @@ h1, h2, h3, h4 { color: #fff;}
 
 .durations {
   text-align: center;
+}
+
+.starttime {
+  color: darkgray;
+}
+
+.endtime {
+  color: darkgray;
 }

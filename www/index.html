@@ -39,7 +39,7 @@
           <a class="button button-round {{lClass}}" id="breastL" ng-click="toggleFeeding('L')" ng-bind-html="leftSign"></a> 
           <a class="button button-round {{rClass}}" id="breastR" ng-click="toggleFeeding('R')" ng-bind-html="rightSign"></a> 
         </div>
-        <div class="timeSinceLast" ng-show="timeSinceLast">Last feeding was <span class="time">{{timeSinceLast}}</span>{{timeSinceLastSuffix}}</div>
+        <div class="timeSinceLast" ng-show="timeSinceLast"><span class="time">{{timeSinceLast}}</span><p>since last feeding</p></div>
         <div class="loader" ng-show="loading"><i class="ion-loading-c"></i></div>
 
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
