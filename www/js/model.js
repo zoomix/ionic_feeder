@@ -21,6 +21,10 @@ var MAX_TIME_MINUTES = 30;
 var STOP_SIGN="<i class='ion-stop'></i>";
 var VIBRATE_INTERVAL = 5 * 60 * 1000;
 
+Array.prototype.has = function(item) {
+  return this.indexOf(item) >= 0;
+}
+
 var util = {
   randomness: function() {
     return (Math.round(Math.random()*Math.pow(2,60))).toString(36)
@@ -108,6 +112,20 @@ var storage = {
           rows.unshift(row);
         }
         resultCB(rows);
+      }, this.errorCB);
+    }, this.errorCB);
+  },
+
+  getIdsOlderThan: function(startTime, resultCB) {
+    this.db.transaction(function(tx) {
+      tx.executeSql('SELECT id FROM DEMO where startTime >= ?', ["" + startTime], function(tx, results) {
+        var ids = [];
+        var len = results.rows.length;
+        for (var i = 0; i < len; i++) {
+          var row = results.rows.item(i)
+          ids.push(row.id);
+        }
+        resultCB(ids);
       }, this.errorCB);
     }, this.errorCB);
   },

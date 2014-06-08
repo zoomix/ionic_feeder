@@ -212,23 +212,26 @@ angular.module('starter', ['ionic'])
     if (newItems && newItems.length > 0) {
       var needReloading = false;
       var feeding = false;
-      for (var i = 0; i < newItems.length; i++) {
-        feeding = newItems[i];
-        if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
-          console.log("ongoing feeding: " + feeding.id);
-          $scope.continue(feeding);
-        } else if(!$scope.hasId(feeding.id)) {
-          needReloading = true;
-          storage.store(feeding);
+      storage.getIdsOlderThan(newItems[0].startTime, function(feedingIds) {
+        console.log("We've got " + feedingIds + " older than " + newItems[0].startTime);
+        for (var i = 0; i < newItems.length; i++) {
+          feeding = newItems[i];
+          if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
+            console.log("ongoing feeding: " + feeding.id);
+            $scope.continue(feeding);
+          } else if(!feedingIds.has(feeding.id)) {
+            needReloading = true;
+            storage.store(feeding);
+          }
         }
-      }
-      $scope.setTimeSinceLast();
-      if(feeding && !$scope.currentFeeding) {
-        $scope.setPredictedSupplier(feeding);
-      }
-      if (needReloading) {
-        $scope.reloadTodaysFeedings();
-      }
+        $scope.setTimeSinceLast();
+        if(feeding && !$scope.currentFeeding) {
+          $scope.setPredictedSupplier(feeding);
+        }
+        if (needReloading) {
+          $scope.reloadTodaysFeedings();
+        }
+      })
     }
     $scope.loading -= 1;//Stop syncing
   }

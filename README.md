@@ -6,7 +6,7 @@ Ionic Feeder
 ##TODO:
 
 * Modify old feeding.
-* Move .hasId to model where it belongs (bug)
+* Create a demo-mode that temporarily changes user id
 * Refactor .getNewFeedings to use only startTime
 * Use a better ID
 * Update counter in notifications.
@@ -49,6 +49,7 @@ Ionic Feeder
 * Input user-id
 * Vibrate on 5 minute mark.
 * Put a menu button for manual sync of latest day
+* Move .hasId to model where it belongs (bug)
 
 
 ##Used plugins
