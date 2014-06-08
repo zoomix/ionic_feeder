@@ -10,18 +10,14 @@ wn CSS if you like */
 
 
 .supplier {
-	/*width: 100%;
-	height: 150px;
-  position: relative; */
-  color: black;
-  background-color: white;
-  border-radius: 100%;
-  padding-top:2px;
-  padding-bottom: 2px;
-  padding-left: 4px;
-  padding-right:4px;
-font-weight: bold;  
-  
+  border: 1px solid white;
+  border-radius: 50%;
+  font-weight: bold;  
+  width: 26px;
+  height: 26px;
+  line-height: 24px;
+  text-align: center;
+  display: inline-block;
 }
 
 *, body, .item, .bar {
@@ -88,6 +84,7 @@ h1, h2, h3, h4 { color: #fff;}
 
 .durations {
   text-align: center;
+  margin: 1em 0;
 }
 
 .starttime {
