@@ -289,4 +289,8 @@ angular.module('starter', ['ionic'])
     }
   }
 
+  $scope.endTime = function(feeding) {
+    return parseInt(feeding.startTime) + parseInt(feeding.duration);
+  }
+
 })
