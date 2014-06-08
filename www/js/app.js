@@ -53,9 +53,18 @@ angular.module('starter', ['ionic'])
     }
   }
 
+  $scope.resyncToday = function() {
+    app.getNewFeedings({startTime: app.getToday(0)}, function() {
+      var counterScope = angular.element(document.getElementById('CounterApp')).scope();
+      counterScope.$broadcast("resync", null);
+    })
+  }
+
   $scope.postAllFeedings = function() {
     app.postAllFeedings();
   }
+
+
 
   $scope.userId = function() {
     return storage.getUserId();
@@ -118,6 +127,10 @@ angular.module('starter', ['ionic'])
   }
 
   var mytimeout = null;
+
+  $scope.$on("resync", function (event, args) {
+    $scope.reloadTodaysFeedings();
+  });
 
   $scope.reloadTodaysFeedings = function() {
       $scope.loading += 1; //Start loading
