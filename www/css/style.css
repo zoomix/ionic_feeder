@@ -54,6 +54,9 @@ wn CSS if you like */
 
 .between {
   color: aqua;
+  background-color: #222;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 .input-label { color: #fff;}
