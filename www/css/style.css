@@ -56,6 +56,10 @@ wn CSS if you like */
 
 .between {
   color: aqua;
+  background-color: #222;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 16px;
 }
 
 .input-label { color: #fff;}
@@ -88,7 +92,7 @@ h1, h2, h3, h4 { color: #fff;}
 
 .durations {
   text-align: center;
-  margin: 1em 0;
+  margin: 0.4em 0;
 }
 
 .starttime {
