@@ -120,7 +120,8 @@ angular.module('starter', ['ionic'])
       } else {
         var sinceLastStart = app.getTimeAgo((new Date().getTime()) - latestRow.startTime);
         var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - latestRow.startTime - latestRow.duration);
-        $scope.timeSinceLast = sinceLastStart + " (" + sinceLastEnd + ") ";
+//        $scope.timeSinceLast = sinceLastStart; + " (" + sinceLastEnd + ") ";
+        $scope.timeSinceLast = sinceLastEnd;
         $scope.timeSinceLastSuffix = "ago.";
       }
     }

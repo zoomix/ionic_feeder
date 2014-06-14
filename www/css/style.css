@@ -69,12 +69,6 @@ h1, h2, h3, h4 { color: #fff;}
 
 .loader {text-align: center; line-height: 26px}
 
-.timeSinceLast {
-  text-align: center;
-  margin-bottom: 20px;
-	color: darkgray;
-}
-
 .time {
   color: aqua;
   font-size: 18px;
@@ -118,4 +112,25 @@ h1, h2, h3, h4 { color: #fff;}
   position: absolute;
   height: 100%;
   left: 12px;
+}
+
+.megaDot {
+  background-color: white;
+  border-radius: 50%;
+  width: 13px;
+  height: 13px;
+  display: inline-block;
+  position: absolute;
+  top: 7px;
+  left: 6px;
+}
+
+.timeSinceLast .time, .timeSinceLast p {
+  margin-left: 44px;
+  line-height: 10px;
+}
+.timeSinceLast p { color: darkgray ;}
+.timeSinceLast { height: 73px; }
+.timeSinceLast .verticalLine {
+  margin-top: 10px;
 }
