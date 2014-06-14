@@ -87,7 +87,7 @@
           <ion-slide>
             <ion-list>
               <div class="day"><i class="ion-arrow-left-b"></i> Today</div>
-              <div class="times timeSinceLast" ng-show="timeSinceLast">
+              <div ng-show="feedings[7] && feedings[7].length > 0" class="times timeSinceLast" ng-show="timeSinceLast">
                 <div class="verticalLine"></div>
                 <div class="megaDot"></div>
                 <span class="time">{{timeSinceLast}}</span>
