@@ -1,4 +1,7 @@
-<div class="durations" ng-show="$index > 0"><span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span></div>
+<div class="durations" ng-show="$index > 0">
+  <div class="verticalLine"></div>
+  <span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span>
+</div>
 <div class="times"><span class="supplier">{{feeding.supplier}}</span>
   <span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span> - 
   <span class="endtime">{{endTime(feeding) | date:'HH:mm'}}</span> 
