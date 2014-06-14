@@ -20,6 +20,9 @@ wn CSS if you like */
   text-align: center;
   display: inline-block;
   color: black;
+  position: absolute;
+  top: 0px;
+  left: 0px;
 }
 
 *, body, .item, .bar {
@@ -56,10 +59,8 @@ wn CSS if you like */
 
 .between {
   color: aqua;
-  background-color: #222;
-  padding: 2px 8px;
-  border-radius: 4px;
   font-size: 16px;
+  margin-left: 44px;
 }
 
 .input-label { color: #fff;}
@@ -85,18 +86,16 @@ h1, h2, h3, h4 { color: #fff;}
   text-transform: uppercase;
 }
 
-.times {
+.times, .durations {
   margin-left: 70px;
   margin-right: 70px;
-}
-
-.durations {
-  text-align: center;
-  margin: 0.4em 0;
+  position: relative;
+  line-height: 26px;
 }
 
 .starttime {
   color: white;
+  margin-left: 44px;
 }
 
 .endtime {
