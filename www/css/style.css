@@ -59,7 +59,7 @@ wn CSS if you like */
 
 .between {
   color: aqua;
-  font-size: 16px;
+  font-size: 18px;
   margin-left: 44px;
 }
 
@@ -71,12 +71,13 @@ h1, h2, h3, h4 { color: #fff;}
 
 .time {
   color: aqua;
-  font-size: 18px;
+  font-size: 30px;
 }
 
 .day {
   text-align: center;
 	margin: 10px;
+  margin-bottom: 30px;
   text-transform: uppercase;
 }
 
@@ -130,7 +131,7 @@ h1, h2, h3, h4 { color: #fff;}
   line-height: 10px;
 }
 .timeSinceLast p { color: darkgray ;}
-.timeSinceLast { height: 73px; }
+.timeSinceLast { height: 85px; }
 .timeSinceLast .verticalLine {
   margin-top: 10px;
 }
