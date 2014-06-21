@@ -50,6 +50,7 @@ Ionic Feeder
 * Vibrate on 5 minute mark.
 * Put a menu button for manual sync of latest day
 * Move .hasId to model where it belongs (bug)
+* Use button instead of <a> for buttons
 
 
 ##Used plugins
