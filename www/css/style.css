@@ -10,19 +10,29 @@ wn CSS if you like */
 
 
 .supplier {
-  border: 1px solid white;
   background-color: white;
-  border-radius: 50%;
+/*  border-radius: 19px;*/
   font-weight: bold;  
-  width: 26px;
-  height: 26px;
-  line-height: 24px;
+  width: 29px;
+  height: 29px;
+  line-height: 28px;
   text-align: center;
   display: inline-block;
   color: black;
   position: absolute;
   top: 0px;
   left: 0px;
+}
+
+.supplierL {
+  border-top-left-radius: 19px;
+  border-bottom-left-radius: 19px;
+  left: -6px;
+}
+.supplierR {
+  border-top-right-radius: 19px;
+  border-bottom-right-radius: 19px;
+  left: 22px;
 }
 
 *, body, .item, .bar {
@@ -60,7 +70,7 @@ wn CSS if you like */
 .between {
   color: aqua;
   font-size: 18px;
-  margin-left: 44px;
+  margin-left: 64px;
 }
 
 .input-label { color: #fff;}
@@ -82,10 +92,11 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 .times, .durations {
-  margin-left: 70px;
+  margin-left: 60px;
   margin-right: 70px;
   position: relative;
-  line-height: 26px;
+  line-height: 30px;
+  overflow: visible;
 }
 
 .durations {
@@ -94,7 +105,7 @@ h1, h2, h3, h4 { color: #fff;}
 
 .starttime {
   color: white;
-  margin-left: 44px;
+  margin-left: 64px;
 }
 
 .endtime {
@@ -112,7 +123,7 @@ h1, h2, h3, h4 { color: #fff;}
   border-left: 1px solid aqua;
   position: absolute;
   height: 100%;
-  left: 12px;
+  left: 22px;
 }
 
 .megaDot {
@@ -123,11 +134,11 @@ h1, h2, h3, h4 { color: #fff;}
   display: inline-block;
   position: absolute;
   top: 7px;
-  left: 6px;
+  left: 16px;
 }
 
 .timeSinceLast .time, .timeSinceLast p {
-  margin-left: 44px;
+  margin-left: 64px;
   line-height: 10px;
 }
 .timeSinceLast p { color: darkgray ;}
