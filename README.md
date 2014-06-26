@@ -20,7 +20,6 @@ Ionic Feeder
 * ...
 
 ##BUGS:
-* Don't revibrate when reentering app.
 * Sometimes we receive a double click on a button / phantom click.
 * Sometimes a store gets 0 duration even though the timer was on.
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
@@ -56,6 +55,7 @@ Ionic Feeder
 * Put a menu button for manual sync of latest day
 * Move .hasId to model where it belongs (bug)
 * Use button instead of <a> for buttons
+* Don't revibrate when reentering app.
 
 
 ##Used plugins

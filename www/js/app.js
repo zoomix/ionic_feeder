@@ -189,6 +189,7 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.continue = function(feeding) {
+    vibrations.catchup(new Date().getTime() - parseInt(feeding.startTime));
     $scope.currentFeeding = feeding;    
     if(feeding.supplier === 'L') {
       $scope.leftSign = STOP_SIGN;

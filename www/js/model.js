@@ -310,6 +310,12 @@ var vibrations = {
 
   reset: function() {
     vibrations.ticked = 0;
+  }, 
+
+  catchup: function(elapsed) {
+    var tick = Math.floor(elapsed / vibrations.interval);
+    console.log("Catching up vibrations with elapsed " + elapsed + ", that makes " + tick + " ticks");
+    vibrations.ticked = tick;
   }
 }
 
