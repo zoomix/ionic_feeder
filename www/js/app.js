@@ -103,26 +103,17 @@ angular.module('starter', ['ionic'])
   $scope.lClass="";
   $scope.rClass="";
   $scope.timeSinceLast = "";
-  $scope.timeSinceLastSuffix = "";
   $scope.activeSlide = 7;
   $scope.loading=0;
 
   $scope.setTimeSinceLast = function() {
     if($scope.todaysFeedings.length == 0) {
       $scope.timeSinceLast = null;
-      $scope.timeSinceLastSuffix = null;
     } else {
       var latestRow = $scope.todaysFeedings[0]; //Remember. The rows are in reverse order.
-      var feedingTooRecent = ((new Date().getTime()) - latestRow.startTime - latestRow.duration) < 60 * 1000; 
-      if (feedingTooRecent) {
-        $scope.timeSinceLast = "just now";
-        $scope.timeSinceLastSuffix = ".";
-      } else {
-        var sinceLastStart = app.getTimeAgo((new Date().getTime()) - latestRow.startTime);
-        var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - latestRow.startTime - latestRow.duration);
-        $scope.timeSinceLast = sinceLastEnd;
-        $scope.timeSinceLastSuffix = "ago.";
-      }
+      var sinceLastStart = app.getTimeAgo((new Date().getTime()) - latestRow.startTime);
+      var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - latestRow.startTime - latestRow.duration);
+      $scope.timeSinceLast = sinceLastEnd;
     }
   }
 
