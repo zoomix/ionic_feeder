@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Add menu button
 * Modify old feeding.
 * Create a demo-mode that temporarily changes user id
 * Refactor .getNewFeedings to use only startTime
@@ -16,6 +15,7 @@ Ionic Feeder
 * Move resync to model and have it throw events
 * Make loading of slides dynamic instead of hardcoded (bug in ionic, see weird_auto_slides_bug branch)
 * Rename the database. Demo? Really?
+* Share code via nfc. phonegap-nfc
 * Tests? Specs?
 * ...
 
@@ -56,6 +56,7 @@ Ionic Feeder
 * Move .hasId to model where it belongs (bug)
 * Use button instead of <a> for buttons
 * Don't revibrate when reentering app.
+* Add menu button
 
 
 ##Used plugins

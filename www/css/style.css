@@ -5,7 +5,6 @@ wn CSS if you like */
   font-size: 80px;
   line-height: 80px;
   text-align: center;
-  margin-top: 40px;
 }
 
 
@@ -41,7 +40,7 @@ wn CSS if you like */
 	color: #fff;
 }
 
-.button {
+.button, .button:HOVER {
 	color: #fff;
 	background-color: #222;
 }
@@ -146,3 +145,5 @@ h1, h2, h3, h4 { color: #fff;}
 .timeSinceLast .verticalLine {
   margin-top: 10px;
 }
+
+.button-menu,.button-menu:HOVER { background-color: #000;}
