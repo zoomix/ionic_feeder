@@ -188,12 +188,12 @@ var app = {
   },
 
 
-  getNewFeedings: function(latestFeeding, newItemsCB) {
+  getNewFeedings: function(latestFeedingStartTime, newItemsCB) {
     // app.showToast('Syncing...');
     var request = new XMLHttpRequest();
     var fromTime = 0;
-    if(latestFeeding) {
-      fromTime = latestFeeding.startTime - 4 * 3600 * 1000; //Allways refetch a bit
+    if(latestFeedingStartTime) {
+      fromTime = latestFeedingStartTime - 4 * 3600 * 1000; //Allways refetch a bit
     }
     request.open("GET", BASE_URL + storage.getUserId() + "/" + fromTime, true);
     request.onreadystatechange = function() {

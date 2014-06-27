@@ -54,7 +54,7 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.resyncToday = function() {
-    app.getNewFeedings({startTime: app.getToday(0)}, function() {
+    app.getNewFeedings(app.getToday(0), function() {
       var counterScope = angular.element(document.getElementById('CounterApp')).scope();
       counterScope.$broadcast("resync", null);
     })
@@ -120,7 +120,6 @@ angular.module('starter', ['ionic'])
       } else {
         var sinceLastStart = app.getTimeAgo((new Date().getTime()) - latestRow.startTime);
         var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - latestRow.startTime - latestRow.duration);
-//        $scope.timeSinceLast = sinceLastStart; + " (" + sinceLastEnd + ") ";
         $scope.timeSinceLast = sinceLastEnd;
         $scope.timeSinceLastSuffix = "ago.";
       }
@@ -152,10 +151,10 @@ angular.module('starter', ['ionic'])
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () {
           $scope.loading += 1; //Start syncing on resume
-          app.getNewFeedings(latestRow, $scope.mergeNewItems);
+          app.getNewFeedings(latestRow.startTime, $scope.mergeNewItems);
         }, false);
         $scope.loading += 1; //Start syncing
-        app.getNewFeedings(latestRow, $scope.mergeNewItems);
+        app.getNewFeedings(latestRow.startTime, $scope.mergeNewItems);
         $scope.loading -= 1; //Stop loading
       });
   }
@@ -236,20 +235,6 @@ angular.module('starter', ['ionic'])
       })
     }
     $scope.loading -= 1;//Stop syncing
-  }
-
-  $scope.hasId = function(id) {
-    for (var i = 0; i < $scope.feedings.length; i++) {
-      if($scope.feedings[i]) {
-        for (var j = 0; j < $scope.feedings[i].length; j++) {
-          if($scope.feedings[i][j].id === id) {
-            console.log("Turns out " + $scope.feedings[i][j].id + " === " + id );
-            return true;
-          }
-        }
-      }
-    };
-    return false;
   }
 
   $scope.timeToPrevFeeding = function(activeSlide, index) {

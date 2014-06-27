@@ -7,7 +7,6 @@ Ionic Feeder
 
 * Modify old feeding.
 * Create a demo-mode that temporarily changes user id
-* Refactor .getNewFeedings to use only startTime
 * Use a better ID
 * Update counter in notifications.
 * Split up controllers
@@ -57,6 +56,7 @@ Ionic Feeder
 * Use button instead of <a> for buttons
 * Don't revibrate when reentering app.
 * Add menu button
+* Refactor .getNewFeedings to use only startTime
 
 
 ##Used plugins
