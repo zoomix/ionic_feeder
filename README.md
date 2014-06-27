@@ -57,6 +57,7 @@ Ionic Feeder
 * Don't revibrate when reentering app.
 * Add menu button
 * Refactor .getNewFeedings to use only startTime
+* Time since last Feeding works across days.
 
 
 ##Used plugins

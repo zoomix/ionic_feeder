@@ -105,9 +105,16 @@ angular.module('starter', ['ionic'])
   $scope.timeSinceLast = "";
   $scope.activeSlide = 7;
   $scope.loading=0;
+  $scope.mostRecentFinishedFeeding=false;
 
+  $scope.fetchAndSetTimeSinceLast = function() {
+    storage.getMostRecentFinishedFeeding(function(row) {
+      $scope.mostRecentFinishedFeeding = row;
+      $scope.setTimeSinceLast();
+    });
+  }
   $scope.setTimeSinceLast = function() {
-    if($scope.todaysFeedings.length == 0) {
+    if(!$scope.mostRecentFinishedFeeding) {
       $scope.timeSinceLast = null;
     } else {
       var latestRow = $scope.todaysFeedings[0]; //Remember. The rows are in reverse order.
@@ -137,7 +144,7 @@ angular.module('starter', ['ionic'])
         }
         $scope.feedings[7] = rows;
         $scope.todaysFeedings = $scope.feedings[7];
-        $scope.setTimeSinceLast();
+        $scope.fetchAndSetTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () {

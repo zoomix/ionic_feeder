@@ -130,6 +130,18 @@ var storage = {
     }, this.errorCB);
   },
 
+  getMostRecentFinishedFeeding: function(resultCB) {
+    this.db.transaction(function(tx) {
+      tx.executeSql('SELECT * FROM DEMO where ongoing <> "true" order by startTime desc limit 1', [], function(tx, results) {
+        if (results.rows && results.rows.length > 0) {
+          var item = results.rows.item(0);
+          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing === 'true'}
+          resultCB(row);
+        }
+      }, this.errorCB);
+    }, this.errorCB);
+  },
+
   storeAndSync: function(row) {
     console.log("storeAndSync: " + (row && row.id));
     storage.store(row, true);
