@@ -38,6 +38,9 @@ var storage = {
     try {
       this.db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
       this.db.transaction(this.populateDB, this.errorCB, this.successCB);
+      this.db.transaction(function(tx) {
+          tx. executeSql('ALTER TABLE DEMO ADD COLUMN deleted');
+        }, this.errorCB, this.successCB)
     } catch (e) {
       console.log("No database. Running in browser? " + e);
     }
@@ -90,7 +93,7 @@ var storage = {
     }
     console.log("getDataForDay from " + fromTime + " to " + toTime);
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM DEMO where startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
+      tx.executeSql('SELECT * FROM DEMO where deleted <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
         var rows = []
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
@@ -129,7 +132,7 @@ var storage = {
 
   getIdsOlderThan: function(startTime, resultCB) {
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT id FROM DEMO where startTime >= ?', ["" + startTime], function(tx, results) {
+      tx.executeSql('SELECT id FROM DEMO where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
         var ids = [];
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
@@ -143,7 +146,7 @@ var storage = {
 
   getMostRecentFinishedFeeding: function(resultCB) {
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM DEMO where ongoing <> "true" order by startTime desc limit 1', [], function(tx, results) {
+      tx.executeSql('SELECT * FROM DEMO where deleted <> "true" and ongoing <> "true" order by startTime desc limit 1', [], function(tx, results) {
         if (results.rows && results.rows.length > 0) {
           var item = results.rows.item(0);
           var row = storage.rowFromDbItem(item);
@@ -168,8 +171,8 @@ var storage = {
       if(!row.id && row.id != 0) {
         row.id = Math.round(Math.random()*1000000);
       }
-      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing) VALUES ' + 
-                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '")');
+      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing,              deleted) VALUES ' + 
+                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '")');
       if(alsoSync) {
         app.postFeeding(row);
       }      

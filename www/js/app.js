@@ -64,8 +64,6 @@ angular.module('starter', ['ionic'])
     app.postAllFeedings();
   }
 
-
-
   $scope.userId = function() {
     return storage.getUserId();
   }
@@ -79,21 +77,12 @@ angular.module('starter', ['ionic'])
   $scope.closeModal = function() {
     $scope.modal.hide();
   };
-  //Cleanup the modal when we're done with it!
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
-  // Execute action on hide modal
-  $scope.$on('modal.hide', function() {
-    // Execute action
-  });
-  // Execute action on remove modal
-  $scope.$on('modal.removed', function() {
-    // Execute action
-  });
 })
 
-.controller('CounterCtrl', function($scope, $timeout) {
+.controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter) {
   $scope.feedings = new Array(8);
   $scope.todaysFeedings = [];
   $scope.feedings[7] = $scope.todaysFeedings;
@@ -216,7 +205,7 @@ angular.module('starter', ['ionic'])
           if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
             console.log("ongoing feeding: " + feeding.id);
             $scope.continue(feeding);
-          } else if(!feedingIds.has(feeding.id)) {
+          } else if( feeding.deleted !== 'true' && feeding.deleted !== true && !feedingIds.has(feeding.id)) {
             needReloading = true;
             storage.store(feeding);
           }
@@ -271,9 +260,45 @@ angular.module('starter', ['ionic'])
       });
     }
   }
+  $scope.reloadActivePage = function() {
+    $scope.feedings[$scope.activeSlide] = null;
+    $scope.slideHasChanged($scope.activeSlide);
+  }
 
   $scope.endTime = function(feeding) {
     return parseInt(feeding.startTime) + parseInt(feeding.duration);
   }
+
+
+  $scope.editFeeding = function(feeding) {
+    $scope.editedFeedingOrig = feeding;
+    $scope.editedFeedingModel = { startTime: $filter('date')(feeding.startTime, 'hh:mm'), 
+                                  duration: $filter('date')(feeding.duration, 'm'),
+                                  supplier: feeding.supplier };
+    var editFeedingPopup = $ionicPopup.show({
+      title: 'Edit feeding!',
+      templateUrl: 'editFeeding.html',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        { text: 'Save', 
+          type: 'button-positive', 
+          onTap: function (e) {
+            $scope.editedFeedingOrig.supplier = $scope.editedFeedingModel.supplier;
+            $scope.editedFeedingOrig.duration = parseInt($scope.editedFeedingModel.duration) * 60 * 1000;
+            storage.storeAndSync($scope.editedFeedingOrig);
+          }
+        },
+        { text: 'Delete', 
+          type: 'button-assertive',
+          onTap: function(e) {
+            $scope.editedFeedingOrig.deleted = true;
+            storage.storeAndSync($scope.editedFeedingOrig);
+            $scope.reloadActivePage();
+          }
+        }
+      ]
+    });
+  };
 
 })

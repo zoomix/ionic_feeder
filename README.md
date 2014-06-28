@@ -5,7 +5,7 @@ Ionic Feeder
 
 ##TODO:
 
-* Modify old feeding.
+* Add updatedAt-field to feedings to sync deletes and modifies.
 * Create a demo-mode that temporarily changes user id
 * Use a better ID
 * Update counter in notifications.
@@ -58,6 +58,7 @@ Ionic Feeder
 * Add menu button
 * Refactor .getNewFeedings to use only startTime
 * Time since last Feeding works across days.
+* Modify old feeding.
 
 
 ##Used plugins
