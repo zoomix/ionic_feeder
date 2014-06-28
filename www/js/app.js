@@ -114,12 +114,9 @@ angular.module('starter', ['ionic'])
     });
   }
   $scope.setTimeSinceLast = function() {
-    if(!$scope.mostRecentFinishedFeeding) {
-      $scope.timeSinceLast = null;
-    } else {
-      var latestRow = $scope.todaysFeedings[0]; //Remember. The rows are in reverse order.
-      var sinceLastStart = app.getTimeAgo((new Date().getTime()) - latestRow.startTime);
-      var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - latestRow.startTime - latestRow.duration);
+    if($scope.mostRecentFinishedFeeding) {
+      var sinceLastStart = app.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime);
+      var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime - $scope.mostRecentFinishedFeeding.duration);
       $scope.timeSinceLast = sinceLastEnd;
     }
   }
@@ -132,6 +129,7 @@ angular.module('starter', ['ionic'])
 
   $scope.reloadTodaysFeedings = function() {
       $scope.loading += 1; //Start loading
+      $scope.fetchAndSetTimeSinceLast();
       storage.getDataForDay(0, function (rows) {
         var latestRow = false;
         if(rows.length > 0) {
@@ -144,7 +142,6 @@ angular.module('starter', ['ionic'])
         }
         $scope.feedings[7] = rows;
         $scope.todaysFeedings = $scope.feedings[7];
-        $scope.fetchAndSetTimeSinceLast();
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () {
@@ -199,6 +196,7 @@ angular.module('starter', ['ionic'])
   $scope.finnish = function(supplier) {
     $scope.todaysFeedings.unshift($scope.currentFeeding);
     $scope.currentFeeding.ongoing = false;
+    $scope.mostRecentFinishedFeeding = $scope.currentFeeding;
     storage.storeAndSync($scope.currentFeeding);
     vibrations.reset();
     $scope.setPredictedSupplier($scope.currentFeeding);

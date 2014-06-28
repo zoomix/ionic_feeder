@@ -62,6 +62,17 @@ var storage = {
 
   },
 
+  rowFromDbItem: function(item) {
+    return {
+            id: item.id, 
+            startTime: parseInt(item.startTime), 
+            supplier: item.supplier, 
+            duration: parseInt(item.duration), 
+            volume: item.volume, 
+            ongoing: item.ongoing === 'true'
+          }
+  },
+
   getDataForDay: function(day, resultCB) {
     // app.showToast('Loading...');
     if(!this.db) {
@@ -84,7 +95,7 @@ var storage = {
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
           var item = results.rows.item(i)
-          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing === 'true'}
+          var row = storage.rowFromDbItem(item);
           rows.push(row);
         }
         resultCB(rows);
@@ -107,8 +118,8 @@ var storage = {
         var rows = []
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
-          var item = results.rows.item(i)
-          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing === 'true'}
+          var item = results.rows.item(i);
+          var row = storage.rowFromDbItem(item);
           rows.unshift(row);
         }
         resultCB(rows);
@@ -122,7 +133,7 @@ var storage = {
         var ids = [];
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
-          var row = results.rows.item(i)
+          var row = results.rows.item(i);
           ids.push(row.id);
         }
         resultCB(ids);
@@ -135,7 +146,7 @@ var storage = {
       tx.executeSql('SELECT * FROM DEMO where ongoing <> "true" order by startTime desc limit 1', [], function(tx, results) {
         if (results.rows && results.rows.length > 0) {
           var item = results.rows.item(0);
-          var row = {id: item.id, startTime: item.startTime, supplier: item.supplier, duration: item.duration, volume: item.volume, ongoing: item.ongoing === 'true'}
+          var row = storage.rowFromDbItem(item);
           resultCB(row);
         }
       }, this.errorCB);
@@ -201,7 +212,6 @@ var app = {
 
 
   getNewFeedings: function(latestFeedingStartTime, newItemsCB) {
-    // app.showToast('Syncing...');
     var request = new XMLHttpRequest();
     var fromTime = 0;
     if(latestFeedingStartTime) {
