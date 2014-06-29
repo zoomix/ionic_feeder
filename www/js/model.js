@@ -215,11 +215,18 @@ var app = {
 
 
   getNewFeedings: function(latestFeedingStartTime, newItemsCB) {
-    var request = new XMLHttpRequest();
-    var fromTime = 0;
     if(latestFeedingStartTime) {
-      fromTime = latestFeedingStartTime - 4 * 3600 * 1000; //Allways refetch a bit
+      var fromTime = latestFeedingStartTime - 4 * 3600 * 1000; //Allways refetch a bit
+      app.downloadNewFeedings(fromTime, newItemsCB);
+    } else {
+      storage.getMostRecentFinishedFeeding(function(row) {
+        app.downloadNewFeedings(row.startTime, newItemsCB);
+      });
     }
+  },
+
+  downloadNewFeedings: function(fromTime, newItemsCB) {
+    var request = new XMLHttpRequest();
     request.open("GET", BASE_URL + storage.getUserId() + "/" + fromTime, true);
     request.onreadystatechange = function() {
       if (request.readyState == 4) {

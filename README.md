@@ -23,6 +23,7 @@ Ionic Feeder
 * Sometimes a store gets 0 duration even though the timer was on.
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 
+
 ##DONE:
 * Store partials in db.
 * Skip fullscreen - show status bar.
@@ -59,6 +60,7 @@ Ionic Feeder
 * Refactor .getNewFeedings to use only startTime
 * Time since last Feeding works across days.
 * Modify old feeding.
+* Does a full resync on a day without registered feedings (bug)
 
 
 ##Used plugins
