@@ -37,7 +37,7 @@ var storage = {
   initialize: function(initializedCB) {
     try {
       this.db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
-      this.db.transaction(this.populateDB, this.errorCB, this.successCB);
+      this.db.transaction(this.populateDB, this.errorCB);
       this.db.transaction(function(tx) { tx. executeSql('ALTER TABLE DEMO ADD COLUMN deleted');   });
       this.db.transaction(function(tx) { tx. executeSql('ALTER TABLE DEMO ADD COLUMN updatedAt'); });
     } catch (e) {
@@ -64,6 +64,7 @@ var storage = {
             duration: parseInt(item.duration), 
             volume: item.volume, 
             ongoing: item.ongoing === 'true',
+            updatedAt: (item.updatedAt) ? parseInt(item.updatedAt) : null,
           }
   },
 
@@ -144,12 +145,13 @@ var storage = {
       if(!row.id && row.id != 0) {
         row.id = Math.round(Math.random()*1000000);
       }
-      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing,              deleted) VALUES ' + 
-                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '")');
+      var preparedUpdatedAt = (row.updatedAt) ? ('"' + row.updatedAt + '"') : null;
+      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing,               deleted,                          updatedAt) VALUES ' + 
+                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '", ' + preparedUpdatedAt + ')');
       if(alsoSync) {
         app.postFeeding(row);
       }      
-    }, this.errorCB, this.successCB);
+    }, this.errorCB);
   },
 
   userId: null, 
@@ -206,7 +208,8 @@ var app = {
         console.log("Synced. Got: '" + request.responseText + "'");
         if (request.responseText && request.responseText.length > 0) {
           var items = JSON.parse(request.responseText);
-          newItemsCB(items);        }
+          newItemsCB(items);
+        }
       }
     }
     request.send();

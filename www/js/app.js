@@ -202,11 +202,13 @@ angular.module('starter', ['ionic'])
         console.log("We've got " + feedingIds + " older than " + newItems[0].startTime);
         for (var i = 0; i < newItems.length; i++) {
           feeding = newItems[i];
+          var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0
           if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
             console.log("ongoing feeding: " + feeding.id);
             $scope.continue(feeding);
-          } else if( feeding.deleted !== 'true' && feeding.deleted !== true && !feedingIds.has(feeding.id)) {
-            needReloading = true;
+          } else if( !feedingIds.has(feeding.id) || feedingUpdated) {
+            var feedingDeleted = feeding.deleted === 'true' || feeding.deleted === true
+            needReloading = needReloading || !feedingDeleted;
             storage.store(feeding);
           }
         }
@@ -215,7 +217,7 @@ angular.module('starter', ['ionic'])
           $scope.setPredictedSupplier(feeding);
         }
         if (needReloading) {
-          $scope.reloadTodaysFeedings();
+          $scope.reloadActivePage();
         }
       })
     }
@@ -286,6 +288,7 @@ angular.module('starter', ['ionic'])
           onTap: function (e) {
             $scope.editedFeedingOrig.supplier = $scope.editedFeedingModel.supplier;
             $scope.editedFeedingOrig.duration = parseInt($scope.editedFeedingModel.duration) * 60 * 1000;
+            $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
           }
         },
@@ -293,6 +296,7 @@ angular.module('starter', ['ionic'])
           type: 'button-assertive',
           onTap: function(e) {
             $scope.editedFeedingOrig.deleted = true;
+            $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
             $scope.reloadActivePage();
           }
