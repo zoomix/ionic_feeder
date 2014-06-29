@@ -38,18 +38,15 @@ var storage = {
     try {
       this.db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
       this.db.transaction(this.populateDB, this.errorCB, this.successCB);
-      this.db.transaction(function(tx) {
-          tx. executeSql('ALTER TABLE DEMO ADD COLUMN deleted');
-        }, this.errorCB, this.successCB)
+      this.db.transaction(function(tx) { tx. executeSql('ALTER TABLE DEMO ADD COLUMN deleted');   });
+      this.db.transaction(function(tx) { tx. executeSql('ALTER TABLE DEMO ADD COLUMN updatedAt'); });
     } catch (e) {
       console.log("No database. Running in browser? " + e);
     }
   },
 
-  // Populate the database 
-  //
   populateDB: function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, startTime, supplier, duration, volume, ongoing)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, startTime, supplier, duration, volume, ongoing, deleted, updatedAt)');
   },
 
   // Transaction error callback
@@ -59,12 +56,6 @@ var storage = {
     console.log(err.message);
   },
 
-  // Transaction success callback
-  //
-  successCB: function() {
-
-  },
-
   rowFromDbItem: function(item) {
     return {
             id: item.id, 
@@ -72,20 +63,11 @@ var storage = {
             supplier: item.supplier, 
             duration: parseInt(item.duration), 
             volume: item.volume, 
-            ongoing: item.ongoing === 'true'
+            ongoing: item.ongoing === 'true',
           }
   },
 
   getDataForDay: function(day, resultCB) {
-    // app.showToast('Loading...');
-    if(!this.db) {
-      // Give some test data back
-      resultCB([ {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true},
-                 {id: 1421, startTime: new Date().getTime() - 4000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
-                 {id: 1321, startTime: new Date().getTime() - 6000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
-                 ]);
-      return;
-    }
     var fromTime = app.getToday(day);
     var toTime = app.getToday(day + 1);
     if (day === -7) {
@@ -107,15 +89,6 @@ var storage = {
   },
 
   allData: function(resultCB) {
-    // app.showToast('Loading...');
-    if(!this.db) {
-      // Give some test data back
-      resultCB([ {id: 4214, startTime: new Date().getTime() - 123000, supplier: 'L', duration: 123000, volume: 0, ongoing: true},
-                 {id: 1421, startTime: new Date().getTime() - 4000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
-                 {id: 1321, startTime: new Date().getTime() - 6000000, supplier: 'L', duration: 245000, volume: 0, ongoing: false},
-                 ]);
-      return;
-    }
     this.db.transaction(function(tx) {
       tx.executeSql('SELECT * FROM DEMO', [], function(tx, results) {
         var rows = []
@@ -233,9 +206,7 @@ var app = {
         console.log("Synced. Got: '" + request.responseText + "'");
         if (request.responseText && request.responseText.length > 0) {
           var items = JSON.parse(request.responseText);
-          newItemsCB(items);
-          // app.showToast('Syncing done.');
-        }
+          newItemsCB(items);        }
       }
     }
     request.send();
@@ -260,7 +231,6 @@ var app = {
   },
 
   postAllFeedings: function(allRows, atIndex) {
-    // app.showToast("Uploading all..");
     console.log("postAllFeedings");
     if(!allRows) {
       storage.allData(function(rows) {
