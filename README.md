@@ -5,7 +5,10 @@ Ionic Feeder
 
 ##TODO:
 
-* Add updatedAt-field to feedings to sync deletes and modifies.
+* Wrong suggested supplier when deleted.
+* Bottle button. No time.
+* Clicking bottle button opens slider for volume.
+* Spinner spins forever on new installations.
 * Create a demo-mode that temporarily changes user id
 * Use a better ID
 * Update counter in notifications.
@@ -61,6 +64,7 @@ Ionic Feeder
 * Time since last Feeding works across days.
 * Modify old feeding.
 * Does a full resync on a day without registered feedings (bug)
+* Add updatedAt-field to feedings to sync deletes and modifies.
 
 
 ##Used plugins
