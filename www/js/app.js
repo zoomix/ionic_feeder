@@ -84,8 +84,6 @@ angular.module('starter', ['ionic'])
 
 .controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter) {
   $scope.feedings = new Array(8);
-  $scope.todaysFeedings = [];
-  $scope.feedings[7] = $scope.todaysFeedings;
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
@@ -95,6 +93,10 @@ angular.module('starter', ['ionic'])
   $scope.activeSlide = 7;
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
+
+  $scope.todaysFeedings = function() {
+    return $scope.feedings[7];
+  }
 
   $scope.fetchAndSetTimeSinceLast = function() {
     storage.getMostRecentFinishedFeeding(function(row) {
@@ -130,7 +132,6 @@ angular.module('starter', ['ionic'])
           $scope.setPredictedSupplier(latestRow);
         }
         $scope.feedings[7] = rows;
-        $scope.todaysFeedings = $scope.feedings[7];
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () {
@@ -183,13 +184,14 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.finnish = function(supplier) {
-    $scope.todaysFeedings.unshift($scope.currentFeeding);
-    $scope.currentFeeding.ongoing = false;
-    $scope.mostRecentFinishedFeeding = $scope.currentFeeding;
-    storage.storeAndSync($scope.currentFeeding);
-    vibrations.reset();
-    $scope.setPredictedSupplier($scope.currentFeeding);
+    var clonedFeeding = storage.rowFromDbItem($scope.currentFeeding);
     $scope.currentFeeding = false;
+    clonedFeeding.ongoing = false;
+    $scope.todaysFeedings().unshift(clonedFeeding);
+    $scope.mostRecentFinishedFeeding = clonedFeeding;
+    storage.storeAndSync(clonedFeeding);
+    vibrations.reset();
+    $scope.setPredictedSupplier(clonedFeeding);
     $scope.leftSign = 'L';
     $scope.rightSign= 'R';
   }
