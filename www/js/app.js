@@ -314,6 +314,8 @@ angular.module('starter', ['ionic'])
 
   $scope.confirmBottleFeeding = function() {
     var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.unconfirmedBottleFeeding, ongoing: false }
+    storage.storeAndSync(feeding);
+    $scope.todaysFeedings().unshift(feeding);
     $scope.unconfirmedBottleFeeding = false;
   }
 

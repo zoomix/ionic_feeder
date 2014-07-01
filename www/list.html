@@ -2,8 +2,16 @@
   <div class="verticalLine"></div>
   <span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span>
 </div>
-<div class="times" on-hold="editFeeding(feeding)"><span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
-  <span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span> - 
-  <span class="endtime">{{endTime(feeding) | date:'HH:mm'}}</span> 
-  <span class="item-note duration">{{feeding.duration | date:'m'}} min</span>
+<div class="times" on-hold="editFeeding(feeding)">
+  <span ng-show="feeding.supplier === 'B'">
+    <span class="supplier supplier{{feeding.supplier}}"><i class="ion-waterdrop"></i></span>
+    <span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span>
+    <span class="item-note volume">{{feeding.volume}}ml</span>
+  </span>
+  <span ng-show="feeding.supplier !== 'B'">
+    <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
+    <span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span> - 
+    <span class="endtime">{{endTime(feeding) | date:'HH:mm'}}</span> 
+    <span class="item-note duration">{{feeding.duration | date:'m'}} min</span>
+  </span>
 </div>

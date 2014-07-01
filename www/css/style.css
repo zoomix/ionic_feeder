@@ -34,6 +34,15 @@ wn CSS if you like */
   border-bottom-right-radius: 19px;
   left: 22px;
 }
+.supplierB {
+  border-radius: 19px;
+  left: 3px;
+  width: 40px;
+}
+.supplierB .ion-waterdrop {
+  background-color: #fff;
+  color: #000;
+}
 
 *, body, .item, .bar {
 	background-color: #000;
