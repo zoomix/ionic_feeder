@@ -5,6 +5,7 @@ wn CSS if you like */
   font-size: 80px;
   line-height: 80px;
   text-align: center;
+  position: relative;
 }
 
 
@@ -73,6 +74,7 @@ wn CSS if you like */
   padding: 8px;
   margin-top: 30px;
   margin-bottom: 30px;
+  line-height: 70px;
 }
 
 .between {

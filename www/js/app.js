@@ -93,6 +93,7 @@ angular.module('starter', ['ionic'])
   $scope.activeSlide = 7;
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
+  $scope.unconfirmedBottleFeeding=false;
 
   $scope.todaysFeedings = function() {
     return $scope.feedings[7];
@@ -306,5 +307,18 @@ angular.module('starter', ['ionic'])
       ]
     });
   };
+
+  $scope.bottleFeeding = function() {
+    $scope.unconfirmedBottleFeeding = 0;
+  }
+
+  $scope.confirmBottleFeeding = function() {
+    var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.unconfirmedBottleFeeding, ongoing: false }
+    $scope.unconfirmedBottleFeeding = false;
+  }
+
+  $scope.cancelBottleFeeding = function() {
+    $scope.unconfirmedBottleFeeding = false;
+  }
 
 })
