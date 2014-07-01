@@ -38,6 +38,7 @@
 
     		<div class="suppliers">
           <button class="button button-round {{lClass}}" id="breastL" ng-click="toggleFeeding('L')" ng-bind-html="leftSign"></button> 
+          <button class="button button-round button-bottle" id="bottle"  ng-click="bottleFeeding()"><i class="ion-waterdrop"></i></button> 
           <button class="button button-round {{rClass}}" id="breastR" ng-click="toggleFeeding('R')" ng-bind-html="rightSign"></button> 
         </div>
         <div class="loader" ng-show="loading"><i class="ion-loading-c"></i></div>

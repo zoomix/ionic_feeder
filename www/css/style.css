@@ -40,7 +40,7 @@ wn CSS if you like */
 	color: #fff;
 }
 
-.button, .button:HOVER {
+.button, .button:HOVER, .ion-waterdrop, .ion-stop {
 	color: #fff;
 	background-color: #222;
 }
@@ -52,6 +52,14 @@ wn CSS if you like */
   height: 46px;
   line-height: 46px;
   font-size: 21px;
+  vertical-align: middle;
+}
+
+.button-bottle {
+  width: 66px;
+  height: 66px;
+  line-height: 66px;
+  border-radius: 50%;
 }
 
 .selected {
@@ -61,6 +69,7 @@ wn CSS if you like */
 
 .suppliers {
 	text-align: center;
+  vertical-align: middle;
   padding: 8px;
   margin-top: 30px;
   margin-bottom: 30px;
