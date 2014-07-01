@@ -125,6 +125,8 @@ var storage = {
           var item = results.rows.item(0);
           var row = storage.rowFromDbItem(item);
           resultCB(row);
+        } else {
+          resultCB();
         }
       }, this.errorCB);
     }, this.errorCB);
@@ -195,7 +197,8 @@ var app = {
       app.downloadNewFeedings(fromTime, newItemsCB);
     } else {
       storage.getMostRecentFinishedFeeding(function(row) {
-        app.downloadNewFeedings(row.startTime, newItemsCB);
+        var startTime = (row)? row.startTime : 0;
+        app.downloadNewFeedings(startTime, newItemsCB);
       });
     }
   },
