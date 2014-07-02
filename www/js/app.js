@@ -221,6 +221,7 @@ angular.module('starter', ['ionic'])
         }
         if (needReloading) {
           $scope.reloadActivePage();
+          $scope.fetchAndSetTimeSinceLast();
         }
       })
     }
