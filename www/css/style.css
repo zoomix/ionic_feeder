@@ -9,6 +9,14 @@ wn CSS if you like */
 }
 
 
+.supplierContainer {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  text-align: center;
+  background-color: transparent;
+  vertical-align: middle;
+}
 .supplier {
   background-color: white;
 /*  border-radius: 19px;*/
@@ -19,29 +27,34 @@ wn CSS if you like */
   text-align: center;
   display: inline-block;
   color: black;
-  position: absolute;
+/*  position: absolute;
   top: 0px;
-  left: 0px;
+  left: 0px;*/
 }
 
 .supplierL {
   border-top-left-radius: 19px;
   border-bottom-left-radius: 19px;
-  left: -6px;
+  margin-right: 29px;
+  left: inherit;
 }
 .supplierR {
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
-  left: 22px;
+  margin-left: 29px;
 }
 .supplierB {
   border-radius: 19px;
-  left: 3px;
+  left: inherit;
   width: 40px;
 }
 .supplierB .ion-waterdrop {
   background-color: #fff;
   color: #000;
+}
+
+.startTime {
+  padding-left: 66px !important;
 }
 
 *, body, .item, .bar {
@@ -89,7 +102,8 @@ wn CSS if you like */
 .between {
   color: aqua;
   font-size: 18px;
-  margin-left: 64px;
+  text-align: right;
+  margin-right: 20px;
 }
 
 .input-label { color: #fff;}
@@ -111,38 +125,29 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 .times, .durations {
-  margin-left: 60px;
-  margin-right: 70px;
   position: relative;
-  line-height: 30px;
+  height: 54px;
   overflow: visible;
 }
 
 .durations {
-  line-height: 42px;
+  height: 52px;
 }
 
-.starttime {
-  color: white;
-  margin-left: 64px;
+.feedingInfo {
+  margin-left: 36px;
+  line-height: 18px;
 }
-
-.endtime {
-  color: white;
-}
-
-.item-note {
-  float: right;
-  color: #aaa;
-  font-size: 14px;
-  line-height: 26px;
+.col .duration, .col .volume {
+  font-size: 12px;
+  color: #999;
 }
 
 .verticalLine {
   border-left: 1px solid aqua;
   position: absolute;
   height: 100%;
-  left: 22px;
+  left: 50%;
 }
 
 .megaDot {
@@ -157,13 +162,15 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 .timeSinceLast .time, .timeSinceLast p {
-  margin-left: 64px;
   line-height: 10px;
 }
 .timeSinceLast p { color: darkgray ;}
-.timeSinceLast { height: 85px; }
+.timeSinceLast { height: 68px; text-align: center; }
 .timeSinceLast .verticalLine {
   margin-top: 10px;
 }
 
 .button-menu,.button-menu:HOVER { background-color: #000;}
+
+.row {padding: 0px;}
+.col {padding: 0px; }
