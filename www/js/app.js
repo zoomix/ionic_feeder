@@ -93,6 +93,7 @@ angular.module('starter', ['ionic'])
   $scope.activeSlide = 7;
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
+  $scope.unconfirmedBottleFeeding=false;
 
   $scope.todaysFeedings = function() {
     return $scope.feedings[7];
@@ -220,6 +221,7 @@ angular.module('starter', ['ionic'])
         }
         if (needReloading) {
           $scope.reloadActivePage();
+          $scope.fetchAndSetTimeSinceLast();
         }
       })
     }
@@ -278,7 +280,8 @@ angular.module('starter', ['ionic'])
     $scope.editedFeedingOrig = feeding;
     $scope.editedFeedingModel = { startTime: $filter('date')(feeding.startTime, 'hh:mm'), 
                                   duration: $filter('date')(feeding.duration, 'm'),
-                                  supplier: feeding.supplier };
+                                  supplier: feeding.supplier,
+                                  volume: (feeding.volume) ? feeding.volume/10 : 0};
     var editFeedingPopup = $ionicPopup.show({
       title: 'Edit feeding!',
       templateUrl: 'editFeeding.html',
@@ -290,6 +293,7 @@ angular.module('starter', ['ionic'])
           onTap: function (e) {
             $scope.editedFeedingOrig.supplier = $scope.editedFeedingModel.supplier;
             $scope.editedFeedingOrig.duration = parseInt($scope.editedFeedingModel.duration) * 60 * 1000;
+            $scope.editedFeedingOrig.volume = $scope.editedFeedingModel.volume * 10;
             $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
           }
@@ -306,5 +310,21 @@ angular.module('starter', ['ionic'])
       ]
     });
   };
+
+  $scope.bottleFeeding = function() {
+    $scope.unconfirmedBottleFeeding = 0;
+  }
+
+  $scope.confirmBottleFeeding = function() {
+    var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.unconfirmedBottleFeeding, ongoing: false }
+    storage.storeAndSync(feeding);
+    $scope.todaysFeedings().unshift(feeding);
+    $scope.fetchAndSetTimeSinceLast();
+    $scope.unconfirmedBottleFeeding = false;
+  }
+
+  $scope.cancelBottleFeeding = function() {
+    $scope.unconfirmedBottleFeeding = false;
+  }
 
 })

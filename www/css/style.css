@@ -5,6 +5,7 @@ wn CSS if you like */
   font-size: 80px;
   line-height: 80px;
   text-align: center;
+  position: relative;
 }
 
 
@@ -33,6 +34,15 @@ wn CSS if you like */
   border-bottom-right-radius: 19px;
   left: 22px;
 }
+.supplierB {
+  border-radius: 19px;
+  left: 3px;
+  width: 40px;
+}
+.supplierB .ion-waterdrop {
+  background-color: #fff;
+  color: #000;
+}
 
 *, body, .item, .bar {
 	background-color: #000;
@@ -40,7 +50,7 @@ wn CSS if you like */
 	color: #fff;
 }
 
-.button, .button:HOVER {
+.button, .button:HOVER, .ion-waterdrop, .ion-stop {
 	color: #fff;
 	background-color: #222;
 }
@@ -52,6 +62,14 @@ wn CSS if you like */
   height: 46px;
   line-height: 46px;
   font-size: 21px;
+  vertical-align: middle;
+}
+
+.button-bottle {
+  width: 66px;
+  height: 66px;
+  line-height: 66px;
+  border-radius: 50%;
 }
 
 .selected {
@@ -61,9 +79,11 @@ wn CSS if you like */
 
 .suppliers {
 	text-align: center;
+  vertical-align: middle;
   padding: 8px;
   margin-top: 30px;
   margin-bottom: 30px;
+  line-height: 70px;
 }
 
 .between {
