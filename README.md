@@ -5,12 +5,13 @@ Ionic Feeder
 
 ##TODO:
 
-* Edit bottle
+* Show predicted supplier if there's been one used last 24hours.
 * Wrong suggested supplier when deleted.
 * Spinner spins forever on new installations.
 * Create a demo-mode that temporarily changes user id
 * Use a better ID
 * Update counter in notifications.
+* Edit bottle. Use bottle icon instead of 'B'
 * Split up controllers
 * Sanitize models.js
 * Move resync to model and have it throw events
@@ -66,6 +67,7 @@ Ionic Feeder
 * Add updatedAt-field to feedings to sync deletes and modifies.
 * Bottle button. No time.
 * Clicking bottle button opens slider for volume.
+* Edit bottle
 
 
 ##Used plugins
