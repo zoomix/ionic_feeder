@@ -5,10 +5,10 @@
     <span class="col"></span>
   </span>
 </div>
-<div class="times" on-hold="editFeeding(feeding)">
+<div class="times">
   <span class="row" ng-show="feeding.supplier === 'B'">
     <div class="verticalLine"></div>
-    <span class="supplierContainer">
+    <span class="supplierContainer" ng-click="editFeeding(feeding)">
       <span class="supplier supplier{{feeding.supplier}}"><i class="ion-waterdrop"></i></span>
     </span>
     <span class="col"></span>
@@ -18,9 +18,9 @@
     </span>
     
   </span>
-  <span class="row"  ng-show="feeding.supplier !== 'B'">
+  <span class="row" ng-show="feeding.supplier !== 'B'">
     <div class="verticalLine"></div>
-    <span class="supplierContainer">
+    <span class="supplierContainer" ng-click="editFeeding(feeding)">
       <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
     </span>
     <span class="col"></span>
