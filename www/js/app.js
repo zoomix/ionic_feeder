@@ -278,7 +278,7 @@ angular.module('starter', ['ionic'])
 
   $scope.editFeeding = function(feeding) {
     $scope.editedFeedingOrig = feeding;
-    $scope.editedFeedingModel = { startTime: $filter('date')(feeding.startTime, 'hh:mm'), 
+    $scope.editedFeedingModel = { startTime: $filter('date')(feeding.startTime, 'HH:mm'), 
                                   duration: $filter('date')(feeding.duration, 'm'),
                                   supplier: feeding.supplier,
                                   volume: (feeding.volume) ? feeding.volume/10 : 0};
