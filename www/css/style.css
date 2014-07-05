@@ -173,4 +173,12 @@ h1, h2, h3, h4 { color: #fff;}
 .button-menu,.button-menu:HOVER { background-color: #000;}
 
 .row {padding: 0px;}
-.col {padding: 0px; }
+.col {padding: 0px;}
+
+.newFeedingDuration { text-align: center;}
+.newFeedingDuration div { 
+  font-size: 56px;
+  line-height: 98px;
+  text-align: center;
+}
+.newFeedingDuration input { width: 90% }

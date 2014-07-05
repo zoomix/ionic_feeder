@@ -93,7 +93,6 @@ angular.module('starter', ['ionic'])
   $scope.activeSlide = 7;
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
-  $scope.unconfirmedBottleFeeding=false;
 
   $scope.todaysFeedings = function() {
     return $scope.feedings[7];
@@ -275,7 +274,6 @@ angular.module('starter', ['ionic'])
     return parseInt(feeding.startTime) + parseInt(feeding.duration);
   }
 
-
   $scope.editFeeding = function(feeding) {
     $scope.editedFeedingOrig = feeding;
     $scope.editedFeedingModel = { startTime: $filter('date')(feeding.startTime, 'HH:mm'), 
@@ -283,7 +281,7 @@ angular.module('starter', ['ionic'])
                                   supplier: feeding.supplier,
                                   volume: (feeding.volume) ? feeding.volume/10 : 0};
     var editFeedingPopup = $ionicPopup.show({
-      title: 'Edit feeding!',
+      title: 'Edit feeding',
       templateUrl: 'editFeeding.html',
       scope: $scope,
       buttons: [
@@ -312,19 +310,24 @@ angular.module('starter', ['ionic'])
   };
 
   $scope.bottleFeeding = function() {
-    $scope.unconfirmedBottleFeeding = 0;
-  }
-
-  $scope.confirmBottleFeeding = function() {
-    var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.unconfirmedBottleFeeding, ongoing: false }
-    storage.storeAndSync(feeding);
-    $scope.todaysFeedings().unshift(feeding);
-    $scope.fetchAndSetTimeSinceLast();
-    $scope.unconfirmedBottleFeeding = false;
-  }
-
-  $scope.cancelBottleFeeding = function() {
-    $scope.unconfirmedBottleFeeding = false;
+    $scope.bottleFeedingModel = { volume: 0 }
+    var editFeedingPopup = $ionicPopup.show({
+      title: 'New bottle feeding',
+      templateUrl: 'newBottleFeeding.html',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        { text: 'Add', 
+          type: 'button-positive', 
+          onTap: function (e) {
+            var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.bottleFeedingModel.volume, ongoing: false }
+            storage.storeAndSync(feeding);
+            $scope.todaysFeedings().unshift(feeding);
+            $scope.fetchAndSetTimeSinceLast();
+          }
+        }
+      ]
+    });
   }
 
 })
