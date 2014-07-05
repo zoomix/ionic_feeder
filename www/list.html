@@ -1,17 +1,32 @@
 <div class="durations" ng-show="$index > 0">
-  <div class="verticalLine"></div>
-  <span class="between">{{timeToPrevFeeding(activeSlide, $index)}}</span>
-</div>
-<div class="times" on-hold="editFeeding(feeding)">
-  <span ng-show="feeding.supplier === 'B'">
-    <span class="supplier supplier{{feeding.supplier}}"><i class="ion-waterdrop"></i></span>
-    <span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span>
-    <span class="item-note volume">{{feeding.volume}}ml</span>
+  <span class="row">
+    <div class="verticalLine"></div>
+    <span class="col between">{{timeToPrevFeeding(activeSlide, $index)}}</span>
+    <span class="col"></span>
   </span>
-  <span ng-show="feeding.supplier !== 'B'">
-    <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
-    <span class="starttime">{{feeding.startTime | date:'HH:mm'}}</span> - 
-    <span class="endtime">{{endTime(feeding) | date:'HH:mm'}}</span> 
-    <span class="item-note duration">{{feeding.duration | date:'m'}} min</span>
+</div>
+<div class="times">
+  <span class="row" ng-show="feeding.supplier === 'B'">
+    <div class="verticalLine"></div>
+    <span class="supplierContainer" ng-click="editFeeding(feeding)">
+      <span class="supplier supplier{{feeding.supplier}}"><i class="ion-waterdrop"></i></span>
+    </span>
+    <span class="col"></span>
+    <span class="col">
+      <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}}</div>
+      <div class="feedingInfo volume">{{feeding.volume}}ml</div>
+    </span>
+    
+  </span>
+  <span class="row" ng-show="feeding.supplier !== 'B'">
+    <div class="verticalLine"></div>
+    <span class="supplierContainer" ng-click="editFeeding(feeding)">
+      <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
+    </span>
+    <span class="col"></span>
+    <span class="col">
+      <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}} - {{endTime(feeding) | date:'HH:mm'}}</div>
+      <div class="feedingInfo duration">{{feeding.duration | date:'m'}} min</div>
+   </span>
   </span>
 </div>
