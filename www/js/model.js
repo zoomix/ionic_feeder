@@ -28,6 +28,10 @@ Array.prototype.has = function(item) {
 var util = {
   randomness: function() {
     return (Math.round(Math.random()*Math.pow(2,60))).toString(36)
+  },
+
+  isBreastFeeding: function(supplier) {
+    return supplier === 'L' || supplier === 'R';
   }
 }
 
@@ -180,6 +184,36 @@ var storage = {
     console.log("setting: userId " + userId);
     window.localStorage.setItem("userId", userId);
     storage.userId = userId;
+  },
+
+  predictSupplier: function(feedings, supplierCallback, index) {
+    console.log("Predicting supplier");
+    var currentIndex = index || 0; 
+    if(feedings && feedings.length > currentIndex) {
+      var feeding = feedings[currentIndex];
+      if(!feeding.ongoing && util.isBreastFeeding(feeding.supplier)) {
+        supplierCallback( feeding.supplier === 'L' ? 'R' : 'L' );
+        return;
+      } else {
+        this.predictSupplier(feedings, supplierCallback, currentIndex++);
+      }
+    } else {
+      var oldestTime = new Date().getTime() - 24 * 3600 * 1000;
+      this.db.transaction(function(tx) {
+        tx.executeSql('SELECT supplier, startTime FROM DEMO ' + 
+                        'where deleted <> "true" ' + 
+                          'and ongoing <> "true" ' + 
+                          'and (supplier == "L" OR supplier == "R")' + 
+                          'and startTime > ?' + 
+                        'order by startTime desc limit 1', ["" + oldestTime], function(tx, results) {
+          if (results.rows && results.rows.length > 0) {
+            console.log("Predicting supplier. Found " + results.rows.item(0).supplier + " @" + results.rows.item(0).startTime);
+            supplierCallback( results.rows.item(0).supplier === 'L' ? 'R' : 'L' );
+          }
+        });
+      });
+    }
+
   }
 }
 

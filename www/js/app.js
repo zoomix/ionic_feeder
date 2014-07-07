@@ -129,9 +129,9 @@ angular.module('starter', ['ionic'])
             rows.shift();
             $scope.continue(latestRow);
           }
-          $scope.setPredictedSupplier(latestRow);
         }
         $scope.feedings[7] = rows;
+        $scope.setPredictedSupplier(rows);
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () {
@@ -144,8 +144,6 @@ angular.module('starter', ['ionic'])
         $scope.resizeList();
       });
   }
-  setTimeout($scope.reloadTodaysFeedings, 1);
-  setTimeout(function() {vibrations.getVibrateInteral()}, 1);
 
   $scope.onTimeout = function(){
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
@@ -181,7 +179,6 @@ angular.module('starter', ['ionic'])
     } else if(feeding.supplier === 'R') {
       $scope.rightSign = STOP_SIGN;
     }
-    $scope.setPredictedSupplier(feeding);
   }
 
   $scope.finnish = function(supplier) {
@@ -192,7 +189,7 @@ angular.module('starter', ['ionic'])
     $scope.mostRecentFinishedFeeding = clonedFeeding;
     storage.storeAndSync(clonedFeeding);
     vibrations.reset();
-    $scope.setPredictedSupplier(clonedFeeding);
+    $scope.setPredictedSupplier([clonedFeeding]);
     $scope.leftSign = 'L';
     $scope.rightSign= 'R';
   }
@@ -200,9 +197,9 @@ angular.module('starter', ['ionic'])
   $scope.mergeNewItems = function(newItems) {
     if (newItems && newItems.length > 0) {
       var needReloading = false;
-      var feeding = false;
       storage.getIdsOlderThan(newItems[0].startTime, function(feedingIds) {
         console.log("We've got " + feedingIds + " older than " + newItems[0].startTime);
+        var feeding = false;
         for (var i = 0; i < newItems.length; i++) {
           feeding = newItems[i];
           var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0
@@ -216,8 +213,8 @@ angular.module('starter', ['ionic'])
           }
         }
         $scope.setTimeSinceLast();
-        if(feeding && !$scope.currentFeeding) {
-          $scope.setPredictedSupplier(feeding);
+        if(!$scope.currentFeeding && feeding) {
+          $scope.setPredictedSupplier([feeding]);
         }
         if (needReloading) {
           $scope.reloadActivePage();
@@ -239,17 +236,16 @@ angular.module('starter', ['ionic'])
     }
   }
 
-  $scope.setPredictedSupplier = function(feeding) {
+  $scope.setPredictedSupplier = function(feedings) {
     $scope.lClass = "";
     $scope.rClass = "";
-    var previousSupplier = feeding.supplier;
-    if(!feeding.ongoing) {
-      if(previousSupplier === 'L') {
-        $scope.rClass = "selected";
-      } else if(previousSupplier === 'R') {
+    storage.predictSupplier(feedings, function(supplier) {
+      if(supplier === 'L') {
         $scope.lClass = "selected";
+      } else if(supplier === 'R') {
+        $scope.rClass = "selected";
       }
-    }
+    })
   }
 
   $scope.slideHasChanged = function(index) {
@@ -341,5 +337,14 @@ angular.module('starter', ['ionic'])
       ]
     });
   }
+
+
+  $scope.init = function() {
+    vibrations.getVibrateInteral();
+    $scope.reloadTodaysFeedings();
+  }
+
+  setTimeout($scope.init(), 1);
+
 
 })

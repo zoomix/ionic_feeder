@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Show predicted supplier if there's been one used last 24hours.
 * Wrong suggested supplier when deleted.
 * Load previous day's data when today is loaded.
 * Create a demo-mode that temporarily changes user id
@@ -69,6 +68,7 @@ Ionic Feeder
 * Sometimes we receive a double click on a button / phantom click. (bug - fixed a while ago.)
 * Sometimes a store gets 0 duration even though the timer was on. (bug - fixed a while ago.)
 * Scroll box size to small. Can't scroll when there are no times. (bug)
+* Show predicted supplier if there's been one used last 24hours.
 
 
 ##Used plugins
