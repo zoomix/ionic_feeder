@@ -232,7 +232,8 @@ angular.module('starter', ['ionic'])
     var next = $scope.feedings[activeSlide][index - 1];
     var curr = $scope.feedings[activeSlide][index ];
     if(next && curr) {
-      return app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
+      var timeAgo = app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
+      return timeAgo < 0 ? 0 : timeAgo;
     }
   }
 
