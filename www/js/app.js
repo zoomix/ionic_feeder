@@ -311,6 +311,7 @@ angular.module('starter', ['ionic'])
             $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
             $scope.reloadActivePage();
+            $scope.setPredictedSupplier();
           }
         }
       ]
