@@ -7,7 +7,7 @@ Ionic Feeder
 
 * Show predicted supplier if there's been one used last 24hours.
 * Wrong suggested supplier when deleted.
-* Spinner spins forever on new installations.
+* Load previous day's data when today is loaded.
 * Create a demo-mode that temporarily changes user id
 * Use a better ID
 * Update counter in notifications.
@@ -22,10 +22,8 @@ Ionic Feeder
 * ...
 
 ##BUGS:
-* Sometimes we receive a double click on a button / phantom click.
-* Sometimes a store gets 0 duration even though the timer was on.
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
-
+* Scroll box size to small. Can't scroll when there are no times.
 
 ##DONE:
 * Store partials in db.
@@ -68,6 +66,9 @@ Ionic Feeder
 * Bottle button. No time.
 * Clicking bottle button opens slider for volume.
 * Edit bottle
+* Spinner spins forever on new installations. (bug - fixed a while ago.)
+* Sometimes we receive a double click on a button / phantom click. (bug - fixed a while ago.)
+* Sometimes a store gets 0 duration even though the timer was on. (bug - fixed a while ago.)
 
 
 ##Used plugins
