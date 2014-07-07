@@ -22,6 +22,7 @@ Ionic Feeder
 
 ##BUGS:
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
+* Did the list become sluggish all of a sudden? Scrolling up and down stutters.
 
 ##DONE:
 * Store partials in db.
