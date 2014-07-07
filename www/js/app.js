@@ -82,7 +82,7 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter) {
+.controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate) {
   $scope.feedings = new Array(8);
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
@@ -141,6 +141,7 @@ angular.module('starter', ['ionic'])
         $scope.loading += 1; //Start syncing
         app.getNewFeedings(latestRow.startTime, $scope.mergeNewItems);
         $scope.loading -= 1; //Stop loading
+        $scope.resizeList();
       });
   }
   setTimeout($scope.reloadTodaysFeedings, 1);
@@ -264,7 +265,18 @@ angular.module('starter', ['ionic'])
         $scope.$apply();
       });
     }
+    $timeout( function() { $scope.resizeList() }, 50);
   }
+
+  $scope.resizeList = function() {
+    if ($scope.listRuleIndex) {
+      document.styleSheets[2].deleteRule($scope.listRuleIndex);
+    }
+    var minHeight = window.innerHeight - document.getElementsByClassName('slider')[0].offsetTop;
+    $scope.listRuleIndex = document.styleSheets[2].insertRule(".list { min-height: " + minHeight + "px }", 2);
+    $ionicScrollDelegate.resize();
+  }
+
   $scope.reloadActivePage = function() {
     $scope.feedings[$scope.activeSlide] = null;
     $scope.slideHasChanged($scope.activeSlide);

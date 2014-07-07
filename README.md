@@ -23,7 +23,6 @@ Ionic Feeder
 
 ##BUGS:
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
-* Scroll box size to small. Can't scroll when there are no times.
 
 ##DONE:
 * Store partials in db.
@@ -69,6 +68,7 @@ Ionic Feeder
 * Spinner spins forever on new installations. (bug - fixed a while ago.)
 * Sometimes we receive a double click on a button / phantom click. (bug - fixed a while ago.)
 * Sometimes a store gets 0 duration even though the timer was on. (bug - fixed a while ago.)
+* Scroll box size to small. Can't scroll when there are no times. (bug)
 
 
 ##Used plugins
