@@ -21,7 +21,6 @@ Ionic Feeder
 
 ##BUGS:
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
-* Did the list become sluggish all of a sudden? Scrolling up and down stutters.
 
 ##DONE:
 * Store partials in db.
@@ -70,6 +69,7 @@ Ionic Feeder
 * Scroll box size to small. Can't scroll when there are no times. (bug)
 * Show predicted supplier if there's been one used last 24hours.
 * Wrong suggested supplier when deleted.
+* Did the list become sluggish all of a sudden? Scrolling up and down stutters. (bug)
 
 
 ##Used plugins

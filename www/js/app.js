@@ -265,12 +265,13 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.resizeList = function() {
-    if ($scope.listRuleIndex) {
-      document.styleSheets[2].deleteRule($scope.listRuleIndex);
+    console.log("resizeList");
+    if (!$scope.resizeListStyle) {
+      $scope.resizeListStyle = document.createElement('style');
+      document.body.appendChild($scope.resizeListStyle);
     }
     var minHeight = window.innerHeight - document.getElementsByClassName('slider')[0].offsetTop;
-    $scope.listRuleIndex = document.styleSheets[2].insertRule(".list { min-height: " + minHeight + "px }", 2);
-    $ionicScrollDelegate.resize();
+    $scope.resizeListStyle.innerHTML = ".list { min-height: " + minHeight + "px }";
   }
 
   $scope.reloadActivePage = function() {
