@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Load previous day's data when today is loaded.
 * Create a demo-mode that temporarily changes user id
 * Use a better ID
 * Update counter in notifications.
@@ -70,6 +69,7 @@ Ionic Feeder
 * Show predicted supplier if there's been one used last 24hours.
 * Wrong suggested supplier when deleted.
 * Did the list become sluggish all of a sudden? Scrolling up and down stutters. (bug)
+* Load previous day's data when today is loaded.
 
 
 ##Used plugins

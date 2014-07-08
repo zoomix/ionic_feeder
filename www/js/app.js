@@ -132,6 +132,7 @@ angular.module('starter', ['ionic'])
         }
         $scope.feedings[7] = rows;
         $scope.setPredictedSupplier(rows);
+        $scope.loadData(6); //load yesterdays data too
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () {
@@ -253,18 +254,21 @@ angular.module('starter', ['ionic'])
 
   $scope.slideHasChanged = function(index) {
     console.log("Slide changed to " + index);
-    if (! $scope.feedings[index]) {
-      $scope.loading += 1; //Start loading
-      var dayOffset = index - 7;
-      console.log("Fetching data for " + dayOffset);
-      storage.getDataForDay(dayOffset, function (rows) {
-        console.log("Setting fetched data");
-        $scope.feedings[index] = rows;
-        $scope.loading -= 1; //Stop loading
-        $scope.$apply();
-      });
-    }
-    $timeout( function() { $scope.resizeList() }, 50);
+    if (!$scope.feedings[index]) { $scope.loadData(index); }
+    if (index > 0 && !$scope.feedings[index-1]) { $scope.loadData(index-1); }
+    $timeout( $scope.resizeList, 50);
+  }
+
+  $scope.loadData = function(index) {
+    $scope.loading += 1; //Start loading
+    var dayOffset = index - 7;
+    console.log("Fetching data for " + dayOffset);
+    storage.getDataForDay(dayOffset, function (rows) {
+      console.log("Setting fetched data");
+      $scope.feedings[index] = rows;
+      $scope.loading -= 1; //Stop loading
+      $scope.$apply();
+    });
   }
 
   $scope.resizeList = function() {
