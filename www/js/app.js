@@ -179,6 +179,8 @@ angular.module('starter', ['ionic'])
     } else if(feeding.supplier === 'R') {
       $scope.rightSign = STOP_SIGN;
     }
+    $scope.lClass = "";
+    $scope.rClass = "";
   }
 
   $scope.finnish = function(supplier) {
