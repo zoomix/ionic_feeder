@@ -229,11 +229,17 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.timeToPrevFeeding = function(activeSlide, index) {
-    if(index < 1) {
+    if(index < 1 && !$scope.feedings[activeSlide + 1]) {
       return "";
     }
-    var next = $scope.feedings[activeSlide][index - 1];
-    var curr = $scope.feedings[activeSlide][index ];
+    var curr = $scope.feedings[activeSlide][index];
+    var next = 0;
+    if(index == 0) {
+      var lastIndexOnNextDay = $scope.feedings[activeSlide+1].length - 1;
+      next = $scope.feedings[activeSlide + 1][lastIndexOnNextDay];
+    } else {
+      next = $scope.feedings[activeSlide][index - 1]
+    }
     if(next && curr) {
       var timeAgo = app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
       return timeAgo < 0 ? 0 : timeAgo;
