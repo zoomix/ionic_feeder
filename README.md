@@ -12,7 +12,6 @@ Ionic Feeder
 * Split up controllers
 * Sanitize models.js
 * Move resync to model and have it throw events
-* Make loading of slides dynamic instead of hardcoded (bug in ionic, see weird_auto_slides_bug branch)
 * Rename the database. Demo? Really?
 * Share code via nfc. phonegap-nfc
 * Tests? Specs?
@@ -70,6 +69,7 @@ Ionic Feeder
 * Wrong suggested supplier when deleted.
 * Did the list become sluggish all of a sudden? Scrolling up and down stutters. (bug)
 * Load previous day's data when today is loaded.
+* Make loading of slides dynamic instead of hardcoded (bug in ionic, see weird_auto_slides_bug branch ($ionicSlideDelegate.update() fixed it))
 
 
 ##Used plugins
