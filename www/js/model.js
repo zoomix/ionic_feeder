@@ -187,7 +187,7 @@ var storage = {
   },
 
   predictSupplier: function(feedings, supplierCallback, index) {
-    console.log("Predicting supplier");
+    console.log("Predicting supplier. Feedings: " + (feedings && feedings.length) + ", index: " + index);
     var currentIndex = index || 0; 
     if(feedings && feedings.length > currentIndex) {
       var feeding = feedings[currentIndex];
@@ -195,7 +195,7 @@ var storage = {
         supplierCallback( feeding.supplier === 'L' ? 'R' : 'L' );
         return;
       } else {
-        this.predictSupplier(feedings, supplierCallback, currentIndex++);
+        this.predictSupplier(feedings, supplierCallback, currentIndex+ 1);
       }
     } else {
       var oldestTime = new Date().getTime() - 24 * 3600 * 1000;
