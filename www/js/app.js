@@ -310,6 +310,7 @@ angular.module('starter', ['ionic'])
             $scope.editedFeedingOrig.volume = $scope.editedFeedingModel.volume * 10;
             $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
+            $scope.fetchAndSetTimeSinceLast();
           }
         },
         { text: 'Delete', 
@@ -320,6 +321,7 @@ angular.module('starter', ['ionic'])
             storage.storeAndSync($scope.editedFeedingOrig);
             $scope.reloadActivePage();
             $scope.setPredictedSupplier();
+            $scope.fetchAndSetTimeSinceLast();
           }
         }
       ]
