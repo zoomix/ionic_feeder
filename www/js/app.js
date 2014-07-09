@@ -68,6 +68,17 @@ angular.module('starter', ['ionic'])
     return storage.getUserId();
   }
 
+  $scope.demoModeOn = storage.isDemoMode()
+  $scope.toggleDemoMode = function() {
+    storage.toggleDemoMode();
+    alert("Restart the app for the change to take effect.");
+  }
+
+  $scope.exitApp = function () {
+    console.log("exiting app");
+    navigator.app.exitApp();
+  }
+
   $ionicModal.fromTemplateUrl('enterCodeModal.html', {
     scope: $scope,
     animation: 'slide-in-up'

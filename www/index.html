@@ -76,7 +76,9 @@
           <ion-item ng-click="enterCode()">Enter code</ion-item>
           <ion-item ng-click="resyncToday()">Resync today</ion-item>
           <ion-item ng-click="postAllFeedings()">Upload all</ion-item>
+          <ion-item ng-click="toggleDemoMode()" class="item item-icon-right">Demo mode<i ng-show="demoModeOn" class="icon ion-checkmark"></i></ion-item>
           <ion-item ng-click="toggleVibrate()" class="item item-icon-right">Vibrate<i ng-show="vibrateOn" class="icon ion-checkmark"></i></ion-item>
+          <ion-item ng-click="exitApp()">Exit</ion-item>
         </ion-list>
         <script id="enterCodeModal.html" type="text/ng-template">
           <div class="modal">

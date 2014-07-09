@@ -5,14 +5,12 @@ Ionic Feeder
 
 ##TODO:
 
-* Create a demo-mode that temporarily changes user id
 * Use a better ID
 * Update counter in notifications.
 * Edit bottle. Use bottle icon instead of 'B'
 * Split up controllers
 * Sanitize models.js
 * Move resync to model and have it throw events
-* Rename the database. Demo? Really?
 * Share code via nfc. phonegap-nfc
 * Tests? Specs?
 * ...
@@ -70,6 +68,8 @@ Ionic Feeder
 * Did the list become sluggish all of a sudden? Scrolling up and down stutters. (bug)
 * Load previous day's data when today is loaded.
 * Make loading of slides dynamic instead of hardcoded (bug in ionic, see weird_auto_slides_bug branch ($ionicSlideDelegate.update() fixed it))
+* Create a demo-mode that temporarily changes user id
+* Rename the database. Demo? Really?
 
 
 ##Used plugins

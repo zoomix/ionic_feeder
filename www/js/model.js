@@ -21,6 +21,9 @@ var MAX_TIME_MINUTES = 30;
 var STOP_SIGN="<i class='ion-stop'></i>";
 var VIBRATE_INTERVAL = 5 * 60 * 1000;
 
+var TABLE_NAME_DEMO = "FEEDINGS_DEMO";
+var TABLE_NAME = "FEEDINGS";
+
 Array.prototype.has = function(item) {
   return this.indexOf(item) >= 0;
 }
@@ -37,20 +40,22 @@ var util = {
 
 var storage = {
   db: null,
+  tableName: "",
 
   initialize: function(initializedCB) {
     try {
       this.db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
       this.db.transaction(this.populateDB, this.errorCB);
-      this.db.transaction(function(tx) { tx. executeSql('ALTER TABLE DEMO ADD COLUMN deleted');   });
-      this.db.transaction(function(tx) { tx. executeSql('ALTER TABLE DEMO ADD COLUMN updatedAt'); });
+      this.tableName = this.isDemoMode() ? TABLE_NAME_DEMO : TABLE_NAME;
+      initializedCB();
     } catch (e) {
       console.log("No database. Running in browser? " + e);
     }
   },
 
   populateDB: function(tx) {
-    tx.executeSql('CREATE TABLE IF NOT EXISTS DEMO (id unique, startTime, supplier, duration, volume, ongoing, deleted, updatedAt)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS ' + TABLE_NAME      + ' (id unique, startTime, supplier, duration, volume, ongoing, deleted, updatedAt)');
+    tx.executeSql('CREATE TABLE IF NOT EXISTS ' + TABLE_NAME_DEMO + ' (id unique, startTime, supplier, duration, volume, ongoing, deleted, updatedAt)');
   },
 
   // Transaction error callback
@@ -80,7 +85,7 @@ var storage = {
     }
     console.log("getDataForDay from " + fromTime + " to " + toTime);
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM DEMO where deleted <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
         var rows = []
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
@@ -95,7 +100,7 @@ var storage = {
 
   allData: function(resultCB) {
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM DEMO', [], function(tx, results) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName, [], function(tx, results) {
         var rows = []
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
@@ -110,7 +115,7 @@ var storage = {
 
   getIdsOlderThan: function(startTime, resultCB) {
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT id FROM DEMO where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
+      tx.executeSql('SELECT id FROM ' + storage.tableName + ' where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
         var ids = [];
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
@@ -124,7 +129,7 @@ var storage = {
 
   getMostRecentFinishedFeeding: function(resultCB) {
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM DEMO where deleted <> "true" and ongoing <> "true" order by startTime desc limit 1', [], function(tx, results) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and ongoing <> "true" order by startTime desc limit 1', [], function(tx, results) {
         if (results.rows && results.rows.length > 0) {
           var item = results.rows.item(0);
           var row = storage.rowFromDbItem(item);
@@ -152,7 +157,7 @@ var storage = {
         row.id = Math.round(Math.random()*1000000);
       }
       var preparedUpdatedAt = (row.updatedAt) ? ('"' + row.updatedAt + '"') : null;
-      tx.executeSql('INSERT or REPLACE INTO DEMO (id,             startTime,               supplier,               duration,               volume,               ongoing,               deleted,                          updatedAt) VALUES ' + 
+      tx.executeSql('INSERT or REPLACE INTO ' + storage.tableName + ' (id,             startTime,               supplier,               duration,               volume,               ongoing,               deleted,                          updatedAt) VALUES ' + 
                                                 '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '", ' + preparedUpdatedAt + ')');
       if(alsoSync) {
         app.postFeeding(row);
@@ -200,7 +205,7 @@ var storage = {
     } else {
       var oldestTime = new Date().getTime() - 24 * 3600 * 1000;
       this.db.transaction(function(tx) {
-        tx.executeSql('SELECT supplier, startTime FROM DEMO ' + 
+        tx.executeSql('SELECT supplier, startTime FROM ' + storage.tableName +  
                         'where deleted <> "true" ' + 
                           'and ongoing <> "true" ' + 
                           'and (supplier == "L" OR supplier == "R")' + 
@@ -213,7 +218,15 @@ var storage = {
         });
       });
     }
+  },
 
+  isDemoMode: function() {
+    var demoModeString = window.localStorage.getItem("demoMode");
+    return demoModeString === 'demo';
+  },
+
+  toggleDemoMode: function() {
+    window.localStorage.setItem("demoMode", this.isDemoMode() ? 'notdemo' : 'demo');
   }
 }
 
@@ -253,6 +266,11 @@ var app = {
   },
 
   postFeeding: function(feeding, successCB) {
+    if(storage.isDemoMode()) {
+      console.log("postFeeding. skipping. Demo mode");
+      successCB && successCB();
+      return;
+    }
     console.log("postFeeding: " + (feeding && feeding.id));
     var data = JSON.stringify(feeding)
     var request = new XMLHttpRequest();
@@ -271,6 +289,10 @@ var app = {
   },
 
   postAllFeedings: function(allRows, atIndex) {
+    if(storage.isDemoMode()) {
+      console.log("postAllFeedings. skipping. Demo mode");
+      return;
+    }
     console.log("postAllFeedings");
     if(!allRows) {
       storage.allData(function(rows) {
