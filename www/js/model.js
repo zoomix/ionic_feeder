@@ -47,7 +47,7 @@ var storage = {
       this.db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);
       this.db.transaction(this.populateDB, this.errorCB);
       this.tableName = this.isDemoMode() ? TABLE_NAME_DEMO : TABLE_NAME;
-      initializedCB();
+      initializedCB && initializedCB();
     } catch (e) {
       console.log("No database. Running in browser? " + e);
     }
