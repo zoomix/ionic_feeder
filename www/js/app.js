@@ -307,13 +307,27 @@ angular.module('starter', ['ionic'])
     return parseInt(feeding.startTime) + parseInt(feeding.duration);
   }
 
+
+  $scope.deleteEditedFeeding = function() {
+    console.log("Deleting feeding");
+    $scope.editedFeedingOrig.deleted = true;
+    $scope.editedFeedingOrig.updatedAt= new Date().getTime();
+    storage.storeAndSync($scope.editedFeedingOrig);
+    $scope.reloadActivePage();
+    $scope.setPredictedSupplier();
+    $scope.fetchAndSetTimeSinceLast();
+    $scope.editFeedingPopup.close();
+  }
+
   $scope.editFeeding = function(feeding) {
     $scope.editedFeedingOrig = feeding;
     $scope.editedFeedingModel = { startTime: $filter('date')(feeding.startTime, 'HH:mm'), 
                                   duration: $filter('date')(feeding.duration, 'm'),
                                   supplier: feeding.supplier,
                                   volume: (feeding.volume) ? feeding.volume/10 : 0};
-    var editFeedingPopup = $ionicPopup.show({
+
+
+    $scope.editFeedingPopup = $ionicPopup.show({
       title: 'Edit feeding',
       templateUrl: 'editFeeding.html',
       scope: $scope,
@@ -323,19 +337,9 @@ angular.module('starter', ['ionic'])
           onTap: function (e) {
             $scope.editedFeedingOrig.supplier = $scope.editedFeedingModel.supplier;
             $scope.editedFeedingOrig.duration = parseInt($scope.editedFeedingModel.duration) * 60 * 1000;
-            $scope.editedFeedingOrig.volume = $scope.editedFeedingModel.volume * 10;
+            $scope.editedFeedingOrig.volume   = $scope.editedFeedingModel.volume * 10;
             $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
-            $scope.fetchAndSetTimeSinceLast();
-          }
-        },
-        { text: 'Delete', 
-          onTap: function(e) {
-            $scope.editedFeedingOrig.deleted = true;
-            $scope.editedFeedingOrig.updatedAt= new Date().getTime();
-            storage.storeAndSync($scope.editedFeedingOrig);
-            $scope.reloadActivePage();
-            $scope.setPredictedSupplier();
             $scope.fetchAndSetTimeSinceLast();
           }
         }

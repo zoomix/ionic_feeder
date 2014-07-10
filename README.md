@@ -9,7 +9,6 @@ Ionic Feeder
 * Drag down to reload
 * Reloading bar instead of spinner.
 * Update counter in notifications.
-* Edit bottle. Use bottle icon instead of 'B'
 * Split up controllers
 * Sanitize model.js
 * Move resync to model and have it throw events
@@ -74,6 +73,7 @@ Ionic Feeder
 * Rename the database. Demo? Really?
 * Use a better ID
 * Popup buttons.
+* Edit bottle. Use bottle icon instead of 'B'
 
 
 ##Used plugins

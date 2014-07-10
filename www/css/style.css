@@ -179,13 +179,19 @@ h1, h2, h3, h4 { color: #fff;}
 .row {padding: 0px;}
 .col {padding: 0px;}
 
-.newFeedingDuration { text-align: center;}
-.newFeedingDuration div { 
-  font-size: 56px;
-  line-height: 98px;
+.newFeedingDuration, .newFeedingVolume { text-align: center;}
+.newFeedingDuration div, .newFeedingVolume div { 
+  font-size: 32px;
+  line-height: 64px;
   text-align: center;
 }
-.newFeedingDuration input { width: 90% }
+.newFeedingDuration input, .newFeedingVolume input { width: 90% }
+.newFeedingDuration .header, .newFeedingVolume .header { 
+  text-transform: uppercase;
+  color: #999;
+  font-size: 12px;
+  line-height: 18px;
+}
 
 .counter {
   background-image: url("../img/blur.jpg");
@@ -198,23 +204,28 @@ h1, h2, h3, h4 { color: #fff;}
   background-color: #242730;
 }
 
-.popup-buttons .button, .popup-buttons .button:HOVER {
+.popup-buttons .button, .popup-buttons .button:HOVER, .popup-buttons .button:FIRST-CHILD, .popup-buttons .button:LAST-CHILD {
   border-width: 2px;
+  border-radius: 50px;
+  border-color: #06E0C6;
+  margin: 0 4px;
+}
+.sources .button, .sources .button:HOVER, .sources .button:FIRST-CHILD, .sources .button:LAST-CHILD {
   border-radius: 0px;
   border-right: none;
-  border-color: #06E0C6;
   margin: 0px;
+  padding: 0px 25px;
 }
-
-.popup-buttons .button:FIRST-CHILD {
+.sources .button:FIRST-CHILD {
   border-top-left-radius: 50px;
   border-bottom-left-radius: 50px;
 }
-.popup-buttons .button:LAST-CHILD {
+.sources .button:LAST-CHILD {
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
-  border-right: 2px solid;
+  border-right: 2px solid #06E0C6;
 }
+.popup .sources { text-align: center; display: inline-table;}
 
 .item-input {
   padding: 10px 0px;
