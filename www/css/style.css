@@ -198,6 +198,24 @@ h1, h2, h3, h4 { color: #fff;}
   background-color: #242730;
 }
 
+.popup-buttons .button, .popup-buttons .button:HOVER {
+  border-width: 2px;
+  border-radius: 0px;
+  border-right: none;
+  border-color: #06E0C6;
+  margin: 0px;
+}
+
+.popup-buttons .button:FIRST-CHILD {
+  border-top-left-radius: 50px;
+  border-bottom-left-radius: 50px;
+}
+.popup-buttons .button:LAST-CHILD {
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  border-right: 2px solid;
+}
+
 .item-input {
   padding: 10px 0px;
   border: none;
@@ -225,4 +243,8 @@ h1, h2, h3, h4 { color: #fff;}
 
 .ion-toggle-filled, .ion-toggle {
   color: #06E0C6;
+}
+.item-icon-right .icon {
+  right: 35px;
+  font-size: 45px;
 }

@@ -320,7 +320,6 @@ angular.module('starter', ['ionic'])
       buttons: [
         { text: 'Cancel' },
         { text: 'Save', 
-          type: 'button-positive', 
           onTap: function (e) {
             $scope.editedFeedingOrig.supplier = $scope.editedFeedingModel.supplier;
             $scope.editedFeedingOrig.duration = parseInt($scope.editedFeedingModel.duration) * 60 * 1000;
@@ -331,7 +330,6 @@ angular.module('starter', ['ionic'])
           }
         },
         { text: 'Delete', 
-          type: 'button-assertive',
           onTap: function(e) {
             $scope.editedFeedingOrig.deleted = true;
             $scope.editedFeedingOrig.updatedAt= new Date().getTime();
@@ -354,7 +352,6 @@ angular.module('starter', ['ionic'])
       buttons: [
         { text: 'Cancel' },
         { text: 'Add', 
-          type: 'button-positive', 
           onTap: function (e) {
             var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.bottleFeedingModel.volume, ongoing: false }
             storage.storeAndSync(feeding);

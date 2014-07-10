@@ -6,10 +6,12 @@ Ionic Feeder
 ##TODO:
 
 * Share/enter code -> Connect devices
+* Drag down to reload
+* Reloading bar instead of spinner.
 * Update counter in notifications.
 * Edit bottle. Use bottle icon instead of 'B'
 * Split up controllers
-* Sanitize models.js
+* Sanitize model.js
 * Move resync to model and have it throw events
 * Share code via nfc. phonegap-nfc
 * Tests? Specs?
@@ -71,6 +73,8 @@ Ionic Feeder
 * Create a demo-mode that temporarily changes user id
 * Rename the database. Demo? Really?
 * Use a better ID
+* Popup buttons.
+
 
 ##Used plugins
 
