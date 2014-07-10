@@ -65,7 +65,7 @@ body, .list, .pane, .item, .menu, .bar, .scroll-content {
 	background-color: #242730;
 }
 
-.button-round, .button-round:HOVER {
+.button-round {
 	border-radius: 50px;
   border-width: 2px;
   width: 130px;
@@ -226,6 +226,7 @@ h1, h2, h3, h4 { color: #fff;}
   border-right: 2px solid #06E0C6;
 }
 .popup .sources { text-align: center; display: inline-table;}
+.popup { width: 80%}
 
 .item-input {
   padding: 10px 0px;
@@ -263,3 +264,19 @@ h1, h2, h3, h4 { color: #fff;}
 .menu-content {
   box-shadow: #222 0px 0px 23px
 }
+
+.modal .scroll-content {
+  padding: 2em;
+}
+.modal {
+  text-align: center;
+}
+.modal .small {
+  font-size: 10px;
+  color: #999;
+}
+.modal .info {
+  margin-bottom: 32px;
+}
+
+input.error {background-color: #c88}

@@ -18,7 +18,7 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller('MenuCtrl', function($scope, $ionicModal) {
+.controller('MenuCtrl', function($scope, $ionicModal, $ionicPopup) {
 
   $scope.vibrateOn = vibrations.getVibrateInteral();
   $scope.toggleVibrate = function() {
@@ -41,16 +41,32 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.enteredCode = "";
-  $scope.enterCode = function() {
+  $scope.connectDevices = function() {
     $scope.modal.show();
   }
-  $scope.storeEnteredCode = function(enteredCode) {
-    if(!enteredCode || enteredCode.length < 10) {
-      alert("Code '" + enteredCode + "' seems invalid. Please try again.");
-    } else {
-      storage.storeUserId(enteredCode);
-      $scope.closeModal();
-    }
+
+  $scope.enterCodePopup = function() {
+    $scope.data = {}
+    // An elaborate, custom popup
+    var myPopup = $ionicPopup.show({
+      template: '<input type="text" ng-model="data.enteredCode" placeholder="{{userId()}}" class="{{data.extraClass}}">',
+      title: 'Enter new code',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        { text: 'Save',
+          onTap: function(e) {
+            if(!$scope.data.enteredCode || $scope.data.enteredCode.length < 10) {
+              //don't allow the user to close unless the code is right
+              $scope.data.extraClass = 'error';
+              e.preventDefault();
+            } else {
+              storage.storeUserId($scope.data.enteredCode);
+            }
+          }
+        },
+      ]
+    });
   }
 
   $scope.resyncToday = function() {
@@ -79,7 +95,7 @@ angular.module('starter', ['ionic'])
     navigator.app.exitApp();
   }
 
-  $ionicModal.fromTemplateUrl('enterCodeModal.html', {
+  $ionicModal.fromTemplateUrl('connectDevices.html', {
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal) {

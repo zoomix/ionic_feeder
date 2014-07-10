@@ -71,31 +71,11 @@
     <ion-side-menu side="left">
       <ion-content ng-controller="MenuCtrl" class="sidemenu">
         <ion-list>
-          <ion-item ng-click="share()">Share code</ion-item>
-          <ion-item ng-click="enterCode()">Enter code</ion-item>
+          <ion-item ng-click="connectDevices()">Connect devices</ion-item>
           <ion-item ng-click="toggleDemoMode()" class="item item-icon-right">Demo mode<i ng-show="demoModeOn" class="icon ion-toggle-filled"></i><i ng-show="!demoModeOn" class="icon ion-toggle"></i></ion-item>
           <ion-item ng-click="toggleVibrate()" class="item item-icon-right">Buzz every 5 min<i ng-show="vibrateOn" class="icon ion-toggle-filled"></i><i ng-show="!vibrateOn" class="icon ion-toggle"></i></ion-item>
           <ion-item ng-click="exitApp()">Exit</ion-item>
         </ion-list>
-        <script id="enterCodeModal.html" type="text/ng-template">
-          <div class="modal">
-            <ion-header-bar>
-              <h1 class="title">Shared code</h1>
-            </ion-header-bar>
-            <ion-content>
-              <p>Your current code is <strong>{{userId()}}</strong>.</p>
-
-              <div class="list">
-                <label class="item item-input item-stacked-label">
-                  <span class="input-label">Enter code</span>
-                  <input type="text" ng-model="enteredCode" placeholder="{{userId()}}">
-                </label>
-                <button class="button button-block button-positive" ng-click="storeEnteredCode(enteredCode)">Save</button>
-              </div
-               
-            </ion-content>
-          </div>
-        </script>
       </ion-content>
     </ion-side-menu>
 
