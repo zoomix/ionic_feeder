@@ -5,7 +5,7 @@ Ionic Feeder
 
 ##TODO:
 
-* Use a better ID
+* Share/enter code -> Connect devices
 * Update counter in notifications.
 * Edit bottle. Use bottle icon instead of 'B'
 * Split up controllers
@@ -70,7 +70,7 @@ Ionic Feeder
 * Make loading of slides dynamic instead of hardcoded (bug in ionic, see weird_auto_slides_bug branch ($ionicSlideDelegate.update() fixed it))
 * Create a demo-mode that temporarily changes user id
 * Rename the database. Demo? Really?
-
+* Use a better ID
 
 ##Used plugins
 

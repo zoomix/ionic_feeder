@@ -154,11 +154,11 @@ var storage = {
     }
     this.db.transaction(function(tx) {
       if(!row.id && row.id != 0) {
-        row.id = Math.round(Math.random()*1000000);
+        row.id = util.randomness();
       }
       var preparedUpdatedAt = (row.updatedAt) ? ('"' + row.updatedAt + '"') : null;
       tx.executeSql('INSERT or REPLACE INTO ' + storage.tableName + ' (id,             startTime,               supplier,               duration,               volume,               ongoing,               deleted,                          updatedAt) VALUES ' + 
-                                                '(' + row.id + ', "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '", ' + preparedUpdatedAt + ')');
+                                                '("' + row.id + '", "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '", ' + preparedUpdatedAt + ')');
       if(alsoSync) {
         app.postFeeding(row);
       }      
