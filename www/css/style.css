@@ -222,3 +222,7 @@ h1, h2, h3, h4 { color: #fff;}
 .sidemenu .item {
   border: 1px solid #464950;
 }
+
+.ion-toggle-filled, .ion-toggle {
+  color: #06E0C6;
+}
