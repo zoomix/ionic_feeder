@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Reloading bar instead of spinner.
 * Bottle feeding default - 100 if no previous feedings
 * Update counter in notifications.
 * Split up controllers
@@ -75,6 +74,7 @@ Ionic Feeder
 * Edit bottle. Use bottle icon instead of 'B'
 * Share/enter code -> Connect devices
 * Drag down to reload
+* Reloading bar instead of spinner.
 
 
 ##Used plugins
