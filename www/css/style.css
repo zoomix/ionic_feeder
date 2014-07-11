@@ -271,6 +271,9 @@ h1, h2, h3, h4 { color: #fff;}
 .menu-content {
   box-shadow: #222 0px 0px 23px
 }
+.noicon {
+  text-align: center;
+}
 
 .modal .scroll-content {
   padding: 2em;
@@ -288,3 +291,20 @@ h1, h2, h3, h4 { color: #fff;}
 
 input.error {background-color: #c88}
 input[type="text"] {padding-left: 10px}
+
+.legend {
+  border: 0px;
+  width: auto;
+  text-align: center;
+  color: #999;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding: 12px 12px 0px;
+  /*margin-top: 44px;*/
+}
+.item-toggle {
+  border: 0px !important; 
+}
+.tools {
+  margin-top: 44px;
+};

@@ -72,10 +72,15 @@
     <ion-side-menu side="left">
       <ion-content ng-controller="MenuCtrl" class="sidemenu">
         <ion-list>
-          <ion-item ng-click="toggleDemoMode()" class="item item-icon-right">Demo mode<i ng-show="demoModeOn" class="icon ion-toggle-filled"></i><i ng-show="!demoModeOn" class="icon ion-toggle"></i></ion-item>
-          <ion-item ng-click="toggleVibrate()"  class="item item-icon-right">Buzz every 5 min<i ng-show="vibrateOn" class="icon ion-toggle-filled"></i><i ng-show="!vibrateOn" class="icon ion-toggle"></i></ion-item>
-          <ion-item ng-click="connectDevices()" class="noicon">Connect devices</ion-item>
-          <ion-item ng-click="exitApp()"        class="noicon">Exit</ion-item>
+          <div class="legend">Settings</div>
+          <ion-item ng-click="toggleDemoMode()" class="item item-icon-right item-toggle">Demo mode<i ng-show="demoModeOn" class="icon ion-toggle-filled"></i><i ng-show="!demoModeOn" class="icon ion-toggle"></i></ion-item>
+          <ion-item ng-click="toggleVibrate()"  class="item item-icon-right item-toggle">Buzz every 5 min<i ng-show="vibrateOn" class="icon ion-toggle-filled"></i><i ng-show="!vibrateOn" class="icon ion-toggle"></i></ion-item>
+
+          <div class="tools">
+            <ion-item ng-click="connectDevices()" class="noicon">Connect devices</ion-item>
+            <ion-item ng-click="exitApp()"        class="noicon">Exit</ion-item>
+          </div>
+
         </ion-list>
       </ion-content>
     </ion-side-menu>
