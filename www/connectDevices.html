@@ -1,0 +1,18 @@
+<div class="modal">
+  <ion-header-bar>
+    <h1 class="title">Connect devices</h1>
+  </ion-header-bar>
+  <ion-content>
+
+    <p class="info">Use multiple devices. See all feeding info on your tablet, your partner's or your other devices.</p>
+
+    <button class="button button-round button-block" ng-click="share()">Add new device...</button>
+    <p class="small">Devices are connected by sharing the same secret code.</p>
+
+    <hr>
+
+    <button class="button button-round button-block" ng-click="enterCodePopup()">Enter code...</button>
+    <p class="small">Your current code is {{userId()}}</p>
+
+  </ion-content>
+</div>
