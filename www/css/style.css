@@ -280,3 +280,4 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 input.error {background-color: #c88}
+input[type="text"] {padding-left: 10px}
