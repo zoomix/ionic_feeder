@@ -30,6 +30,7 @@
     <!-- Center content -->
     <ion-side-menu-content>
       <ion-content id="CounterApp" ng-controller="CounterCtrl">
+        <ion-refresher pulling-text="Pull to resync today..." on-refresh="resyncToday()"></ion-refresher>
         <div class="counter">
           <button menu-toggle="left" class="button button-icon icon ion-navicon button-menu"></button>
           <div class="ongoing">
@@ -44,7 +45,7 @@
           </div>
         </div>  
 
-        <div class="loader" ng-show="loading"><i class="ion-loading-c"></i></div>
+        <div class="loadingIndicator" ng-show="loading > 0"><i class="ion-loading-c"></i></div>
 
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
           <ion-slide ng-repeat="feedingDay in feedings.slice(0,7) track by $index">
@@ -71,10 +72,10 @@
     <ion-side-menu side="left">
       <ion-content ng-controller="MenuCtrl" class="sidemenu">
         <ion-list>
-          <ion-item ng-click="connectDevices()">Connect devices</ion-item>
           <ion-item ng-click="toggleDemoMode()" class="item item-icon-right">Demo mode<i ng-show="demoModeOn" class="icon ion-toggle-filled"></i><i ng-show="!demoModeOn" class="icon ion-toggle"></i></ion-item>
-          <ion-item ng-click="toggleVibrate()" class="item item-icon-right">Buzz every 5 min<i ng-show="vibrateOn" class="icon ion-toggle-filled"></i><i ng-show="!vibrateOn" class="icon ion-toggle"></i></ion-item>
-          <ion-item ng-click="exitApp()">Exit</ion-item>
+          <ion-item ng-click="toggleVibrate()"  class="item item-icon-right">Buzz every 5 min<i ng-show="vibrateOn" class="icon ion-toggle-filled"></i><i ng-show="!vibrateOn" class="icon ion-toggle"></i></ion-item>
+          <ion-item ng-click="connectDevices()" class="noicon">Connect devices</ion-item>
+          <ion-item ng-click="exitApp()"        class="noicon">Exit</ion-item>
         </ion-list>
       </ion-content>
     </ion-side-menu>

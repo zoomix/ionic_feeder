@@ -69,13 +69,6 @@ angular.module('starter', ['ionic'])
     });
   }
 
-  $scope.resyncToday = function() {
-    app.getNewFeedings(app.getToday(0), function() {
-      var counterScope = angular.element(document.getElementById('CounterApp')).scope();
-      counterScope.$broadcast("resync", null);
-    })
-  }
-
   $scope.postAllFeedings = function() {
     app.postAllFeedings();
   }
@@ -140,10 +133,6 @@ angular.module('starter', ['ionic'])
   }
 
   var mytimeout = null;
-
-  $scope.$on("resync", function (event, args) {
-    $scope.reloadTodaysFeedings();
-  });
 
   $scope.reloadTodaysFeedings = function() {
       $scope.loading += 1; //Start loading
@@ -381,6 +370,15 @@ angular.module('starter', ['ionic'])
         }
       ]
     });
+  }
+
+  $scope.resyncToday = function() {
+    $scope.loading = -100;
+    app.getNewFeedings(app.getToday(0), function() {
+      $scope.reloadTodaysFeedings();
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.loading = 0;
+    })
   }
 
 

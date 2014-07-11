@@ -124,7 +124,14 @@ body, .list, .pane, .item, .menu, .bar, .scroll-content {
 
 h1, h2, h3, h4 { color: #fff;}
 
-.loader {text-align: center; line-height: 26px}
+.loadingIndicator {
+  text-align: center;
+  position: absolute;
+  top:0px;
+  right: 0px;
+  vertical-align: middle;
+  font-size: 32px;
+}
 
 .time {
   color: #FCC108;
