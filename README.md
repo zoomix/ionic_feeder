@@ -16,6 +16,7 @@ Ionic Feeder
 
 ##BUGS:
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
+* Sometimes we get two timers running for the same feeding.
 
 ##DONE:
 * Store partials in db.

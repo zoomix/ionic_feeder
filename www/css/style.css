@@ -285,6 +285,9 @@ h1, h2, h3, h4 { color: #fff;}
 
 input.error {background-color: #c88}
 input[type="text"] {padding-left: 10px}
+input[type="range"]::-webkit-slider-thumb:before {
+  background-color: #06E0C6;
+}
 
 .legend {
   border: 0px;
