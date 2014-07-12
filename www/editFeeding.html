@@ -6,8 +6,6 @@
     <button class="button {{editedFeedingModel.supplier === 'R' && 'selected' || ''}}" ng-click="editedFeedingModel.supplier = 'R'">R</button>
   </div>
 
-  <hr>
-
   <div class="newFeedingVolume" ng-show="editedFeedingModel.supplier === 'B'">
     <div class="header">Volume</div>
     <div>{{editedFeedingModel.volume}}0 ml</div>
@@ -19,10 +17,6 @@
     <input type="range" min="0" max="30" value="{{editedFeedingModel.duration}}" ng-model="editedFeedingModel.duration">
   </div>
 
-  <hr>
-
-  <button class="button button-block" ng-click="deleteEditedFeeding()">Delete</button>
-
-  <hr>
+  <button class="button button-block button-round" ng-click="deleteEditedFeeding()">Delete</button>
 
 </div>

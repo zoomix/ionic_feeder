@@ -180,7 +180,10 @@ h1, h2, h3, h4 { color: #fff;}
 .row {padding: 0px;}
 .col {padding: 0px;}
 
-.newFeedingDuration, .newFeedingVolume { text-align: center;}
+.newFeedingDuration, .newFeedingVolume {
+  text-align: center;
+  margin: 14px 0 24px;
+}
 .newFeedingDuration div, .newFeedingVolume div { 
   font-size: 32px;
   line-height: 64px;
@@ -228,6 +231,11 @@ h1, h2, h3, h4 { color: #fff;}
 }
 .popup .sources { text-align: center; display: inline-table;}
 .popup { width: 80%}
+.popup .button-block {
+  border-color: #8b8b8b;
+  font-size: 16px;
+  margin: 0px 4px 20px;
+}
 
 .item-input {
   padding: 10px 0px;
@@ -265,9 +273,6 @@ h1, h2, h3, h4 { color: #fff;}
 .menu-content {
   box-shadow: #222 0px 0px 23px
 }
-.noicon {
-  text-align: center;
-}
 
 .modal .scroll-content {
   padding: 2em;
@@ -286,7 +291,7 @@ h1, h2, h3, h4 { color: #fff;}
 input.error {background-color: #c88}
 input[type="text"] {padding-left: 10px}
 input[type="range"]::-webkit-slider-thumb:before {
-  background-color: #06E0C6;
+  background-color: #FCC108;
 }
 
 .legend {
@@ -299,9 +304,15 @@ input[type="range"]::-webkit-slider-thumb:before {
   padding: 12px 12px 0px;
   /*margin-top: 44px;*/
 }
+.settings {
+  margin: 22px 0;
+}
 .item-toggle {
   border: 0px !important; 
 }
-.tools {
-  margin-top: 44px;
+.noicon {
+  margin: 0px 10px;
+  border-left-style: none !important;
+  border-right-style: none !important;
+  padding-left: 5px;
 };
