@@ -353,7 +353,7 @@ angular.module('starter', ['ionic'])
   };
 
   $scope.bottleFeeding = function() {
-    $scope.bottleFeedingModel = { volume: 0 }
+    $scope.bottleFeedingModel = { volume: 15 }
     var editFeedingPopup = $ionicPopup.show({
       title: 'New bottle feeding',
       templateUrl: 'newBottleFeeding.html',

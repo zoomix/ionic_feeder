@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Bottle feeding default - 100 if no previous feedings
 * Update counter in notifications.
 * Split up controllers
 * Sanitize model.js
@@ -78,6 +77,7 @@ Ionic Feeder
 * Share/enter code -> Connect devices
 * Drag down to reload
 * Reloading bar instead of spinner.
+* Bottle feeding default - 150ml
 
 
 ##Used plugins
