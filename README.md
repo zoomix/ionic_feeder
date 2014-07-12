@@ -17,7 +17,6 @@ Ionic Feeder
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 * Sometimes we get two timers running for the same feeding.
 * Resyncing doesnt reset previous day. (should clear anything up to that date.)
-* Scrolling "time between feedings" gets reset. Use something clever here.
 
 ##DONE:
 * Store partials in db.
@@ -78,6 +77,7 @@ Ionic Feeder
 * Drag down to reload
 * Reloading bar instead of spinner.
 * Bottle feeding default - 150ml
+* Scrolling "time between feedings" gets reset. Use something clever here. (bug)
 
 
 ##Used plugins

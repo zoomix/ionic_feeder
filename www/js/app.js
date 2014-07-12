@@ -126,8 +126,8 @@ angular.module('starter', ['ionic'])
   }
   $scope.setTimeSinceLast = function() {
     if($scope.mostRecentFinishedFeeding) {
-      var sinceLastStart = app.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime);
-      var sinceLastEnd = app.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime - $scope.mostRecentFinishedFeeding.duration);
+      var sinceLastStart = util.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime);
+      var sinceLastEnd = util.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime - $scope.mostRecentFinishedFeeding.duration);
       $scope.timeSinceLast = sinceLastEnd;
     }
   }
@@ -147,6 +147,7 @@ angular.module('starter', ['ionic'])
           }
         }
         $scope.feedings[7] = rows;
+        util.populateTimeBetween($scope.feedings[7], []);
         $scope.setPredictedSupplier(rows);
         $scope.loadData(6); //load yesterdays data too
         $scope.$apply();
@@ -244,24 +245,6 @@ angular.module('starter', ['ionic'])
     $scope.loading -= 1;//Stop syncing
   }
 
-  $scope.timeToPrevFeeding = function(activeSlide, index) {
-    if(index < 1 && !$scope.feedings[activeSlide + 1]) {
-      return "";
-    }
-    var curr = $scope.feedings[activeSlide][index];
-    var next = 0;
-    if(index == 0) {
-      var lastIndexOnNextDay = $scope.feedings[activeSlide+1].length - 1;
-      next = $scope.feedings[activeSlide + 1][lastIndexOnNextDay];
-    } else {
-      next = $scope.feedings[activeSlide][index - 1]
-    }
-    if(next && curr) {
-      var timeAgo = app.getTimeAgo(next.startTime - curr.startTime - curr.duration);
-      return timeAgo < 0 ? 0 : timeAgo;
-    }
-  }
-
   $scope.setPredictedSupplier = function(feedings) {
     $scope.lClass = "";
     $scope.rClass = "";
@@ -288,6 +271,7 @@ angular.module('starter', ['ionic'])
     storage.getDataForDay(dayOffset, function (rows) {
       console.log("Setting fetched data");
       $scope.feedings[index] = rows;
+      util.populateTimeBetween($scope.feedings[index], index < 7 && $scope.feedings[index+1]);
       $scope.loading -= 1; //Stop loading
       $scope.$apply();
     });

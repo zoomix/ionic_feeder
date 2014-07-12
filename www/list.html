@@ -1,7 +1,7 @@
-<div class="durations" ng-show="!(activeSlide == 7 && $index == 0)">
+<div class="durations" ng-show="feeding.timeAgo">
   <span class="row">
     <div class="verticalLine"></div>
-    <span class="col between">{{timeToPrevFeeding(activeSlide, $index)}}</span>
+    <span class="col between">{{feeding.timeAgo}}</span>
     <span class="col"></span>
   </span>
 </div>

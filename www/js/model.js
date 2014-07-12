@@ -35,6 +35,35 @@ var util = {
 
   isBreastFeeding: function(supplier) {
     return supplier === 'L' || supplier === 'R';
+  }, 
+
+  populateTimeBetween: function(thisDaysFeedings, nextDaysFeedings) {
+    for (var i = 1; i < thisDaysFeedings.length; i++) {
+      var curr = thisDaysFeedings[i];
+      var next = thisDaysFeedings[i-1];
+      util.timeBetween(curr, next, function (timeAgo) {curr.timeAgo = timeAgo});
+    };
+    if(thisDaysFeedings && thisDaysFeedings.length > 0 && nextDaysFeedings && nextDaysFeedings.length > 0) {
+      var curr = thisDaysFeedings[0];
+      var next = nextDaysFeedings[nextDaysFeedings.length - 1];
+      util.timeBetween(curr, next, function (timeAgo) {curr.timeAgo = timeAgo});
+    }
+  },
+
+  timeBetween: function(curr, next, timeBetweenCB) {
+    if(next && curr) {
+      var msAgo = next.startTime - curr.startTime - curr.duration;
+      if(msAgo > 0) {
+        var timeAgo = util.getTimeAgo(msAgo);
+        timeBetweenCB(timeAgo);
+      }
+    }
+  },
+
+  getTimeAgo: function(timeInMs) {
+    var hours = Math.floor(timeInMs / 1000 / 60 / 60);
+    var minutes = Math.floor((timeInMs / 1000 / 60) % 60);
+    return hours + "h " + minutes + "m";
   }
 }
 
@@ -231,13 +260,6 @@ var storage = {
 }
 
 var app = {
-  getTimeAgo: function(timeInMs) {
-    var hours = Math.floor(timeInMs / 1000 / 60 / 60);
-    var minutes = Math.floor((timeInMs / 1000 / 60) % 60);
-    return hours + "h " + minutes + "m";
-  },
-
-
   getNewFeedings: function(latestFeedingStartTime, newItemsCB) {
     if(latestFeedingStartTime) {
       var fromTime = latestFeedingStartTime - 4 * 3600 * 1000; //Allways refetch a bit
