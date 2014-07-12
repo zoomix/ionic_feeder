@@ -126,6 +126,12 @@ h1, h2, h3, h4 { color: #fff;}
 
 .loadingIndicator {
   text-align: center;
+  display: block;
+  position: absolute;
+  height: 20px;
+  width: 100%;
+  z-index: 2;
+  margin-top: -3px;
 }
 .time {
   color: #FCC108;
