@@ -18,6 +18,7 @@ Ionic Feeder
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 * Sometimes we get two timers running for the same feeding.
 * Resyncing doesnt reset previous day. (should clear anything up to that date.)
+* Range slider messes up when sliding on s3. It looks like it's working and then aligns left and dies.
 
 ##DONE:
 * Store partials in db.
