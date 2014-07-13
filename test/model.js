@@ -1,4 +1,16 @@
 var assert = require("assert")
+
+var path = require('path'),
+    opendatabase = require('opendatabase')
+
+var database_dir = path.join(path.dirname(__filename), 'test_openDatabase.sqlite')
+var open_db = new opendatabase({name: database_dir, version: "1.0", description: "Example database for indurate.js", size: 3*1024*1024})
+
+var fake_localstorage = { db: {}, 
+                          getItem:function (item) {return this.db[item]},
+                          setItem:function (item, value) { this.db[item] = value}}
+
+window = {openDatabase: function(name, version, desc, size) { return open_db}, localStorage: fake_localstorage};
 document = {addEventListener: function() {console.log("Adding evenent listener")}}
 
 var model = require("../www/js/model.js");
