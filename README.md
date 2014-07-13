@@ -5,6 +5,7 @@ Ionic Feeder
 
 ##TODO:
 
+* Are you sure you want to delete.
 * Update counter in notifications.
 * Split up controllers
 * Sanitize model.js
@@ -14,6 +15,7 @@ Ionic Feeder
 * ...
 
 ##BUGS:
+* ion-refresher stops updating of timer on samsung s3 running 4.3. =/
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 * Sometimes we get two timers running for the same feeding.
 * Resyncing doesnt reset previous day. (should clear anything up to that date.)

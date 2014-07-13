@@ -206,6 +206,7 @@ angular.module('starter', ['ionic'])
     $scope.currentFeeding = false;
     clonedFeeding.ongoing = false;
     $scope.todaysFeedings().unshift(clonedFeeding);
+    util.populateTimeBetween($scope.feedings[7], []);
     $scope.mostRecentFinishedFeeding = clonedFeeding;
     storage.storeAndSync(clonedFeeding);
     vibrations.reset();
