@@ -1,2 +1,9 @@
 node_modules/
 www/js/config.js
+platforms/android/CordovaLib
+platforms/android/assets
+platforms/android/cordova
+platforms/android/ant-build
+platforms/android/src
+plugins
+www/lib
