@@ -60,7 +60,7 @@ body, .list, .pane, .item, .menu, .bar, .scroll-content {
   background-color: #242730;
 }
 
-.button, .button:HOVER {
+.button, .button:HOVER, .button.button-positive, .button.button-positive:HOVER {
 	color: #fff;
 	background-color: #242730;
 }

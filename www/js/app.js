@@ -300,13 +300,23 @@ angular.module('starter', ['ionic'])
 
   $scope.deleteEditedFeeding = function() {
     console.log("Deleting feeding");
-    $scope.editedFeedingOrig.deleted = true;
-    $scope.editedFeedingOrig.updatedAt= new Date().getTime();
-    storage.storeAndSync($scope.editedFeedingOrig);
-    $scope.reloadActivePage();
-    $scope.setPredictedSupplier();
-    $scope.fetchAndSetTimeSinceLast();
-    $scope.editFeedingPopup.close();
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Delete feeding',
+      template: 'Are you sure you want to delete this feeding?'
+    });
+    confirmPopup.then(function(res) {
+      if(res) {
+        $scope.editedFeedingOrig.deleted = true;
+        $scope.editedFeedingOrig.updatedAt= new Date().getTime();
+        storage.storeAndSync($scope.editedFeedingOrig);
+        $scope.reloadActivePage();
+        $scope.setPredictedSupplier();
+        $scope.fetchAndSetTimeSinceLast();
+        $scope.editFeedingPopup.close();
+      } else {
+        console.log('Not deleting');
+      }
+    });
   }
 
   $scope.editFeeding = function(feeding) {

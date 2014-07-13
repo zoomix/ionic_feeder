@@ -5,7 +5,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Are you sure you want to delete.
 * Update counter in notifications.
 * Split up controllers
 * Sanitize model.js
@@ -80,6 +79,7 @@ Ionic Feeder
 * Reloading bar instead of spinner.
 * Bottle feeding default - 150ml
 * Scrolling "time between feedings" gets reset. Use something clever here. (bug)
+* Are you sure you want to delete.
 
 
 ##Used plugins
