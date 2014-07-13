@@ -3,6 +3,12 @@ Ionic Feeder
 
 ##An app to help out with breastfeeding.
 
+## Tests
+
+    npm install
+    node_modules/mocha/bin/mocha
+
+
 ##TODO:
 
 * Update counter in notifications.
