@@ -313,7 +313,7 @@ input[type="range"]::-webkit-slider-thumb:before {
 .settings {
   margin: 22px 0;
 }
-.item-toggle {
+.settings .item {
   border: 0px !important; 
 }
 .noicon {
