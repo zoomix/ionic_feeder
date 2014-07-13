@@ -412,3 +412,10 @@ function handleOpenURL(url) {
 }
 
 document.addEventListener('deviceready', storage.initialize(), false);
+
+if(typeof exports !== 'undefined') {
+  exports.util = util;
+  exports.storage = storage;
+  exports.app = app;
+  exports.vibrations = vibrations;
+}
