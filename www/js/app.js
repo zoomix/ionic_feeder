@@ -301,6 +301,7 @@ angular.module('starter', ['ionic'])
 
   $scope.reloadActivePage = function() {
     $scope.feedings[$scope.activeSlide] = null;
+    if ($scope.activeSlide > 0) { $scope.feedings[$scope.activeSlide - 1] = null };
     $scope.slideHasChanged($scope.activeSlide);
   }
 
