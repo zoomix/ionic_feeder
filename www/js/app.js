@@ -165,10 +165,10 @@ angular.module('starter', ['ionic'])
         mytimeout = $timeout($scope.onTimeout,1000);
         document.addEventListener('resume', function () {
           $scope.loading += 1; //Start syncing on resume
-          app.getNewFeedings(latestRow.startTime, $scope.mergeNewItems);
+          app.getNewFeedings(latestRow.startTime, $scope.postSync);
         }, false);
         $scope.loading += 1; //Start syncing
-        app.getNewFeedings(latestRow.startTime, $scope.mergeNewItems);
+        app.getNewFeedings(latestRow.startTime, $scope.postSync);
         $scope.loading -= 1; //Stop loading
         $scope.resizeList();
       });
@@ -226,35 +226,15 @@ angular.module('starter', ['ionic'])
     $scope.rightSign= 'R';
   }
 
-  $scope.mergeNewItems = function(newItems) {
-    if (newItems && newItems.length > 0) {
-      var needReloading = false;
-      storage.getIdsOlderThan(newItems[0].startTime, function(feedingIds) {
-        console.log("We've got " + feedingIds + " older than " + newItems[0].startTime);
-        var feeding = false;
-        for (var i = 0; i < newItems.length; i++) {
-          feeding = newItems[i];
-          var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0
-          if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
-            console.log("ongoing feeding: " + feeding.id);
-            $scope.continue(feeding);
-          } else if( !feedingIds.has(feeding.id) || feedingUpdated) {
-            var feedingDeleted = feeding.deleted === 'true' || feeding.deleted === true
-            needReloading = needReloading || !feedingDeleted;
-            storage.store(feeding);
-          }
-        }
-        $scope.setTimeSinceLast();
-        if(!$scope.currentFeeding && feeding) {
-          $scope.setPredictedSupplier([feeding]);
-        }
-        if (needReloading) {
-          $scope.reloadActivePage();
-          $scope.fetchAndSetTimeSinceLast();
-        }
-      })
+  $scope.postSync = function(needReloading, ongoingFeeding) {
+    ongoingFeeding && $scope.continue(ongoingFeeding);
+    $scope.setTimeSinceLast();
+    !ongoingFeeding && $scope.setPredictedSupplier();
+    if (needReloading) {
+      $scope.reloadActivePage();
+      $scope.fetchAndSetTimeSinceLast();
     }
-    $scope.loading -= 1;//Stop syncing
+    $scope.loading -= 1;
   }
 
   $scope.setPredictedSupplier = function(feedings) {

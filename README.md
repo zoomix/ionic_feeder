@@ -14,7 +14,6 @@ Ionic Feeder
 * Update counter in notifications.
 * Split up controllers
 * Sanitize model.js
-* Move resync to model and have it throw events
 * Share code via nfc. phonegap-nfc
 * Tests? Specs?
 * ...
@@ -24,6 +23,7 @@ Ionic Feeder
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 * Sometimes we get two timers running for the same feeding.
 * Range slider messes up when sliding on s3. It looks like it's working and then aligns left and dies.
+* Predicted supplier doesnt predict when running with empty params.
 
 ##DONE:
 * Store partials in db.
@@ -87,6 +87,7 @@ Ionic Feeder
 * Scrolling "time between feedings" gets reset. Use something clever here. (bug)
 * Are you sure you want to delete.
 * Resyncing doesnt reset previous day. (should clear anything up to that date.) (bug)
+* Move resync to model and do callbacks
 
 
 ##Used plugins

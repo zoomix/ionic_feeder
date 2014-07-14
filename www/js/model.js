@@ -256,23 +256,47 @@ var storage = {
 
   toggleDemoMode: function() {
     window.localStorage.setItem("demoMode", this.isDemoMode() ? 'notdemo' : 'demo');
+  }, 
+
+  sync: function(newItems, postSyncCB) {
+    if (newItems && newItems.length > 0) {
+      var needReloading = false;
+      var ongoingFeeding = false;
+      storage.getIdsOlderThan(newItems[0].startTime, function(feedingIds) {
+        console.log("We've got " + feedingIds + " older than " + newItems[0].startTime);
+        var feeding = false;
+        for (var i = 0; i < newItems.length; i++) {
+          feeding = newItems[i];
+          var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0
+          if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
+            console.log("ongoing feeding: " + feeding.id);
+            ongoingFeeding = feeding;
+          } else if( !feedingIds.has(feeding.id) || feedingUpdated) {
+            var feedingDeleted = feeding.deleted === 'true' || feeding.deleted === true
+            needReloading = needReloading || !feedingDeleted;
+            storage.store(feeding);
+          }
+        }
+        postSyncCB(needReloading, ongoingFeeding);
+      });
+    }
   }
 }
 
 var app = {
-  getNewFeedings: function(latestFeedingStartTime, newItemsCB) {
+  getNewFeedings: function(latestFeedingStartTime, postSyncCB) {
     if(latestFeedingStartTime) {
       var fromTime = latestFeedingStartTime - 4 * 3600 * 1000; //Allways refetch a bit
-      app.downloadNewFeedings(fromTime, newItemsCB);
+      app.downloadNewFeedings(fromTime, postSyncCB);
     } else {
       storage.getMostRecentFinishedFeeding(function(row) {
         var startTime = (row)? row.startTime : 0;
-        app.downloadNewFeedings(startTime, newItemsCB);
+        app.downloadNewFeedings(startTime, postSyncCB);
       });
     }
   },
 
-  downloadNewFeedings: function(fromTime, newItemsCB) {
+  downloadNewFeedings: function(fromTime, postSyncCB) {
     var request = new XMLHttpRequest();
     request.open("GET", BASE_URL + storage.getUserId() + "/" + fromTime, true);
     request.onreadystatechange = function() {
@@ -280,7 +304,7 @@ var app = {
         console.log("Synced. Got: '" + request.responseText + "'");
         if (request.responseText && request.responseText.length > 0) {
           var items = JSON.parse(request.responseText);
-          newItemsCB(items);
+          storage.sync(items, postSyncCB);
         }
       }
     }
