@@ -196,7 +196,6 @@ h1, h2, h3, h4 { color: #fff;}
   line-height: 64px;
   text-align: center;
 }
-.newFeedingDuration input, .newFeedingVolume input { width: 90% }
 .newFeedingDuration .header, .newFeedingVolume .header { 
   text-transform: uppercase;
   color: #999;
