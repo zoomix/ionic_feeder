@@ -1,9 +1,9 @@
 
-var fake_localstorage = { db: {}, 
-                          getItem:function (item) {return this.db[item]},
-                          setItem:function (item, value) { this.db[item] = value}}
-
-
+storage.dumpDB = function(succesCB) {
+  this.db.transaction(function(tx) {
+    tx.executeSql("delete from " + storage.tableName, [], succesCB, this.errorCB);
+  }, this.errorCB);
+}
 
 describe("model test", function () {
 
@@ -27,32 +27,107 @@ describe("model test", function () {
   });
 
 
+  describe("storage - get feedings", function() {
+    var feeding_finished, feeding_ongoing;
 
-  describe("storage sync", function () {
-
-    var item = {"id":"7fml19rtvtgc","startTime":1405360344488,"supplier":"L","duration":8645,"volume":0,"ongoing":false,"updatedAt":null};
-
-    before(function(done) {
+    beforeEach(function(done) {
+      feeding_finished = {"id":"apa_finished","startTime":new Date().getTime() - 10000, "supplier":"L","duration":8645,"volume":0,"ongoing":false,"updatedAt":null};
+      feeding_ongoing  = {"id":"apa__ongoing","startTime":new Date().getTime() -  1000, "supplier":"R","duration":0,"volume":0,"ongoing":true,"updatedAt":null};
       storage.initialize(function() {
-        storage.store(item, false, function() {
-          console.log("storing must be done");
-          storage.allData(function(rows) {console.log(rows)});
+        storage.dumpDB(function() {
+          storage.store(feeding_finished, false, function() {
+            storage.store(feeding_ongoing, false, done);  
+          });
+        });
+      });
+    });
+
+    it('gets todays feedings - omiting ongoing', function(done) {
+      storage.getDataForDay(0, function(rows) {
+        try {expect(rows).to.have.length(1);} catch (err) {done(err);}
+        done();
+      });
+    });
+
+    it('gets ongoing feeding', function(done) {
+      storage.getOngoingFeeding(function(feeding) {
+        try {expect(feeding.id).to.be('apa__ongoing');} catch (err) {done(err);}
+        done();
+      });
+    });
+
+    it('gets ongoing feeding only within max feeding time ()', function(done) {
+      feeding_ongoing.startTime = feeding_ongoing.startTime - (1 + MAX_TIME_MINUTES) * 60 * 1000;
+      storage.store(feeding_ongoing, false, function() {
+        storage.getOngoingFeeding(function(feeding) {
+          try {expect(feeding).to.not.be.ok();} catch (err) {done(err);}
           done();
+        });
+      });
+    });
+
+  });
+
+
+  describe("storage sync - merging items from server", function () {
+
+    var feeding;
+
+    beforeEach(function(done) {
+      feeding = {"id":"7fml19rtvtgc","startTime":new Date().getTime() - 10000, "supplier":"L","duration":8645,"volume":0,"ongoing":false,"updatedAt":null};
+      storage.initialize(function() {
+        storage.dumpDB(function() {
+          storage.store(feeding, false, done);
         });
       });
     })
 
-    it('calls', function(done) {
-      storage.allData(function(rows) {console.log(rows)});
-      item.startTime = item.startTime - 100;
-      storage.sync([item], function(needReloading, ongoingFeeding) {
+    it('has downloaded the same feeding we already have. No reloading necessary', function(done) {
+      storage.sync([feeding], function(needReloading, ongoingFeeding) {
         try {
-          expect(needReloading).to.be.ok();
+          expect(needReloading).to.not.be.ok();
         } catch (error) {
           done(error)
         }
         done();
       });
-    })
+    });
+
+    it('has downloaded an feeding we already have but with an updatedAt timestamp. Reload', function(done) {
+      feeding.updatedAt = feeding.startTime + 1000;
+      storage.sync([feeding], function(needReloading, ongoingFeeding) {
+        try { expect(needReloading).to.be.ok(); } catch (error) { done(error); }
+        done();
+      });
+    });
+
+    it('has downloaded a new feeding. Reload', function(done) {
+      feeding.id = "apa";
+      storage.sync([feeding], function(needReloading, ongoingFeeding) {
+        try { expect(needReloading).to.be.ok(); } catch (error) { done(error); }
+        done();
+      });
+    });
+
+    it('has downloaded a new feeding, but it was deleted. No reload', function(done) {
+      feeding.id = "apa";
+      feeding.deleted="true";
+      storage.sync([feeding], function(needReloading, ongoingFeeding) {
+        try { expect(needReloading).not.to.be.ok(); } catch (error) { done(error); }
+        done();
+      });
+    });
+
+    it('has downloaded a new feeding which is ongoing. No reload and mark as ongoing', function(done) {
+      feeding.id = "apa";
+      feeding.ongoing="true";
+      storage.sync([feeding], function(needReloading, ongoingFeeding) {
+        try { 
+          expect(needReloading).to.not.be.ok();
+          expect(ongoingFeeding).to.be.ok(); 
+        } catch (error) { done(error); }
+        done();
+      });
+    });
   })
 });

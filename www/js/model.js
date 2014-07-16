@@ -114,7 +114,7 @@ var storage = {
     }
     console.log("getDataForDay from " + fromTime + " to " + toTime);
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and ongoing <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
         var rows = []
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
@@ -123,6 +123,22 @@ var storage = {
           rows.push(row);
         }
         resultCB(rows);
+      }, this.errorCB);
+    }, this.errorCB);
+  },
+
+  getOngoingFeeding: function(resultCB) {
+    var fromTime = "" + (new Date().getTime() - MAX_TIME_MINUTES * 60 * 1000);
+    console.log("getOngoingFeeding from " + fromTime);
+    this.db.transaction(function(tx) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime > ? and ongoing="true" order by startTime desc limit 1', [fromTime], function(tx, results) {
+        if(results.rows.length > 0) {
+          var item = results.rows.item(0);
+          var feeding = storage.rowFromDbItem(item);
+          resultCB(feeding);
+        } else {
+          resultCB();
+        }
       }, this.errorCB);
     }, this.errorCB);
   },
@@ -175,8 +191,8 @@ var storage = {
     storage.store(row, true);
   },
 
-  store: function(row, alsoSync) {
-    console.log("store: " + (row && row.id));
+  store: function(row, alsoSync, doneCB) {
+    console.log("store: " + (row && row.id) + " from " + (row && row.startTime));
     if(!this.db) {
       console.log("Could not store. Db not initialized");
       return;
@@ -190,7 +206,9 @@ var storage = {
                                                 '("' + row.id + '", "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '", ' + preparedUpdatedAt + ')');
       if(alsoSync) {
         app.postFeeding(row);
-      }      
+      }     
+
+      doneCB && doneCB(); 
     }, this.errorCB);
   },
 
@@ -435,7 +453,7 @@ function handleOpenURL(url) {
   }, 0);
 }
 
-document.addEventListener('deviceready', storage.initialize(), false);
+storage.initialize(function() { });
 
 if(typeof exports !== 'undefined') {
   exports.util = util;
