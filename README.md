@@ -5,8 +5,7 @@ Ionic Feeder
 
 ## Tests
 
-    npm install
-    node_modules/mocha/bin/mocha
+    load test/model.html in chrome browser. Preferably in a private window
 
 
 ##TODO:

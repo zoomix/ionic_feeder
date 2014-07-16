@@ -1,39 +1,58 @@
-var assert = require("assert")
-
-var path = require('path'),
-    opendatabase = require('opendatabase')
-
-var database_dir = path.join(path.dirname(__filename), 'test_openDatabase.sqlite')
-var open_db = new opendatabase({name: database_dir, version: "1.0", description: "Example database for indurate.js", size: 3*1024*1024})
 
 var fake_localstorage = { db: {}, 
                           getItem:function (item) {return this.db[item]},
                           setItem:function (item, value) { this.db[item] = value}}
 
-window = {openDatabase: function(name, version, desc, size) { return open_db}, localStorage: fake_localstorage};
-document = {addEventListener: function() {console.log("Adding evenent listener")}}
 
-var model = require("../www/js/model.js");
-var util = model.util;
 
 describe("model test", function () {
 
   describe("Util methods", function() {
   	it('gives out random numbers', function() {
-      assert(util.randomness().length > 10);
+      expect(util.randomness().length).to.be.above(8);
     });
 
     it('verifies breastfeeding for provider L', function() {
-      assert(util.isBreastFeeding('L'));
+      expect(util.isBreastFeeding('L')).to.be.ok();
     });
     it('verifies breastfeeding for provider R', function() {
-      assert(util.isBreastFeeding('R'));
+      expect(util.isBreastFeeding('R')).to.be.ok();
     });
     it('verifies breastfeeding for provider B', function() {
-      assert(!util.isBreastFeeding('B'));
+      expect(util.isBreastFeeding('B')).to.not.be.ok();
     });
     it('verifies breastfeeding for provider null', function() {
-      assert(!util.isBreastFeeding(null));
+      expect(util.isBreastFeeding(null)).to.not.be.ok();
     });
   });
+
+
+
+  describe("storage sync", function () {
+
+    var item = {"id":"7fml19rtvtgc","startTime":1405360344488,"supplier":"L","duration":8645,"volume":0,"ongoing":false,"updatedAt":null};
+
+    before(function(done) {
+      storage.initialize(function() {
+        storage.store(item, false, function() {
+          console.log("storing must be done");
+          storage.allData(function(rows) {console.log(rows)});
+          done();
+        });
+      });
+    })
+
+    it('calls', function(done) {
+      storage.allData(function(rows) {console.log(rows)});
+      item.startTime = item.startTime - 100;
+      storage.sync([item], function(needReloading, ongoingFeeding) {
+        try {
+          expect(needReloading).to.be.ok();
+        } catch (error) {
+          done(error)
+        }
+        done();
+      });
+    })
+  })
 });

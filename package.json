@@ -14,7 +14,6 @@
     "gulp-util": "^2.2.14",
     "shelljs": "^0.3.0",
     "mocha":"^1.12",
-    "sqlite3":"^2.2.3",
-    "opendatabase":"^0.2"
+    "expect.js":"^0.3"
   }
 }
