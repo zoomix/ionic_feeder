@@ -109,6 +109,13 @@ describe("model test", function () {
       })
     });
 
+    it('predicts the supplier from database when parameters dont have relevant feedings', function(done) {
+      storage.predictSupplier([feeding_B], function(predicted) {
+        try { expect(predicted).to.eql('L') } catch (err) { done(err) }
+        done();
+      })
+    });
+
     it('predicts the supplier with parameters', function(done) {
       feeding_R.startTime = feeding_L.startTime - 1000; //Make L be the most recent feeding
       storage.predictSupplier(feedings, function(predicted) {
