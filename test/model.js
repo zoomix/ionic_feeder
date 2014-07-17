@@ -83,6 +83,40 @@ describe("model test", function () {
 
   });
 
+  describe("storage - predictSupplier", function() {
+    var feeding_L, feeding_R, feeding_B, feedings;
+
+    before(function(done) {
+      feeding_L = {"id":"feeding_L","startTime":new Date().getTime() - 10000, "supplier":"L","duration":8645,"volume":0,"ongoing":false,"updatedAt":null};
+      feeding_R = {"id":"feeding_R","startTime":new Date().getTime() -  1000, "supplier":"R","duration":0,"volume":0,"ongoing":false,"updatedAt":null};
+      feeding_B = {"id":"feeding_B","startTime":new Date().getTime() -   100, "supplier":"B","duration":0,"volume":1230,"ongoing":false,"updatedAt":null};
+      feedings = [feeding_L, feeding_R, feeding_B];
+      storage.initialize(function() {
+        storage.dumpDB(function() {
+          storage.store(feeding_L, false, function() {
+            storage.store(feeding_R, false, function() {
+              storage.store(feeding_B, false, done);
+            });
+          });
+        });
+      });
+    });
+
+    it('predicts the supplier from database', function(done) {
+      storage.predictSupplier(null, function(predicted) {
+        try { expect(predicted).to.eql('L') } catch (err) { done(err) }
+        done();
+      })
+    });
+
+    it('predicts the supplier with parameters', function(done) {
+      feeding_R.startTime = feeding_L.startTime - 1000; //Make L be the most recent feeding
+      storage.predictSupplier(feedings, function(predicted) {
+        try { expect(predicted).to.eql('R') } catch (err) { done(err) }
+        done();
+      })
+    });
+  })
 
   describe("storage sync - merging items from server", function () {
 

@@ -21,8 +21,6 @@ Ionic Feeder
 * ion-refresher stops updating of timer on samsung s3 running 4.3. =/
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 * Sometimes we get two timers running for the same feeding.
-* Range slider messes up when sliding on s3. It looks like it's working and then aligns left and dies.
-* Predicted supplier doesnt predict when running with empty params.
 
 ##DONE:
 * Store partials in db.
@@ -88,6 +86,8 @@ Ionic Feeder
 * Resyncing doesnt reset previous day. (should clear anything up to that date.) (bug)
 * Move resync to model and do callbacks
 * Adding a bottle feeding doesnt update time between (bug)
+* Range slider messes up when sliding on s3. It looks like it's working and then aligns left and dies. (bug - fixed a while ago)
+* Predicted supplier doesnt predict when running with empty params. (bug)
 
 
 ##Used plugins

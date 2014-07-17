@@ -263,17 +263,17 @@ var storage = {
       var oldestTime = new Date().getTime() - 24 * 3600 * 1000;
       this.db.transaction(function(tx) {
         tx.executeSql('SELECT supplier, startTime FROM ' + storage.tableName +  
-                        'where deleted <> "true" ' + 
-                          'and ongoing <> "true" ' + 
-                          'and (supplier == "L" OR supplier == "R")' + 
-                          'and startTime > ?' + 
-                        'order by startTime desc limit 1', ["" + oldestTime], function(tx, results) {
+                        ' where deleted <> ? ' + 
+                          'and ongoing <> ? ' + 
+                          'and (supplier == ? OR supplier == ?) ' + 
+                          'and startTime > ? ' + 
+                        'order by startTime desc limit 1', ["true", "true", "L", "R", "" + oldestTime], function(tx, results) {
           if (results.rows && results.rows.length > 0) {
             console.log("Predicting supplier. Found " + results.rows.item(0).supplier + " @" + results.rows.item(0).startTime);
             supplierCallback( results.rows.item(0).supplier === 'L' ? 'R' : 'L' );
           }
         });
-      });
+      }, this.errorCB);
     }
   },
 
