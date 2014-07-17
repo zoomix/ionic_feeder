@@ -349,6 +349,7 @@ angular.module('starter', ['ionic'])
             storage.storeAndSync(feeding);
             $scope.todaysFeedings().unshift(feeding);
             $scope.fetchAndSetTimeSinceLast();
+            util.populateTimeBetween($scope.todaysFeedings(), []);
           }
         }
       ]

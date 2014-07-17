@@ -87,6 +87,7 @@ Ionic Feeder
 * Are you sure you want to delete.
 * Resyncing doesnt reset previous day. (should clear anything up to that date.) (bug)
 * Move resync to model and do callbacks
+* Adding a bottle feeding doesnt update time between (bug)
 
 
 ##Used plugins
