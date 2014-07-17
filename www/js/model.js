@@ -128,17 +128,27 @@ var storage = {
   },
 
   getOngoingFeeding: function(resultCB) {
-    var fromTime = "" + (new Date().getTime() - MAX_TIME_MINUTES * 60 * 1000);
+    var feedingtimeThreshold = new Date().getTime() - MAX_TIME_MINUTES * 60 * 1000;
+    var fromTime = "" + (new Date().getTime() - 2 * 24 * 60 * 60 * 1000); //Dont check all data. Just looka couple of days back.
     console.log("getOngoingFeeding from " + fromTime);
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime > ? and ongoing="true" order by startTime desc limit 1', [fromTime], function(tx, results) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime > ? and ongoing="true" order by startTime desc', [fromTime], function(tx, results) {
+        var feedingReported = false;
         if(results.rows.length > 0) {
-          var item = results.rows.item(0);
-          var feeding = storage.rowFromDbItem(item);
-          resultCB(feeding);
-        } else {
-          resultCB();
+          for (var i = 0; i < results.rows.length; i++) {
+            var item = results.rows.item(i);
+            var feeding = storage.rowFromDbItem(item);
+            if (feeding.startTime > feedingtimeThreshold && !feedingReported) {
+              feedingReported = true;
+              resultCB(feeding);
+            } else {
+              feeding.duration = MAX_TIME_MINUTES * 60 * 1000;
+              feeding.ongoing = false;
+              storage.store(feeding, false);
+            }
+          };
         }
+        if(!feedingReported) {resultCB();}
       }, this.errorCB);
     }, this.errorCB);
   },

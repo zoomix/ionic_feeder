@@ -56,12 +56,27 @@ describe("model test", function () {
       });
     });
 
-    it('gets ongoing feeding only within max feeding time ()', function(done) {
+    it('gets ongoing feeding only within max feeding time', function(done) {
       feeding_ongoing.startTime = feeding_ongoing.startTime - (1 + MAX_TIME_MINUTES) * 60 * 1000;
       storage.store(feeding_ongoing, false, function() {
         storage.getOngoingFeeding(function(feeding) {
           try {expect(feeding).to.not.be.ok();} catch (err) {done(err);}
           done();
+        });
+      });
+    });
+
+    it('sets too old ongoing feeding times to finished', function(done) {
+      feeding_ongoing.startTime = feeding_ongoing.startTime - (1 + MAX_TIME_MINUTES) * 60 * 1000;
+      storage.store(feeding_ongoing, false, function() {
+        storage.getOngoingFeeding(function(feeding) {
+          try {expect(feeding).to.not.be.ok();} catch (err) {done(err);}
+          storage.getDataForDay(0, function(rows) {
+            try {
+              expect(rows).to.have.length(2);
+            } catch (err) {done(err);}
+            done();
+          });
         });
       });
     });

@@ -148,15 +148,11 @@ angular.module('starter', ['ionic'])
   $scope.reloadTodaysFeedings = function() {
       $scope.loading += 1; //Start loading
       $scope.fetchAndSetTimeSinceLast();
+      storage.getOngoingFeeding(function(ongoingFeeding) {
+        ongoingFeeding && $scope.continue(ongoingFeeding);
+      });
       storage.getDataForDay(0, function (rows) {
-        var latestRow = false;
-        if(rows.length > 0) {
-          latestRow = rows[0]; //Remember. The rows are in reverse order.
-          if(latestRow.ongoing) {
-            rows.shift();
-            $scope.continue(latestRow);
-          }
-        }
+        var latestRow = rows.length > 0 && rows[0];
         $scope.feedings[7] = rows;
         util.populateTimeBetween($scope.feedings[7], []);
         $scope.setPredictedSupplier(rows);
