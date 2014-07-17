@@ -18,7 +18,7 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller('MenuCtrl', function($scope, $ionicModal, $ionicPopup) {
+.controller('MenuCtrl', function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate) {
 
   $scope.vibrateOn = vibrations.getVibrateInteral();
   $scope.toggleVibrate = function() {
@@ -42,6 +42,7 @@ angular.module('starter', ['ionic'])
 
   $scope.enteredCode = "";
   $scope.connectDevices = function() {
+    $ionicSideMenuDelegate.toggleLeft();
     $scope.modal.show();
   }
 
@@ -73,6 +74,7 @@ angular.module('starter', ['ionic'])
     app.getNewFeedings(app.getToday(0), function() {
       var counterScope = angular.element(document.getElementById('CounterApp')).scope();
       counterScope.$broadcast("resync", null);
+      $ionicSideMenuDelegate.toggleLeft();
     })
   }
 
@@ -87,6 +89,7 @@ angular.module('starter', ['ionic'])
   $scope.demoModeOn = storage.isDemoMode()
   $scope.toggleDemoMode = function() {
     storage.toggleDemoMode();
+    $ionicSideMenuDelegate.toggleLeft();
     alert("Restart the app for the change to take effect.");
   }
 
