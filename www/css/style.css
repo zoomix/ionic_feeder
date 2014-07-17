@@ -59,6 +59,9 @@
 body, .list, .pane, .item, .menu, .bar, .scroll-content {
   background-color: #242730;
 }
+.pane {
+  border: none !important;
+}
 
 .button, .button:HOVER, .button.button-positive, .button.button-positive:HOVER {
 	color: #fff;
@@ -285,7 +288,7 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 .menu-content {
-  box-shadow: #222 0px 0px 23px
+  box-shadow: #222 0px 0px 23px;
 }
 
 .modal .scroll-content {
