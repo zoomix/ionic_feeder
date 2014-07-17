@@ -267,6 +267,13 @@ h1, h2, h3, h4 { color: #fff;}
 .sidemenu .item {
   border: 1px solid #464950;
 }
+.sidemenu .version {
+  color: #06E0C6;
+  font-size: 8px;
+  position: absolute;
+  right:10px;
+  top: 0px;
+}
 
 .ion-toggle-filled, .ion-toggle {
   color: #06E0C6;

@@ -114,7 +114,7 @@ var storage = {
     }
     console.log("getDataForDay from " + fromTime + " to " + toTime);
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and ongoing <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
         var rows = []
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
@@ -123,6 +123,32 @@ var storage = {
           rows.push(row);
         }
         resultCB(rows);
+      }, this.errorCB);
+    }, this.errorCB);
+  },
+
+  getOngoingFeeding: function(resultCB) {
+    var feedingtimeThreshold = new Date().getTime() - MAX_TIME_MINUTES * 60 * 1000;
+    var fromTime = "" + (new Date().getTime() - 2 * 24 * 60 * 60 * 1000); //Dont check all data. Just looka couple of days back.
+    console.log("getOngoingFeeding from " + fromTime);
+    this.db.transaction(function(tx) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime > ? and ongoing="true" order by startTime desc', [fromTime], function(tx, results) {
+        var feedingReported = false;
+        if(results.rows.length > 0) {
+          for (var i = 0; i < results.rows.length; i++) {
+            var item = results.rows.item(i);
+            var feeding = storage.rowFromDbItem(item);
+            if (feeding.startTime > feedingtimeThreshold && !feedingReported) {
+              feedingReported = true;
+              resultCB(feeding);
+            } else {
+              feeding.duration = MAX_TIME_MINUTES * 60 * 1000;
+              feeding.ongoing = false;
+              storage.store(feeding, false);
+            }
+          };
+        }
+        if(!feedingReported) {resultCB();}
       }, this.errorCB);
     }, this.errorCB);
   },
@@ -175,8 +201,8 @@ var storage = {
     storage.store(row, true);
   },
 
-  store: function(row, alsoSync) {
-    console.log("store: " + (row && row.id));
+  store: function(row, alsoSync, doneCB) {
+    console.log("store: " + (row && row.id) + " from " + (row && row.startTime));
     if(!this.db) {
       console.log("Could not store. Db not initialized");
       return;
@@ -190,7 +216,9 @@ var storage = {
                                                 '("' + row.id + '", "' + row.startTime + '", "' + row.supplier + '", "' + row.duration + '", "' + row.volume + '", "' + row.ongoing + '", "' + (row.deleted == true) + '", ' + preparedUpdatedAt + ')');
       if(alsoSync) {
         app.postFeeding(row);
-      }      
+      }     
+
+      doneCB && doneCB(); 
     }, this.errorCB);
   },
 
@@ -256,23 +284,47 @@ var storage = {
 
   toggleDemoMode: function() {
     window.localStorage.setItem("demoMode", this.isDemoMode() ? 'notdemo' : 'demo');
+  }, 
+
+  sync: function(newItems, postSyncCB) {
+    if (newItems && newItems.length > 0) {
+      var needReloading = false;
+      var ongoingFeeding = false;
+      storage.getIdsOlderThan(newItems[0].startTime, function(feedingIds) {
+        console.log("We've got " + feedingIds + " older than " + newItems[0].startTime);
+        var feeding = false;
+        for (var i = 0; i < newItems.length; i++) {
+          feeding = newItems[i];
+          var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0
+          if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
+            console.log("ongoing feeding: " + feeding.id);
+            ongoingFeeding = feeding;
+          } else if( !feedingIds.has(feeding.id) || feedingUpdated) {
+            var feedingDeleted = feeding.deleted === 'true' || feeding.deleted === true
+            needReloading = needReloading || !feedingDeleted;
+            storage.store(feeding);
+          }
+        }
+        postSyncCB(needReloading, ongoingFeeding);
+      });
+    }
   }
 }
 
 var app = {
-  getNewFeedings: function(latestFeedingStartTime, newItemsCB) {
+  getNewFeedings: function(latestFeedingStartTime, postSyncCB) {
     if(latestFeedingStartTime) {
       var fromTime = latestFeedingStartTime - 4 * 3600 * 1000; //Allways refetch a bit
-      app.downloadNewFeedings(fromTime, newItemsCB);
+      app.downloadNewFeedings(fromTime, postSyncCB);
     } else {
       storage.getMostRecentFinishedFeeding(function(row) {
         var startTime = (row)? row.startTime : 0;
-        app.downloadNewFeedings(startTime, newItemsCB);
+        app.downloadNewFeedings(startTime, postSyncCB);
       });
     }
   },
 
-  downloadNewFeedings: function(fromTime, newItemsCB) {
+  downloadNewFeedings: function(fromTime, postSyncCB) {
     var request = new XMLHttpRequest();
     request.open("GET", BASE_URL + storage.getUserId() + "/" + fromTime, true);
     request.onreadystatechange = function() {
@@ -280,7 +332,7 @@ var app = {
         console.log("Synced. Got: '" + request.responseText + "'");
         if (request.responseText && request.responseText.length > 0) {
           var items = JSON.parse(request.responseText);
-          newItemsCB(items);
+          storage.sync(items, postSyncCB);
         }
       }
     }
@@ -411,7 +463,7 @@ function handleOpenURL(url) {
   }, 0);
 }
 
-document.addEventListener('deviceready', storage.initialize(), false);
+storage.initialize(function() { });
 
 if(typeof exports !== 'undefined') {
   exports.util = util;
