@@ -64,7 +64,27 @@ var util = {
     var hours = Math.floor(timeInMs / 1000 / 60 / 60);
     var minutes = Math.floor((timeInMs / 1000 / 60) % 60);
     return hours + "h " + minutes + "m";
+  },
+
+  showToast: function(message) {
+    if(window.plugins && window.plugins.toast) {
+      window.plugins.toast.showShortBottom(message);
+    } else {
+      console.log("Toasting: " + message);
+    }
+  },
+
+  getToday: function(offset) {
+    var now = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    console.log("Date for " + offset + " was " + new Date((now.getTime() + offset * 1000 * 60 * 60 * 24)));
+    return "" + (now.getTime() + offset * 1000 * 60 * 60 * 24);
   }
+
 }
 
 var storage = {
@@ -107,8 +127,8 @@ var storage = {
   },
 
   getDataForDay: function(day, resultCB) {
-    var fromTime = app.getToday(day);
-    var toTime = app.getToday(day + 1);
+    var fromTime = util.getToday(day);
+    var toTime = util.getToday(day + 1);
     if (day === -7) {
       fromTime = 0;
     }
@@ -383,27 +403,7 @@ var app = {
         });
       }
     }
-  },
-
-  showToast: function(message) {
-    if(window.plugins && window.plugins.toast) {
-      window.plugins.toast.showShortBottom(message);
-    } else {
-      console.log("Toasting: " + message);
-    }
-  },
-
-  getToday: function(offset) {
-    var now = new Date();
-    now.setHours(0);
-    now.setMinutes(0);
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-
-    console.log("Date for " + offset + " was " + new Date((now.getTime() + offset * 1000 * 60 * 60 * 24)));
-    return "" + (now.getTime() + offset * 1000 * 60 * 60 * 24);
   }
-
 }
 
 var vibrations = {
