@@ -72,9 +72,9 @@ angular.module('starter', ['ionic'])
 
   $scope.resyncToday = function() {
     app.getNewFeedings(app.getToday(0), function() {
+      $ionicSideMenuDelegate.toggleLeft();
       var counterScope = angular.element(document.getElementById('CounterApp')).scope();
       counterScope.$broadcast("resync", null);
-      $ionicSideMenuDelegate.toggleLeft();
     })
   }
 

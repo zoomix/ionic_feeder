@@ -6,22 +6,22 @@
   </span>
 </div>
 <div class="times">
-  <span class="row" ng-show="feeding.supplier === 'B'">
+  <span class="row" ng-show="feeding.supplier === 'B'" ng-click="editFeeding(feeding)">
     <div class="verticalLine"></div>
     <span class="supplierContainer">
       <span ng-click="editFeeding(feeding)" class="supplier supplier{{feeding.supplier}}"><i class="ion-waterdrop"></i></span>
     </span>
     <span class="col"></span>
-    <span class="col">
+    <span class="col" ng-click="editFeeding(feeding)">
       <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}}</div>
       <div class="feedingInfo volume">{{feeding.volume}}ml</div>
     </span>
     
   </span>
-  <span class="row" ng-show="feeding.supplier !== 'B'">
+  <span class="row" ng-show="feeding.supplier !== 'B'" ng-click="editFeeding(feeding)">
     <div class="verticalLine"></div>
     <span class="supplierContainer">
-      <span ng-click="editFeeding(feeding)" class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
+      <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
     </span>
     <span class="col"></span>
     <span class="col">
