@@ -15,7 +15,6 @@ Ionic Feeder
 * Sanitize model.js
 * Share code via nfc. phonegap-nfc
 * Refresh button in main view instead of menu?
-* Change background on button click to give press feedback.
 * Texts and message for sharing/entering code. 
 * Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
 * Design subject-line in popups.
@@ -93,6 +92,7 @@ Ionic Feeder
 * Range slider messes up when sliding on s3. It looks like it's working and then aligns left and dies. (bug - fixed a while ago)
 * Predicted supplier doesnt predict when running with empty params. (bug)
 * Tests? Specs?
+* Change background on button click to give press feedback.
 
 
 ##Used plugins

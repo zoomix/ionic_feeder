@@ -80,6 +80,12 @@ body, .list, .pane, .item, .menu, .bar, .scroll-content {
   box-shadow: #222 0 0 28px;
 }
 
+.button-round.activated, .popup-buttons .button.activated, .sources .button.activated {
+  background-color: #88FAEC !important;
+  border-color: #88FAEC !important;
+  color: black;
+}
+
 .button-bottle, .button-bottle:HOVER {
   width: 90px;
   height: 90px;
@@ -267,7 +273,14 @@ h1, h2, h3, h4 { color: #fff;}
 .sidemenu .list, .sidemenu .item {
   background-color: transparent;
 }
+.sidemenu .item.activated {
+  background-color: #464950;
+}
 .sidemenu .item {
+  border: 1px solid #464950;
+  border-bottom: none;
+}
+.sidemenu .item:LAST-CHILD {
   border: 1px solid #464950;
 }
 .sidemenu .version {
