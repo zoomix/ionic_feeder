@@ -1,4 +1,11 @@
 
+app = {
+  postedFeedings: [],
+  postFeeding: function(feeding) {
+    this.postedFeedings.push(feeding);
+  }
+}
+
 storage.dumpDB = function(succesCB) {
   this.db.transaction(function(tx) {
     tx.executeSql("delete from " + storage.tableName, [], succesCB, this.errorCB);
@@ -185,5 +192,27 @@ describe("model test", function () {
         done();
       });
     });
+
+    it('has downloaded the same feeding we already have, but this one is still ongoing. Stop it and update with our last timestamp', function(done) {
+      feeding.ongoing=true;
+      storage.sync([feeding], function(needReloading, ongoingFeeding) {
+        try {
+          expect(needReloading).to.not.be.ok();
+          expect(ongoingFeeding).to.not.be.ok();
+        } catch (error) {
+          done(error);
+        }
+        setTimeout(function() { //This is kinda ugly. Is there a better way of doing this?
+          try {
+            expect(app.postedFeedings).to.not.be.empty();
+            expect(app.postedFeedings[0].id).to.eql(feeding.id);
+          } catch (error) {
+            done(error)
+          }
+          done();
+        }, 80);
+      });
+    });
+
   })
 });

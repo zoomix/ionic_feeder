@@ -317,8 +317,16 @@ var storage = {
           feeding = newItems[i];
           var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0
           if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
-            console.log("ongoing feeding: " + feeding.id);
-            ongoingFeeding = feeding;
+            if ( feedingIds.has(feeding.id) ) {
+              console.log("ongoing feeding we already have: " + feeding.id);
+              storage.getFeedingById(feeding.id, function(storedFeeding) {
+                storedFeeding.updatedAt = new Date().getTime();
+                storage.store(storedFeeding, true);
+              })
+            } else {
+              console.log("ongoing feeding: " + feeding.id);
+              ongoingFeeding = feeding;
+            }
           } else if( !feedingIds.has(feeding.id) || feedingUpdated) {
             var feedingDeleted = feeding.deleted === 'true' || feeding.deleted === true
             needReloading = needReloading || !feedingDeleted;
@@ -328,6 +336,18 @@ var storage = {
         postSyncCB(needReloading, ongoingFeeding);
       });
     }
+  },
+
+  getFeedingById: function(feedingId, resultCB) {
+    this.db.transaction(function(tx) {
+      tx.executeSql("select * from " + storage.tableName + " where id = ?", [feedingId], function(tx, results) {
+        var feeding;
+        if (results.rows && results.rows.length > 0) {
+          feeding = storage.rowFromDbItem(results.rows.item(0));
+        }
+        resultCB(feeding);
+      });
+    }, this.errorCB);
   }
 }
 
