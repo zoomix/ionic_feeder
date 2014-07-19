@@ -76,17 +76,24 @@ header h2 {
   color: #06E0C6;
 }
 
+div.inner, section {
+  background-color: #e5e5e5;
+}
 section {
   height: 360px;
-  background-color: rgba(255, 255, 255, 0.8);
   position: relative;
   vertical-align: center;
+  display: inline-flex;
+}
+section .content {
+  margin: auto 0;
+  text-align: center;
 }
 
-section.odd  > h1, section.odd p { margin-left: 50%;}
-section.even > h1, section.even p { margin-right: 50%;}
-section h1 { font-size: 32px;  padding-top: 40px }
-section p {
+section.odd  .content > h1, section.odd p { margin-left: 50%;}
+section.even .content > h1, section.even p { margin-right: 50%;}
+section h1 { font-size: 32px }
+section p, section dl {
   font-size: 14px;
   color: #666;
 }
@@ -143,4 +150,7 @@ a.button {
   display: inline-block;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
+}
+
+strong { font-weight: bold
 }
