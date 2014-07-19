@@ -1,0 +1,122 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+  display: block;
+}
+
+div.inner { width: 80%; margin: 0 auto;}
+
+body {
+  background-image: url('../images/menu-backdrop.png');
+}
+
+h1, h2 {
+  font-family: 'Roboto Slab', serif;
+}
+
+h2 {
+  font-weight: 300;
+}
+
+p, a {
+  font-family: 'Roboto Slab', serif;
+  font-weight: 300;
+}
+
+header, section, footer {
+  padding: 0 10%;
+  margin: 30px 0px;
+  border-radius: 8px;
+}
+
+header {
+  background-color: green;
+  text-align: center;
+  height: 300px;
+  background-image: url('../images/head2.jpg');
+  background-position: bottom right;
+  background-size: auto 400px;
+  text-shadow: 0 1px 0 black;
+}
+
+header h1 {
+  padding-top: 40px;
+  font-size: 50px;
+  color: white;
+}
+header h2 {
+  font-size: 30px;
+  color: aqua;
+}
+
+section {
+  height: 300px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+section > h1, section p { margin-left: 50%;}
+section h1 { font-size: 32px;  padding-top: 40px }
+section p { font-size: 12px; }
+section > .left, section > .right {
+  width: 49%;
+  display: inline-table;
+}
+
+section#basics {
+  background-image: url('../images/2014-07-19-12-24-08.png');
+  background-size: 300px;
+  background-repeat: no-repeat;
+  background-position: 5% -46px;
+}
+
+section#nobloat {
+  background-image: url('../images/idontthinkso.jpg');
+  background-size: 300px;
+  background-repeat: no-repeat;
+  background-position: 5% -91px;
+}
+
+footer {
+  background-color: yellow;
+}
+
+a.button {
+  background-color: #242730;
+  border-radius: 50px;
+  border-width: 2px;
+  border-style: solid;
+  font-size: 21px;
+  vertical-align: middle;
+  border-color: #06E0C6;
+  box-shadow: #222 0 0 28px;
+  color: white;
+  text-decoration: none;;
+  padding: 8px 16px;
+  margin: 46px;
+  display: inline-block;
+}
