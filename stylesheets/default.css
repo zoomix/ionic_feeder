@@ -29,7 +29,7 @@ footer, header, hgroup, menu, nav, section {
   display: block;
 }
 
-div.inner { width: 80%; margin: 0 auto;}
+div.inner { width: 800px; margin: 0 auto;}
 
 body {
   background-image: url('../images/menu-backdrop.png');
@@ -40,21 +40,23 @@ h1, h2 {
 }
 
 h2 {
+  font-family: 'Roboto', sans-serif;
   font-weight: 300;
 }
 
 p, a {
-  font-family: 'Roboto Slab', serif;
+  font-family: 'Roboto Slab', sans-serif;
   font-weight: 300;
 }
 
+
 header, section, footer {
-  padding: 0 10%;
-  margin: 30px 0px;
-  border-radius: 8px;
+  padding: 0 80px;
+  margin: 0px 0px;
 }
 
 header {
+  border-radius-top-left: 8px;
   background-color: green;
   text-align: center;
   height: 300px;
@@ -71,34 +73,54 @@ header h1 {
 }
 header h2 {
   font-size: 30px;
-  color: aqua;
+  color: #06E0C6;
 }
 
 section {
-  height: 300px;
-  background-color: rgba(255, 255, 255, 0.5);
+  height: 360px;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: relative;
+  vertical-align: center;
 }
 
-section > h1, section p { margin-left: 50%;}
+section.odd  > h1, section.odd p { margin-left: 50%;}
+section.even > h1, section.even p { margin-right: 50%;}
 section h1 { font-size: 32px;  padding-top: 40px }
-section p { font-size: 12px; }
+section p {
+  font-size: 14px;
+  color: #666;
+}
 section > .left, section > .right {
   width: 49%;
   display: inline-table;
 }
 
-section#basics {
-  background-image: url('../images/2014-07-19-12-24-08.png');
-  background-size: 300px;
+section .img {
+  top: 30px;
+  width: 300px;
+  height: 300px;
+  position: absolute;
   background-repeat: no-repeat;
-  background-position: 5% -46px;
+  border-radius: 28px;
 }
 
-section#nobloat {
+section#basics .img {
+  background-image: url('../images/2014-07-19-12-24-08.png');
+  background-size: 300px;
+  background-position: 0 -46px;
+}
+
+section#sync .img {
+  background-image: url('../images/2014-07-19-12-24-48.png');
+  background-size: 300px;
+  background-position: 0 -194px;
+  right: 80px;
+}
+
+section#nobloat .img {
   background-image: url('../images/idontthinkso.jpg');
   background-size: 300px;
-  background-repeat: no-repeat;
-  background-position: 5% -91px;
+  background-position: 0 -91px;
 }
 
 footer {
@@ -119,4 +141,6 @@ a.button {
   padding: 8px 16px;
   margin: 46px;
   display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
 }
