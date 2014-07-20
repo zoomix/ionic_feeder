@@ -39,12 +39,12 @@ h1, h2 {
   font-family: 'Roboto Slab', serif;
 }
 
-h2 {
+h2, dt {
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
 }
 
-p, a {
+p, a, dd {
   font-family: 'Roboto Slab', sans-serif;
   font-weight: 300;
 }
@@ -96,10 +96,13 @@ section h1 { font-size: 32px }
 section p, section dl {
   font-size: 14px;
   color: #666;
+  margin-bottom: 8px;
 }
+section dd { margin-bottom: 8px;}
 section > .left, section > .right {
   width: 49%;
   display: inline-table;
+  text-align: center;
 }
 
 section .img {
@@ -118,9 +121,9 @@ section#basics .img {
 }
 
 section#sync .img {
-  background-image: url('../images/2014-07-19-12-24-48.png');
-  background-size: 300px;
-  background-position: 0 -194px;
+  background-image: url('../images/sync.jpg');
+  background-size: auto 300px;
+  background-position: -28px 2px;
   right: 80px;
 }
 
