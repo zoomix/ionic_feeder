@@ -57,7 +57,6 @@ header, section, footer {
 
 header {
   border-radius-top-left: 8px;
-  background-color: green;
   text-align: center;
   height: 300px;
   background-image: url('../images/head2.jpg');
@@ -90,13 +89,14 @@ section .content {
   text-align: center;
 }
 
-section.odd  .content > h1, section.odd p { margin-left: 50%;}
-section.even .content > h1, section.even p { margin-right: 50%;}
+section.odd  .content { margin-left: 50%;}
+section.even .content { margin-right: 50%;}
 section h1 { font-size: 32px }
 section p, section dl {
   font-size: 14px;
   color: #666;
   margin-bottom: 8px;
+  margin-top: 8px;
 }
 section dd { margin-bottom: 8px;}
 section > .left, section > .right {
@@ -131,6 +131,10 @@ section#nobloat .img {
   background-image: url('../images/idontthinkso.jpg');
   background-size: 300px;
   background-position: 0 -91px;
+}
+
+section#basics .img, section#nobloat .img  {
+  left:80px;
 }
 
 footer {
