@@ -228,7 +228,7 @@ angular.module('starter', ['ionic'])
   $scope.postSync = function(needReloading, ongoingFeeding) {
     ongoingFeeding && $scope.continue(ongoingFeeding);
     $scope.setTimeSinceLast();
-    !ongoingFeeding && $scope.setPredictedSupplier();
+    $scope.setPredictedSupplier();
     if (needReloading) {
       $scope.reloadActivePage();
       $scope.fetchAndSetTimeSinceLast();
@@ -237,9 +237,12 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.setPredictedSupplier = function(feedings) {
-    $scope.lClass = "";
-    $scope.rClass = "";
     storage.predictSupplier(feedings, function(supplier) {
+      $scope.lClass = "";
+      $scope.rClass = "";
+      if( $scope.ongoingFeeding ) {
+        return;
+      }
       if(supplier === 'L') {
         $scope.lClass = "selected";
       } else if(supplier === 'R') {
