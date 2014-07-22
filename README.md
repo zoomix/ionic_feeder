@@ -10,7 +10,6 @@ Ionic Feeder
 
 ##TODO:
 
-* Tactile feedback on clicking the feeding list items
 * Update counter in notifications.
 * Split up controllers
 * Sanitize model.js
@@ -95,6 +94,7 @@ Ionic Feeder
 * Tests? Specs?
 * Change background on button click to give press feedback.
 * Sometimes we get two timers running for the same feeding. (bug. Seems fixed)
+* Tactile feedback on clicking the feeding list items
 
 
 ##Used plugins

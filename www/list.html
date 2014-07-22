@@ -6,27 +6,21 @@
   </span>
 </div>
 <div class="times">
-  <span class="row" ng-show="feeding.supplier === 'B'" ng-click="editFeeding(feeding)">
+  <span class="row">
     <div class="verticalLine"></div>
-    <span class="supplierContainer">
-      <span class="supplier supplierB"><i class="ion-waterdrop"></i></span>
-    </span>
-    <span class="col"></span>
-    <span class="col" ng-click="editFeeding(feeding)">
-      <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}}</div>
-      <div class="feedingInfo volume">{{feeding.volume}}ml</div>
-    </span>
-    
-  </span>
-  <span class="row" ng-show="feeding.supplier !== 'B'" ng-click="editFeeding(feeding)">
-    <div class="verticalLine"></div>
-    <span class="supplierContainer">
-      <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
-    </span>
     <span class="col"></span>
     <span class="col">
-      <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}} - {{endTime(feeding) | date:'HH:mm'}}</div>
-      <div class="feedingInfo duration">{{feeding.duration | date:'m'}} min</div>
+      <div class="feeding" ng-click="editFeeding(feeding)" ng-show="feeding.supplier === 'B'">
+        <span class="supplier supplierB"><i class="ion-waterdrop"></i></span>
+        <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}}</div>
+        <div class="feedingInfo volume">{{feeding.volume}}ml</div>
+      </div>
+
+      <div class="feeding" ng-click="editFeeding(feeding)" ng-show="feeding.supplier !== 'B'">
+        <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
+        <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}} - {{endTime(feeding) | date:'HH:mm'}}</div>
+        <div class="feedingInfo duration">{{feeding.duration | date:'m'}} min</div>
+      </div>
    </span>
   </span>
 </div>

@@ -6,21 +6,23 @@
   background-color: transparent;
 }
 
-
-.supplierContainer {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  text-align: center;
-  background-color: transparent;
-  vertical-align: middle;
+.feeding {
+  height: 35px;
+  position: relative;
+  overflow: visible;
+  border-top-right-radius: 19px;
+  border-bottom-right-radius: 19px;
+  margin-right: 30px;
+}
+.feeding.activated {
+  background: #464950;
 }
 .supplier {
   background-color: white;
   font-weight: bold;  
-  width: 29px;
-  height: 29px;
-  line-height: 28px;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
   text-align: center;
   display: inline-block;
   color: black;
@@ -29,18 +31,19 @@
 .supplierL {
   border-top-left-radius: 19px;
   border-bottom-left-radius: 19px;
-  margin-right: 29px;
-  left: inherit;
+  position: absolute;
+  left: -35px;
 }
 .supplierR {
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
-  margin-left: 29px;
+  position: absolute;
 }
 .supplierB {
   border-radius: 19px;
-  left: inherit;
-  width: 40px;
+  width: 46px;
+  position: absolute;
+  left: -23px;
 }
 .supplierB .ion-waterdrop {
   background-color: #fff;
@@ -162,11 +165,11 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 .durations {
-  height: 52px;
+  height: 46px;
 }
 
 .feedingInfo {
-  margin-left: 36px;
+  margin-left: 44px;
   line-height: 18px;
 }
 .col .duration, .col .volume {
