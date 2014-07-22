@@ -56,7 +56,6 @@ header, section, footer {
 }
 
 header {
-  border-radius-top-left: 8px;
   text-align: center;
   height: 300px;
   background-image: url('../images/head2.jpg');
@@ -115,7 +114,7 @@ section .img {
 }
 
 section#basics .img {
-  background-image: url('../images/2014-07-19-12-24-08.png');
+  background-image: url('../images/2014-07-19-12-24-48.png');
   background-size: 300px;
   background-position: 0 -46px;
 }
@@ -123,7 +122,7 @@ section#basics .img {
 section#sync .img {
   background-image: url('../images/sync.jpg');
   background-size: auto 300px;
-  background-position: -28px 2px;
+  background-position: -28px 0px;
   right: 80px;
 }
 
@@ -137,13 +136,18 @@ section#basics .img, section#nobloat .img  {
   left:80px;
 }
 
-footer {
-  background-color: #999;
-  padding-top: 20px;
-  padding-bottom: 20px;
+section#nobloat .img {
+  margin-bottom: 32px;
 }
 
-a.button {
+footer {
+  background-color: #666;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+}
+
+a.button, a.button:hover {
   background-color: #242730;
   border-radius: 50px;
   border-width: 2px;
@@ -159,6 +163,15 @@ a.button {
   display: inline-block;
   font-family: 'Roboto', sans-serif;
   font-weight: 300;
+}
+
+a {
+  text-decoration: none;
+  font-weight: bold;
+  color: inherit;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 strong { font-weight: bold

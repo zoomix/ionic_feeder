@@ -1,7 +1,8 @@
 div.inner { width: 100%; max-width: 500px; min-width: 320px }
 
 header, section, footer {
-  padding: 0 10px;
+  padding-right: 10px;
+  padding-left: 10px;
 }
 
 header {
@@ -13,7 +14,7 @@ header h2 { font-size: 21px; margin-top: 4px; }
 
 a.button {
   margin: 33px 0 45px;
-  font-size: 13px;
+  font-size: 18px;
 }
 
 section {
@@ -24,10 +25,10 @@ section {
 section .img {
   display: block;
   position: inherit;
-  border-radius: 0;
   right: inherit !important;
   left: inherit !important;
-  margin: 0 auto;
+  top: 0px;
+  margin: 20px auto 0;
 }
 
 section {
@@ -36,10 +37,6 @@ section {
 
 section .content {
   display: block;
-}
-
-section .img {
-  top: 0px;
 }
 
 section.odd .content  {  margin: 0px !important; padding: 0 30px;}
