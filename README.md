@@ -10,6 +10,7 @@ Ionic Feeder
 
 ##TODO:
 
+* Tactile feedback on clicking the feeding list items
 * Update counter in notifications.
 * Split up controllers
 * Sanitize model.js
@@ -23,7 +24,7 @@ Ionic Feeder
 ##BUGS:
 * ion-refresher stops updating of timer on samsung s3 running 4.3. =/
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
-* Sometimes we get two timers running for the same feeding.
+* When an ongoing feeding is resynced it is marked as updated. Following syncs will reload the list unecessariliy. 
 
 ##DONE:
 * Store partials in db.
@@ -93,6 +94,7 @@ Ionic Feeder
 * Predicted supplier doesnt predict when running with empty params. (bug)
 * Tests? Specs?
 * Change background on button click to give press feedback.
+* Sometimes we get two timers running for the same feeding. (bug. Seems fixed)
 
 
 ##Used plugins
