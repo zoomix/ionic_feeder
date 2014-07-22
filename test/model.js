@@ -214,5 +214,17 @@ describe("model test", function () {
       });
     });
 
+    it('calls callback even if nothing was synced', function(done) {
+      storage.sync([], function(needReloading, ongoingFeeding) {
+        try {
+          expect(needReloading).to.not.be.ok();
+          expect(ongoingFeeding).to.not.be.ok();
+        } catch (error) {
+          done(error);
+        }
+        done();
+      })
+    })
+
   })
 });

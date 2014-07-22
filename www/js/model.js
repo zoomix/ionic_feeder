@@ -307,7 +307,9 @@ var storage = {
   }, 
 
   sync: function(newItems, postSyncCB) {
-    if (newItems && newItems.length > 0) {
+    if (!newItems || newItems.length == 0) {
+      postSyncCB(false, false);
+    } else {
       var needReloading = false;
       var ongoingFeeding = false;
       storage.getIdsOlderThan(newItems[0].startTime, function(feedingIds) {
