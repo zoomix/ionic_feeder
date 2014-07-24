@@ -9,9 +9,6 @@ Ionic Feeder
 
 
 ##TODO:
-* Update counter in notifications.
-* Share code via nfc. phonegap-nfc
-* Refresh button in main view instead of menu?
 * Texts and message for sharing/entering code. 
 * Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
 * Design subject-line in popups.
@@ -24,6 +21,9 @@ Ionic Feeder
 ##FUTURE:
 * Split up controllers
 * Sanitize model.js
+* Update counter in notifications.
+* Share code via nfc. phonegap-nfc
+* Refresh button in main view instead of menu?
 * More tests
 
 
