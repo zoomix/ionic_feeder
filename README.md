@@ -1,7 +1,7 @@
 Ionic Feeder
 =====================
 
-##An app to help out with breastfeeding.
+##An app to help out with breastfeeding. See http://zoomix.github.io/ionic_feeder/ for more info.
 
 ## Tests
 
@@ -9,21 +9,24 @@ Ionic Feeder
 
 
 ##TODO:
-
+* When entering a new secret code, automatically perform a sync.
 * Update counter in notifications.
-* Split up controllers
-* Sanitize model.js
 * Share code via nfc. phonegap-nfc
 * Refresh button in main view instead of menu?
 * Texts and message for sharing/entering code. 
 * Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
 * Design subject-line in popups.
-* ...
 
 ##BUGS:
 * ion-refresher stops updating of timer on samsung s3 running 4.3. =/
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 * When an ongoing feeding is resynced it is marked as updated. Following syncs will reload the list unecessariliy. 
+
+##FUTURE:
+* Split up controllers
+* Sanitize model.js
+* More tests
+
 
 ##DONE:
 * Store partials in db.
