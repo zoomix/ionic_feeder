@@ -63,6 +63,7 @@ angular.module('starter', ['ionic'])
               e.preventDefault();
             } else {
               storage.storeUserId($scope.data.enteredCode);
+              $scope.init();
             }
           }
         },
@@ -90,7 +91,7 @@ angular.module('starter', ['ionic'])
   $scope.toggleDemoMode = function() {
     storage.toggleDemoMode();
     $ionicSideMenuDelegate.toggleLeft();
-    alert("Restart the app for the change to take effect.");
+    $scope.init();
   }
 
   $scope.exitApp = function () {

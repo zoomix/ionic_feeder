@@ -9,7 +9,6 @@ Ionic Feeder
 
 
 ##TODO:
-* When entering a new secret code, automatically perform a sync.
 * Update counter in notifications.
 * Share code via nfc. phonegap-nfc
 * Refresh button in main view instead of menu?
@@ -98,6 +97,7 @@ Ionic Feeder
 * Change background on button click to give press feedback.
 * Sometimes we get two timers running for the same feeding. (bug. Seems fixed)
 * Tactile feedback on clicking the feeding list items
+* When entering a new secret code, automatically perform a sync.
 
 
 ##Used plugins
