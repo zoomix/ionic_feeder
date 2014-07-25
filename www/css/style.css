@@ -313,12 +313,16 @@ h1, h2, h3, h4 { color: #fff;}
 .modal {
   text-align: center;
 }
-.modal .small {
-  font-size: 10px;
-  color: #999;
+.modal h2 {
+  font-size: 14px;
+  text-transform: uppercase;
+  color: #FCC108;
 }
-.modal .info {
+.modal .info, .modal .button {
   margin-bottom: 32px;
+}
+.modal .faded {
+  color: #999;
 }
 
 input.error {background-color: #c88}

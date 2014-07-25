@@ -36,7 +36,7 @@ angular.module('starter', ['ionic'])
   $scope.share = function() {
     var userId = storage.getUserId();
     if (window.plugins && window.plugins.socialsharing) {
-      window.plugins.socialsharing.share("Copy-paste this code into the 'Connect Devices' -> 'Enter code' menu in the application: " + userId, "Ionic feeder share code");
+      window.plugins.socialsharing.share("Copy-paste this code into the 'Connect Devices' -> 'Enter code' menu in Ionic Baby Feeder: \n" + userId, "Ionic Baby Feeder share code");
     }
   }
 

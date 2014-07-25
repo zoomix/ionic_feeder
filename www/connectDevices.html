@@ -4,15 +4,15 @@
   </ion-header-bar>
   <ion-content>
 
-    <p class="info">See and sync all feeding info between all your and your partner's Android devices.</p>
-
-    <button class="button button-round button-block" ng-click="share()">Add new device</button>
-    <p class="small">Devices are connected by sharing the same secret code.</p>
+    <h2>Add new device</h2>
+    <p class="info">Add a device by sharing your private code.<br/>Your private code is <span class="faded">{{userId()}}</span></p>
+    <button class="button button-round button-block" ng-click="share()">Send code</button>
 
     <hr>
 
+    <h2>Received a code?</h2>
+    <p class="info">Enter the code to start syncing feedings between your devices.</p>
     <button class="button button-round button-block" ng-click="enterCodePopup()">Enter code</button>
-    <p class="small">Your current code is {{userId()}}</p>
 
   </ion-content>
 </div>

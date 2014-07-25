@@ -9,9 +9,9 @@ Ionic Feeder
 
 
 ##TODO:
-* Texts and message for sharing/entering code. 
 * Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
 * Design subject-line in popups.
+* Rename the app =)
 
 ##BUGS:
 * ion-refresher stops updating of timer on samsung s3 running 4.3. =/
@@ -24,6 +24,7 @@ Ionic Feeder
 * Update counter in notifications.
 * Share code via nfc. phonegap-nfc
 * Refresh button in main view instead of menu?
+* Skins for app
 * More tests
 
 
@@ -98,6 +99,7 @@ Ionic Feeder
 * Sometimes we get two timers running for the same feeding. (bug. Seems fixed)
 * Tactile feedback on clicking the feeding list items
 * When entering a new secret code, automatically perform a sync.
+* Texts and message for sharing/entering code. 
 
 
 ##Used plugins
