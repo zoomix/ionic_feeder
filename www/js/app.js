@@ -63,7 +63,8 @@ angular.module('starter', ['ionic'])
               e.preventDefault();
             } else {
               storage.storeUserId($scope.data.enteredCode);
-              $scope.init();
+              $scope.closeModal();
+              $scope.resync();
             }
           }
         },
@@ -74,8 +75,7 @@ angular.module('starter', ['ionic'])
   $scope.resyncToday = function() {
     app.getNewFeedings(app.getToday(0), function() {
       $ionicSideMenuDelegate.toggleLeft();
-      var counterScope = angular.element(document.getElementById('CounterApp')).scope();
-      counterScope.$broadcast("resync", null);
+      $scope.resync();
     })
   }
 
@@ -91,7 +91,12 @@ angular.module('starter', ['ionic'])
   $scope.toggleDemoMode = function() {
     storage.toggleDemoMode();
     $ionicSideMenuDelegate.toggleLeft();
-    $scope.init();
+    $scope.resync();
+  }
+
+  $scope.resync = function () {
+    var counterScope = angular.element(document.getElementById('CounterApp')).scope();
+    counterScope.$broadcast("resync", null);
   }
 
   $scope.exitApp = function () {
