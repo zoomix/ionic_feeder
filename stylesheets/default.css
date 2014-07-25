@@ -141,10 +141,12 @@ section#nobloat .img {
 }
 
 footer {
-  background-color: #666;
+  background-color: #ddd;
   padding-top: 20px;
   padding-bottom: 20px;
+  font-size: 12px;
   text-align: center;
+  color: #666;
 }
 
 a.button, a.button:hover {
