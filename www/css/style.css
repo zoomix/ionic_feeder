@@ -12,7 +12,8 @@
   overflow: visible;
   border-top-right-radius: 19px;
   border-bottom-right-radius: 19px;
-  margin-right: 30px;
+  display: inline-block;
+  padding-right: 19px;
 }
 .feeding.activated {
   background: #464950;
@@ -230,7 +231,7 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 .counter {
-  background-image: url("../img/blur.jpg");
+  background-image: url("../img/blur2.jpg");
   overflow: auto;
   background-position: bottom;
   background-repeat: no-repeat;
@@ -359,7 +360,6 @@ input[type="range"]::-webkit-slider-thumb:before {
   text-transform: uppercase;
   font-size: 12px;
   padding: 12px 12px 0px;
-  /*margin-top: 44px;*/
 }
 .settings {
   margin: 22px 0;
