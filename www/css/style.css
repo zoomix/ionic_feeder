@@ -118,11 +118,25 @@ body, .list, .pane, .item, .menu, .bar, .scroll-content, .modal {
 .suppliers {
 	text-align: center;
   vertical-align: middle;
-  padding: 8px;
+  padding: 16px 0 8px;
   margin-top: 30px;
   margin-bottom: 30px;
   line-height: 70px;
   background-color: transparent;
+  overflow: visible;
+  position: relative;
+}
+.suppliers .feedingText {
+  position: absolute;
+  z-index: 8;
+  text-align: center;
+  width: 100%;
+  top: -14px;
+  line-height: 9px;
+  text-transform: uppercase;
+  color: #ccc;
+  font-size: 12px;
+  margin: 0 auto;
 }
 
 .between {
