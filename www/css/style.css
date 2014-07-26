@@ -385,3 +385,11 @@ input[type="range"]::-webkit-slider-thumb:before {
 .bar-header  {
   background-image: none;
 }
+
+.popup, .limitedWidth {
+  max-width: 500px;
+}
+
+.limitedWidth {
+  margin: 0 auto;
+}
