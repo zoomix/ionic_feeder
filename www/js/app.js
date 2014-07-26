@@ -73,7 +73,7 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.resyncToday = function() {
-    app.getNewFeedings(app.getToday(0), function() {
+    app.getNewFeedings(util.getToday(0), function() {
       $ionicSideMenuDelegate.toggleLeft();
       $scope.resync();
     })
