@@ -129,6 +129,7 @@ angular.module('starter', ['ionic'])
   $scope.activeSlide = 7;
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
+  $scope.updateTimeInMs = 1000;
 
   $scope.todaysFeedings = function() {
     return $scope.feedings[7];
@@ -167,16 +168,24 @@ angular.module('starter', ['ionic'])
         $scope.setPredictedSupplier(rows);
         $scope.loadData(6); //load yesterdays data too
         $scope.$apply();
-        mytimeout = $timeout($scope.onTimeout,1000);
-        document.addEventListener('resume', function () {
-          $scope.loading += 1; //Start syncing on resume
-          app.getNewFeedings(latestRow.startTime, $scope.postSync);
-        }, false);
+        mytimeout = $timeout($scope.onTimeout,$scope.updateTimeInMs);
+        $scope.setupDocumentEvents(latestRow);
         $scope.loading += 1; //Start syncing
         app.getNewFeedings(latestRow.startTime, $scope.postSync);
         $scope.loading -= 1; //Stop loading
         $scope.resizeList();
       });
+  }
+
+  $scope.setupDocumentEvents = function(latestRow) {
+    document.addEventListener('resume', function () {
+      $scope.updateTimeInMs = 1000;
+      $scope.loading += 1; //Start syncing on resume
+      app.getNewFeedings(latestRow.startTime, $scope.postSync);
+    }, false);
+    document.addEventListener('pause', function () {
+      $scope.updateTimeInMs = 15000;
+    }, false);
   }
 
   $scope.onTimeout = function(){
@@ -189,7 +198,7 @@ angular.module('starter', ['ionic'])
       vibrations.doVibrate($scope.currentFeeding.duration);
     }
     $scope.setTimeSinceLast();  
-    mytimeout = $timeout($scope.onTimeout,1000);
+    mytimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
   };
 
   $scope.toggleFeeding = function(supplier) {

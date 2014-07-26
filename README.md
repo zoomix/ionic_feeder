@@ -9,7 +9,6 @@ Ionic Feeder
 
 
 ##TODO:
-* Step down the update interval when app is sleeping
 * Rename the app =)
 
 ##BUGS:
@@ -18,7 +17,7 @@ Ionic Feeder
 * When an ongoing feeding is resynced it is marked as updated. Following syncs will reload the list unecessariliy. 
 
 ##FUTURE:
-* Split up controllers
+* Split up controllers. Extract list controller to save on updating everything on every second
 * Sanitize model.js
 * Update counter in notifications.
 * Share code via nfc. phonegap-nfc
@@ -101,6 +100,7 @@ Ionic Feeder
 * Texts and message for sharing/entering code. 
 * Design subject-line in popups.
 * Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
+* Step down the update interval when app is sleeping
 
 
 ##Used plugins
