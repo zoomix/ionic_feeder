@@ -9,7 +9,6 @@ Ionic Feeder
 
 
 ##TODO:
-* Feedback
 * Rename the app =)
 
 ##BUGS:
@@ -104,6 +103,7 @@ Ionic Feeder
 * Design subject-line in popups.
 * Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
 * Step down the update interval when app is sleeping
+* Feedback
 
 
 ##Used plugins

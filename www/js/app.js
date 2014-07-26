@@ -40,6 +40,12 @@ angular.module('starter', ['ionic'])
     }
   }
 
+  $scope.feedback = function() {
+    if (window.plugins && window.plugins.socialsharing) {
+      window.plugins.socialsharing.shareViaEmail('' /*no message*/, 'Just a note', ['ionic_baby_feeder@kvrgic.se']);
+    }
+  }
+
   $scope.enteredCode = "";
   $scope.connectDevices = function() {
     $ionicSideMenuDelegate.toggleLeft();
