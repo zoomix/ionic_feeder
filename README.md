@@ -9,6 +9,7 @@ Ionic Feeder
 
 
 ##TODO:
+* Feedback
 * Rename the app =)
 
 ##BUGS:
@@ -17,6 +18,8 @@ Ionic Feeder
 * When an ongoing feeding is resynced it is marked as updated. Following syncs will reload the list unecessariliy. 
 
 ##FUTURE:
+* MOTD
+* Feedback in background without user having to send email.
 * Split up controllers. Extract list controller to save on updating everything on every second
 * Sanitize model.js
 * Update counter in notifications.
