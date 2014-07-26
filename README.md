@@ -9,8 +9,7 @@ Ionic Feeder
 
 
 ##TODO:
-* Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
-* Design subject-line in popups.
+* Step down the update interval when app is sleeping
 * Rename the app =)
 
 ##BUGS:
@@ -100,6 +99,8 @@ Ionic Feeder
 * Tactile feedback on clicking the feeding list items
 * When entering a new secret code, automatically perform a sync.
 * Texts and message for sharing/entering code. 
+* Design subject-line in popups.
+* Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
 
 
 ##Used plugins
