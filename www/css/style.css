@@ -59,7 +59,7 @@
 	color: #fff;
 }
 
-body, .list, .pane, .item, .menu, .bar, .scroll-content {
+body, .list, .pane, .item, .menu, .bar, .scroll-content, .modal {
   background-color: #242730;
 }
 .pane {
@@ -317,6 +317,10 @@ h1, h2, h3, h4 { color: #fff;}
   font-size: 14px;
   text-transform: uppercase;
   color: #FCC108;
+  margin-top: 40px;
+}
+.modal h2:first-child {
+  margin-top: 14px;
 }
 .modal .info, .modal .button {
   margin-bottom: 32px;
@@ -324,6 +328,8 @@ h1, h2, h3, h4 { color: #fff;}
 .modal .faded {
   color: #999;
 }
+hr {border-color: #555;}
+
 
 input.error {background-color: #c88}
 input[type="text"] {padding-left: 10px}
@@ -352,4 +358,16 @@ input[type="range"]::-webkit-slider-thumb:before {
   border-left-style: none !important;
   border-right-style: none !important;
   padding-left: 5px;
-};
+}
+
+.popup-head, .bar-header h1.title {
+  margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: 1px solid #555;
+  text-transform: uppercase;
+  font-size: 15px;
+}
+
+.bar-header  {
+  background-image: none;
+}
