@@ -39,12 +39,7 @@ h1, h2 {
   font-family: 'Roboto Slab', serif;
 }
 
-h2, dt, footer {
-  font-family: 'Roboto', sans-serif;
-  font-weight: 300;
-}
-
-p, a, dd {
+p, a, dd, h2, dt {
   font-family: 'Roboto Slab', sans-serif;
   font-weight: 300;
 }
@@ -110,13 +105,13 @@ section .img {
   height: 300px;
   position: absolute;
   background-repeat: no-repeat;
-  border-radius: 28px;
+  border-radius: 50%;
 }
 
 section#basics .img {
   background-image: url('../images/2014-07-19-12-24-08.png');
   background-size: 300px;
-  background-position: 0 -46px;
+  background-position: 0 -40px;
 }
 
 section#sync .img {
@@ -163,18 +158,17 @@ a.button, a.button:hover {
   padding: 8px 16px;
   margin: 46px;
   display: inline-block;
-  font-family: 'Roboto', sans-serif;
+  /*font-family: 'Roboto', sans-serif;*/
   font-weight: 300;
 }
 
 a {
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 400;
   color: inherit;
 }
 a:hover {
   text-decoration: underline;
 }
 
-strong { font-weight: bold
-}
+strong { font-weight: 400; }
