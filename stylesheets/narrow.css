@@ -7,6 +7,7 @@ header, section, footer {
 
 header {
   height: auto;
+  background-position: bottom center;
 }
 
 header h1 { font-size: 47px }
