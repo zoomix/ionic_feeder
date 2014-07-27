@@ -186,6 +186,7 @@ angular.module('starter', ['ionic'])
   $scope.setupDocumentEvents = function(latestRow) {
     document.addEventListener('resume', function () {
       $scope.updateTimeInMs = 1000;
+      $scope.onTimeout(); //Better not wait for the sleeping timeout (>10s) to trigger. Trigger it not to keep ticking.
       $scope.loading += 1; //Start syncing on resume
       app.getNewFeedings(latestRow.startTime, $scope.postSync);
     }, false);
