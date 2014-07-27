@@ -28,7 +28,7 @@ angular.module('starter', ['ionic'])
     vibrations.setVibrateInterval(vibrateInterval);
   }
 
-  $scope.version = "0.0.1";
+  $scope.version = "0.0.2";
   $scope.about = function() {
     alert("Ionic Feeder, version " + $scope.version);
   }
