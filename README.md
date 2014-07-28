@@ -1,4 +1,4 @@
-Ionic Feeder
+Ionic Baby Feeder
 =====================
 
 ##An app to help out with breastfeeding. See http://zoomix.github.io/ionic_feeder/ for more info.

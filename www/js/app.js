@@ -29,9 +29,6 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.version = "0.0.2";
-  $scope.about = function() {
-    alert("Ionic Feeder, version " + $scope.version);
-  }
 
   $scope.share = function() {
     var userId = storage.getUserId();
