@@ -420,3 +420,77 @@ input[type="range"]::-webkit-slider-thumb:before {
   color: #666;
   text-align: center;
 }
+.infoOverlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 80;
+  background-color: rgba(0,0,0,0.5);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: monospace;
+  font-size: 24px;
+  text-align: center;
+  text-shadow: 0 0 28px gray;
+}
+.infoOverlay .buttonContainer {
+  position: fixed;
+  top: 400px;
+  width: 100%;
+}
+.button-info, .button-info:HOVER {
+  width: auto;
+  background-color: #06E0C6;
+  color: black;
+  padding-right: 34px;
+  padding-left: 34px;
+  line-height: inherit;
+  box-shadow: 0 0 28px gray;
+}
+#infoArrowLeft {
+  position: fixed;
+  top: 221px;
+  left: 115px;
+  width: 31px;
+}
+#infoArrowBottle {
+  position: fixed;
+  top: 242px;
+  left: 226px;
+  width: 31px;
+}
+#infoArrowRight {
+  position: fixed;
+  top: 221px;
+  left: 342px;
+  width: 31px;
+}
+#infoTextLeft {
+  position: fixed;
+  top: 317px;
+  left: 75px;
+  font-size: 24px;
+  width: 100px;
+  text-align: center;
+}
+#infoTextBottle {
+  position: fixed;
+  top: 334px;
+  left: 192px;
+  font-size: 24px;
+  width: 100px;
+  text-align: center;
+}
+#infoTextRight {
+  position: fixed;
+  top: 317px;
+  left: 313px;
+  width: 100px;
+  text-align: center;
+}
+#infoStartFeeding {
+  position: fixed;;
+  top: 131px;
+  left:0;
+  width: 100%;
+}

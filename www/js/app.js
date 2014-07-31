@@ -133,6 +133,12 @@ angular.module('starter', ['ionic'])
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
   $scope.updateTimeInMs = 1000;
+  $scope.showInfoOverlay = true;
+
+  $scope.hideInfoOverlay = function() {
+    $scope.showInfoOverlay = false;
+    storage.setInfoOverlayShown(true);
+  }
 
   $scope.todaysFeedings = function() {
     return $scope.feedingDays[$scope.feedingDays.length - 1];
@@ -405,6 +411,7 @@ angular.module('starter', ['ionic'])
   $scope.init = function() {
     vibrations.getVibrateInteral();
     $scope.reloadTodaysFeedings();
+    $scope.showInfoOverlay = !storage.isInfoOverlayShown();
   }
 
   setTimeout($scope.init(), 1);
