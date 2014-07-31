@@ -433,6 +433,12 @@ input[type="range"]::-webkit-slider-thumb:before {
   text-align: center;
   text-shadow: 0 0 28px gray;
 }
+.infoOverlayInner {
+  width: 480px;
+  margin: 0 auto;
+  height: 100%;
+  position: relative;
+}
 .infoOverlay .buttonContainer {
   position: fixed;
   top: 400px;
@@ -448,25 +454,25 @@ input[type="range"]::-webkit-slider-thumb:before {
   box-shadow: 0 0 28px gray;
 }
 #infoArrowLeft {
-  position: fixed;
+  position: absolute;
   top: 221px;
   left: 115px;
   width: 31px;
 }
 #infoArrowBottle {
-  position: fixed;
+  position: absolute;
   top: 242px;
   left: 226px;
   width: 31px;
 }
 #infoArrowRight {
-  position: fixed;
+  position: absolute;
   top: 221px;
   left: 342px;
   width: 31px;
 }
 #infoTextLeft {
-  position: fixed;
+  position: absolute;
   top: 317px;
   left: 88px;
   font-size: 24px;
@@ -474,7 +480,7 @@ input[type="range"]::-webkit-slider-thumb:before {
   text-align: center;
 }
 #infoTextBottle {
-  position: fixed;
+  position: absolute;
   top: 334px;
   left: 206px;
   font-size: 24px;
@@ -482,14 +488,14 @@ input[type="range"]::-webkit-slider-thumb:before {
   text-align: center;
 }
 #infoTextRight {
-  position: fixed;
+  position: absolute;
   top: 317px;
   left: 325px;
   width: 78px;
   text-align: center;
 }
 #infoStartFeeding {
-  position: fixed;
+  position: absolute;
   width: 300px;
   top: 130px;
   left: 89px;

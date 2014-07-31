@@ -37,6 +37,7 @@
       <ion-content id="CounterApp" ng-controller="CounterCtrl">
 
         <div class="infoOverlay hidden {{showInfoOverlay ? 'forceVisible' : ''}}" ng-show="showInfoOverlay">
+          <div class="infoOverlayInner">
           <img id="infoArrowLeft" src="img/infoArrowLeft.png">
           <img id="infoArrowBottle" src="img/infoArrowBottle.png">
           <img id="infoArrowRight" src="img/infoArrowRight.png">
@@ -49,6 +50,7 @@
           <img id="infoTextBottle" src="img/infoTextBottle.png">
           <img id="infoTextRight" src="img/infoTextRight.png">
           <div class="buttonContainer"><button class="button button-round button-info" ng-click="hideInfoOverlay()">Got it. Let me try!</button></div>
+          </div>
         </div>
 
         <div class="counter">
