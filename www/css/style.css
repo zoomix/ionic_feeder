@@ -426,7 +426,7 @@ input[type="range"]::-webkit-slider-thumb:before {
   height: 100%;
   z-index: 80;
   background-color: rgba(0,0,0,0.5);
-  font-weight: bold;
+  /*font-weight: bold;*/
   text-transform: uppercase;
   font-family: monospace;
   font-size: 24px;
@@ -468,29 +468,29 @@ input[type="range"]::-webkit-slider-thumb:before {
 #infoTextLeft {
   position: fixed;
   top: 317px;
-  left: 75px;
+  left: 88px;
   font-size: 24px;
-  width: 100px;
+  width: 78px;
   text-align: center;
 }
 #infoTextBottle {
   position: fixed;
   top: 334px;
-  left: 192px;
+  left: 206px;
   font-size: 24px;
-  width: 100px;
+  width: 80px;
   text-align: center;
 }
 #infoTextRight {
   position: fixed;
   top: 317px;
-  left: 313px;
-  width: 100px;
+  left: 325px;
+  width: 78px;
   text-align: center;
 }
 #infoStartFeeding {
-  position: fixed;;
-  top: 131px;
-  left:0;
-  width: 100%;
+  position: fixed;
+  width: 300px;
+  top: 130px;
+  left: 89px;
 }
