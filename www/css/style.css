@@ -454,7 +454,6 @@ input[type="range"]::-webkit-slider-thumb:before {
   padding-left: 34px;
   line-height: inherit;
   box-shadow: 0 0 28px gray;
-  z-index: 99;
 }
 #infoArrowLeft {
   position: absolute;
