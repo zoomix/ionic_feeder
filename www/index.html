@@ -49,13 +49,13 @@
         <div class="loadingIndicator" ng-show="loading > 0"><img src="img/499.GIF"></div>
 
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
-          <ion-slide ng-repeat="feedingDay in feedings.slice(0,7) track by $index">
+          <ion-slide ng-repeat="feedingDay in feedings.slice(0,7) track by $index" class="feedingSlide">
             <ion-list>
               <div class="day"><i ng-show="$index > 0 && feedings[$index-1]" class="ion-arrow-left-b"></i> {{feedingDay[0].startTime | date:'EEEE'}} <i class="ion-arrow-right-b"></i> </div>
               <div ng-repeat="feeding in feedingDay"><ng-include src="'list.html'" /></div>
             </ion-list>
           </ion-slide>
-          <ion-slide> <!-- today is a bit of a special case -->
+          <ion-slide class="feedingSlide"> <!-- today is a bit of a special case -->
             <ion-list>
               <div class="day"><i class="ion-arrow-left-b"></i> Today</div>
               <div ng-show="mostRecentFinishedFeeding" class="times timeSinceLast" ng-show="timeSinceLast">

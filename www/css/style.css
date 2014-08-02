@@ -1,3 +1,24 @@
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
+}
+ 
+.clearfix {
+  display: inline-block;
+}
+ 
+html[xmlns] .clearfix {
+  display: block;
+}
+ 
+* html .clearfix {
+  height: 1%;
+}
+
 .ongoing, .ongoing SPAN { 
   font-size: 80px;
   line-height: 80px;
@@ -60,7 +81,7 @@
 	color: #fff;
 }
 
-body, .list, .pane, .item, .menu, .bar, .scroll-content, .modal {
+body, .list, .pane, .item, .menu, .bar, .scroll-content, .modal, .feedingSlide, .slider, .times {
   background-color: #242730;
 }
 .pane {
