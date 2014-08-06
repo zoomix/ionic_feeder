@@ -121,8 +121,8 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate) {
-  $scope.feedings = new Array(8);
+.controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate, $ionicSlideBoxDelegate ) {
+  $scope.feedingDays = new Array(1);
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
@@ -135,7 +135,22 @@ angular.module('starter', ['ionic'])
   $scope.updateTimeInMs = 1000;
 
   $scope.todaysFeedings = function() {
-    return $scope.feedings[7];
+    return $scope.feedingDays[$scope.feedingDays.length - 1];
+  }
+
+  $scope.getFeedingDay = function(slideNr) {
+    return $scope.feedingDays[slideNr];
+  }
+
+  $scope.setFeedingDay = function(slideNr, feedings) {
+    console.log("Setting @" + slideNr + " value " + feedings);
+    var index = 7 - slideNr;
+    if (index > $scope.feedingDays.length) {
+      $scope.feedingDays.unshift(null);
+      $scope.setFeedingDay(slideNr, feedings);
+    } else {
+      $scope.feedingDays[slideNr] = feedings;
+    }
   }
 
   $scope.fetchAndSetTimeSinceLast = function() {
@@ -166,8 +181,8 @@ angular.module('starter', ['ionic'])
       });
       storage.getDataForDay(0, function (rows) {
         var latestRow = rows.length > 0 && rows[0];
-        $scope.feedings[7] = rows;
-        util.populateTimeBetween($scope.feedings[7], []);
+        $scope.setFeedingDay(7, rows);
+        util.populateTimeBetween($scope.getFeedingDay(7), []);
         $scope.setPredictedSupplier(rows);
         $scope.loadData(6); //load yesterdays data too
         $scope.$apply();
@@ -235,7 +250,7 @@ angular.module('starter', ['ionic'])
     $scope.currentFeeding = false;
     clonedFeeding.ongoing = false;
     $scope.todaysFeedings().unshift(clonedFeeding);
-    util.populateTimeBetween($scope.feedings[7], []);
+    util.populateTimeBetween($scope.getFeedingDay(7), []);
     $scope.mostRecentFinishedFeeding = clonedFeeding;
     storage.storeAndSync(clonedFeeding);
     vibrations.reset();
@@ -272,8 +287,8 @@ angular.module('starter', ['ionic'])
 
   $scope.slideHasChanged = function(index) {
     console.log("Slide changed to " + index);
-    if (!$scope.feedings[index]) { $scope.loadData(index); }
-    if (index > 0 && !$scope.feedings[index-1]) { $scope.loadData(index-1); }
+    if (!$scope.getFeedingDay(index)) { $scope.loadData(index); }
+    if (index > 0 && !$scope.getFeedingDay(index-1)) { $scope.loadData(index-1); }
     $timeout( $scope.resizeList, 50);
   }
 
@@ -283,8 +298,8 @@ angular.module('starter', ['ionic'])
     console.log("Fetching data for " + dayOffset);
     storage.getDataForDay(dayOffset, function (rows) {
       console.log("Setting fetched data");
-      $scope.feedings[index] = rows;
-      util.populateTimeBetween($scope.feedings[index], index < 7 && $scope.feedings[index+1]);
+      $scope.setFeedingDay(index, rows);
+      util.populateTimeBetween($scope.getFeedingDay(index), index < 7 && $scope.getFeedingDay(index+1));
       $scope.loading -= 1; //Stop loading
       $scope.$apply();
     });
@@ -298,11 +313,12 @@ angular.module('starter', ['ionic'])
     }
     var minHeight = window.innerHeight - document.getElementsByClassName('slider')[0].offsetTop;
     $scope.resizeListStyle.innerHTML = ".list { min-height: " + minHeight + "px }";
+    $ionicSlideBoxDelegate.update();
   }
 
   $scope.reloadActivePage = function() {
-    $scope.feedings[$scope.activeSlide] = null;
-    if ($scope.activeSlide > 0) { $scope.feedings[$scope.activeSlide - 1] = null };
+    $scope.setFeedingDay($scope.activeSlide, null);
+    if ($scope.activeSlide > 0) { $scope.setFeedingDay($scope.activeSlide - 1, null) };
     $scope.slideHasChanged($scope.activeSlide);
   }
 
