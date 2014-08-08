@@ -51,7 +51,7 @@
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
           <ion-slide ng-repeat="feedingDay in feedingDays.slice(0,feedingDays.length - 1) track by $index" class="feedingSlide">
             <ion-list>
-              <div class="day"><i ng-show="$index > 0 && feedingDays[$index-1]" class="ion-arrow-left-b"></i> {{feedingDay[0].startTime | date:'EEEE d/M'}} <i class="ion-arrow-right-b"></i> </div>
+              <div class="day"><i ng-show="$index > 0 && feedingDays[$index-1]" class="ion-arrow-left-b"></i> {{feedingDay[0].startTime | date:'EEEE d MMM'}} <i class="ion-arrow-right-b"></i> </div>
               <div ng-repeat="feeding in feedingDay"><ng-include src="'list.html'" /></div>
             </ion-list>
           </ion-slide>
