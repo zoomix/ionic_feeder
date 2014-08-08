@@ -129,9 +129,6 @@ var storage = {
   getDataForDay: function(day, resultCB) {
     var fromTime = util.getToday(day);
     var toTime = util.getToday(day + 1);
-    if (day === -7) {
-      fromTime = 0;
-    }
     console.log("getDataForDay from " + fromTime + " to " + toTime);
     this.db.transaction(function(tx) {
       tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and ongoing <> "true" and startTime > ? and startTime < ? order by startTime desc', [fromTime, toTime], function(tx, results) {
