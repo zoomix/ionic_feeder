@@ -129,7 +129,7 @@ angular.module('starter', ['ionic'])
   $scope.lClass="";
   $scope.rClass="";
   $scope.timeSinceLast = "";
-  $scope.activeSlide = 7;
+  $scope.activeSlide = HISTORY_DAYS;
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
   $scope.updateTimeInMs = 1000;
@@ -144,7 +144,7 @@ angular.module('starter', ['ionic'])
 
   $scope.setFeedingDay = function(slideNr, feedings) {
     console.log("Setting @" + slideNr + " value " + feedings);
-    var index = 7 - slideNr;
+    var index = HISTORY_DAYS - slideNr;
     if (index > $scope.feedingDays.length) {
       $scope.feedingDays.unshift(null);
       $scope.setFeedingDay(slideNr, feedings);
@@ -181,10 +181,10 @@ angular.module('starter', ['ionic'])
       });
       storage.getDataForDay(0, function (rows) {
         var latestRow = rows.length > 0 && rows[0];
-        $scope.setFeedingDay(7, rows);
-        util.populateTimeBetween($scope.getFeedingDay(7), []);
+        $scope.setFeedingDay(HISTORY_DAYS, rows);
+        util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
         $scope.setPredictedSupplier(rows);
-        $scope.loadData(6); //load yesterdays data too
+        $scope.loadData(HISTORY_DAYS - 1); //load yesterdays data too
         $scope.$apply();
         mytimeout = $timeout($scope.onTimeout,$scope.updateTimeInMs);
         $scope.setupDocumentEvents(latestRow);
@@ -250,7 +250,7 @@ angular.module('starter', ['ionic'])
     $scope.currentFeeding = false;
     clonedFeeding.ongoing = false;
     $scope.todaysFeedings().unshift(clonedFeeding);
-    util.populateTimeBetween($scope.getFeedingDay(7), []);
+    util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
     $scope.mostRecentFinishedFeeding = clonedFeeding;
     storage.storeAndSync(clonedFeeding);
     vibrations.reset();
@@ -294,12 +294,12 @@ angular.module('starter', ['ionic'])
 
   $scope.loadData = function(index) {
     $scope.loading += 1; //Start loading
-    var dayOffset = index - 7;
+    var dayOffset = index - HISTORY_DAYS;
     console.log("Fetching data for " + dayOffset);
     storage.getDataForDay(dayOffset, function (rows) {
       console.log("Setting fetched data");
       $scope.setFeedingDay(index, rows);
-      util.populateTimeBetween($scope.getFeedingDay(index), index < 7 && $scope.getFeedingDay(index+1));
+      util.populateTimeBetween($scope.getFeedingDay(index), index < HISTORY_DAYS && $scope.getFeedingDay(index+1));
       $scope.loading -= 1; //Stop loading
       $scope.$apply();
     });

@@ -20,6 +20,7 @@ var DATE_FORMAT = "yyyy-MM-dd HH:mm";
 var MAX_TIME_MINUTES = 30;
 var STOP_SIGN="<i class='ion-stop'></i>";
 var VIBRATE_INTERVAL = 5 * 60 * 1000;
+var HISTORY_DAYS=14;
 
 var TABLE_NAME_DEMO = "FEEDINGS_DEMO";
 var TABLE_NAME = "FEEDINGS";
