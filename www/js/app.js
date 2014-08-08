@@ -397,6 +397,10 @@ angular.module('starter', ['ionic'])
     });
   }
 
+  $scope.getToday = function(day) {
+    return util.getToday(day);
+  }
+
 
   $scope.init = function() {
     vibrations.getVibrateInteral();

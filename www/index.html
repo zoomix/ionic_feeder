@@ -51,13 +51,18 @@
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
           <ion-slide ng-repeat="feedingDay in feedingDays.slice(0,feedingDays.length - 1) track by $index" class="feedingSlide">
             <ion-list>
-              <div class="day"><i ng-show="$index > 0 && feedingDays[$index-1]" class="ion-arrow-left-b"></i> {{feedingDay[0].startTime | date:'EEEE d MMM'}} <i class="ion-arrow-right-b"></i> </div>
-              <div ng-repeat="feeding in feedingDay"><ng-include src="'list.html'" /></div>
+              <div class="day">
+                <i ng-show="$index > 0 && feedingDays[$index-1]" class="ion-arrow-left-b"></i>
+                {{getToday($index) | date:'EEEE d MMM'}}
+                <i class="ion-arrow-right-b"></i>
+              </div>
+              <div ng-show="feedingDay && feedingDay.length" ng-repeat="feeding in feedingDay"><ng-include src="'list.html'" /></div>
+              <div ng-show="!feedingDay || !feedingDay.length" class="noFeedings">No feedings this day</div>
             </ion-list>
           </ion-slide>
           <ion-slide class="feedingSlide"> <!-- today is a bit of a special case -->
             <ion-list>
-              <div class="day"><i class="ion-arrow-left-b"></i> Today</div>
+              <div class="day"><i class="ion-arrow-left-b" ng-show="feedingDays[feedingDays.length-2]"></i> Today</div>
               <div ng-show="mostRecentFinishedFeeding" class="times timeSinceLast" ng-show="timeSinceLast">
                 <span class="time">{{timeSinceLast}}</span>
                 <p>since last feeding</p>

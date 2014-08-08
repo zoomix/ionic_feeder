@@ -414,3 +414,9 @@ input[type="range"]::-webkit-slider-thumb:before {
 .limitedWidth {
   margin: 0 auto;
 }
+
+.noFeedings {
+  font-size: 18px;
+  color: #666;
+  text-align: center;
+}

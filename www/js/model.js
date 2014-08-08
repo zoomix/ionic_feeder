@@ -81,8 +81,6 @@ var util = {
     now.setMinutes(0);
     now.setSeconds(0);
     now.setMilliseconds(0);
-
-    console.log("Date for " + offset + " was " + new Date((now.getTime() + offset * 1000 * 60 * 60 * 24)));
     return "" + (now.getTime() + offset * 1000 * 60 * 60 * 24);
   }
 
