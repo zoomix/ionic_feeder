@@ -346,7 +346,18 @@ var storage = {
         resultCB(feeding);
       });
     }, this.errorCB);
+  },
+
+  isInfoOverlayShown: function() {
+    var demoModeString = window.localStorage.getItem("infoOverlayShown");
+    return demoModeString === 'true';
+  },
+
+  setInfoOverlayShown: function(value) {
+    console.log("setting: info overlay shown to " + value);
+    window.localStorage.setItem("infoOverlayShown", "" + value);
   }
+
 }
 
 var app = {

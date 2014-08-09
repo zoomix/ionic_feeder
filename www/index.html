@@ -12,6 +12,11 @@
     <link href="css/ionic.app.css" rel="stylesheet">
     -->
 
+    <style type="text/css">
+      .hidden {visibility: hidden;}
+      .forceVisible {visibility: visible;}
+    </style>
+
     <!-- ionic/angularjs js -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
 
@@ -25,11 +30,37 @@
     <script src="js/app.js"></script>
   </head>
   <body ng-app="starter">
+
+
+
   <ion-side-menus>
+
+
 
     <!-- Center content -->
     <ion-side-menu-content>
       <ion-content id="CounterApp" ng-controller="CounterCtrl">
+
+        <div class="infoOverlay hidden {{showInfoOverlay ? 'forceVisible' : ''}}" 
+          ng-show="showInfoOverlay">
+          <div class="infoOverlayInner">
+            <img id="infoArrowLeft" src="img/infoArrowLeft.png">
+            <img id="infoArrowBottle" src="img/infoArrowBottle.png">
+            <img id="infoArrowRight" src="img/infoArrowRight.png">
+  <!--           <div id="infoTextLeft">left breast</div>
+            <div id="infoTextBottle">bottle</div>
+            <div id="infoTextRight">right breast</div>
+   -->          <!-- <div id="infoStartFeeding">start feeding</div> -->
+            <img id="infoStartFeeding" src="img/infoStartFeeding.png">
+            <img id="infoTextLeft" src="img/infoTextLeft.png">
+            <img id="infoTextBottle" src="img/infoTextBottle.png">
+            <img id="infoTextRight" src="img/infoTextRight.png">
+          </div>
+          <div class="buttonContainer">
+            <button class="button button-round button-info" ng-click="hideInfoOverlay()">Got it. Let me try!</button>
+          </div>
+        </div>
+
 
         <div class="counter">
           <button menu-toggle="left" class="button button-icon icon ion-navicon button-menu"></button>
@@ -61,7 +92,7 @@
             </ion-list>
           </ion-slide>
           <ion-slide class="feedingSlide"> <!-- today is a bit of a special case -->
-            <ion-list>
+            <ion-list ng-show="!showInfoOverlay">
               <div class="day"><i class="ion-arrow-left-b" ng-show="feedingDays[feedingDays.length-2]"></i> Today</div>
               <div ng-show="mostRecentFinishedFeeding" class="times timeSinceLast" ng-show="timeSinceLast">
                 <span class="time">{{timeSinceLast}}</span>

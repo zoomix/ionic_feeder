@@ -28,7 +28,7 @@ angular.module('starter', ['ionic'])
     vibrations.setVibrateInterval(vibrateInterval);
   }
 
-  $scope.version = "0.0.2";
+  $scope.version = "0.1.1";
 
   $scope.share = function() {
     var userId = storage.getUserId();
@@ -121,7 +121,7 @@ angular.module('starter', ['ionic'])
   });
 })
 
-.controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate, $ionicSlideBoxDelegate ) {
+.controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
   $scope.feedingDays = new Array(1);
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
@@ -133,6 +133,8 @@ angular.module('starter', ['ionic'])
   $scope.loading=0;
   $scope.mostRecentFinishedFeeding=false;
   $scope.updateTimeInMs = 1000;
+  $scope.showInfoOverlay = true;
+
 
   $scope.todaysFeedings = function() {
     return $scope.feedingDays[$scope.feedingDays.length - 1];
@@ -401,10 +403,19 @@ angular.module('starter', ['ionic'])
     return util.getToday(day);
   }
 
+  $scope.hideInfoOverlay = function() {
+    $scope.showInfoOverlay = false;
+    $ionicSideMenuDelegate.canDragContent(true);
+    storage.setInfoOverlayShown(true);
+  }
 
   $scope.init = function() {
     vibrations.getVibrateInteral();
     $scope.reloadTodaysFeedings();
+    $scope.showInfoOverlay = !storage.isInfoOverlayShown();
+    if($scope.showInfoOverlay) {
+      $ionicSideMenuDelegate.canDragContent(false);
+    }
   }
 
   setTimeout($scope.init(), 1);
