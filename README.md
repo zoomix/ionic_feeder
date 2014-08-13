@@ -18,6 +18,7 @@ Ionic Baby Feeder
 
 ##FUTURE:
 * MOTD
+* Menu button opens menu
 * Feedback in background without user having to send email.
 * Split up controllers. Extract list controller to save on updating everything on every second
 * Sanitize model.js
