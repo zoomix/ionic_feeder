@@ -2,7 +2,7 @@
  * Copyright 2014 Drifty Co.
  * http://drifty.com/
  *
- * Ionic, v1.0.0-beta.9-nightly-262
+ * Ionic, v1.0.0-beta.11-nightly-362
  * A powerful HTML5 mobile app framework.
  * http://ionicframework.com/
  *
@@ -99,6 +99,9 @@ var IonicModule = angular.module('ionic', ['ngAnimate', 'ngSanitize', 'ui.router
  *      destructiveText: 'Delete',
  *      titleText: 'Modify your album',
  *      cancelText: 'Cancel',
+ *      cancel: function() {
+          // add cancel code..
+        },
  *      buttonClicked: function(index) {
  *        return true;
  *      }
@@ -216,7 +219,9 @@ function($rootScope, $document, $compile, $animate, $timeout, $ionicTemplateLoad
 
     // registerBackButtonAction returns a callback to deregister the action
     scope.$deregisterBackButton = $ionicPlatform.registerBackButtonAction(
-      scope.cancel,
+      function() {
+        $timeout(scope.cancel);
+      },
       PLATFORM_BACK_BUTTON_PRIORITY_ACTION_SHEET
     );
 
@@ -307,72 +312,6 @@ jqLite.prototype.removeClass = function(cssClasses) {
   return this;
 };
 
-
-/**
- * @ngdoc service
- * @name $ionicAnimation
- * @module ionic
- * @description
- *
- * A powerful animation and transition system for Ionic apps.
- *
- * @usage
- *
- * ```js
- * angular.module('mySuperApp', ['ionic'])
- * .controller(function($scope, $ionicAnimation) {
- *    var anim = $ionicAnimation({
- *     // A unique, reusable name
- *     name: 'popIn',
- *
- *     // The duration of an auto playthrough
- *     duration: 0.5,
- *
- *     // How long to wait before running the animation
- *     delay: 0,
- *
- *     // Whether to reverse after doing one run through
- *     autoReverse: false,
- *
- *     // How many times to repeat? -1 or null for infinite
- *     repeat: -1,
- *
- *     // Timing curve to use (same as CSS timing functions), or a function of time "t" to handle it yourself
- *     curve: 'ease-in-out'
- *
- *     onStart: function() {
- *       // Callback on start
- *     },
- *     onEnd: function() {
- *       // Callback on end
- *     },
- *     step: function(amt) {
- *
- *     }
- *   })
- * });
- * ```
- *
- */
-IonicModule
-.provider('$ionicAnimation', function() {
-  var useSlowAnimations = false;
-  this.setSlowAnimations = function(isSlow) {
-    useSlowAnimations = isSlow;
-  };
-
-  this.create = function(animation) {
-    return ionic.Animation.create(animation);
-  };
-
-  this.$get = [function() {
-    return function(opts) {
-      opts.useSlowAnimations = useSlowAnimations;
-      return ionic.Animation.create(opts);
-    };
-  }];
-});
-
 /**
  * @ngdoc service
  * @name $ionicBackdrop
@@ -409,8 +348,8 @@ IonicModule
  */
 IonicModule
 .factory('$ionicBackdrop', [
-  '$document',
-function($document) {
+  '$document', '$timeout',
+function($document, $timeout) {
 
   var el = jqLite('<div class="backdrop">');
   var backdropHolds = 0;
@@ -449,9 +388,9 @@ function($document) {
   function release() {
     if ( (--backdropHolds) === 0 ) {
       el.removeClass('active');
-      setTimeout(function() {
+      $timeout(function() {
         !backdropHolds && el.removeClass('visible');
-      }, 100);
+      }, 400, false);
     }
   }
 
@@ -524,12 +463,16 @@ IonicModule
   '$parse',
   '$rootScope',
 function($cacheFactory, $parse, $rootScope) {
+  function hideWithTransform(element) {
+    element.css(ionic.CSS.TRANSFORM, 'translate3d(-2000px,-2000px,0)');
+  }
 
   function CollectionRepeatDataSource(options) {
     var self = this;
     this.scope = options.scope;
     this.transcludeFn = options.transcludeFn;
     this.transcludeParent = options.transcludeParent;
+    this.element = options.element;
 
     this.keyExpr = options.keyExpr;
     this.listExpr = options.listExpr;
@@ -541,26 +484,14 @@ function($cacheFactory, $parse, $rootScope) {
     this.dimensions = [];
     this.data = [];
 
-    if (this.trackByExpr) {
-      var trackByGetter = $parse(this.trackByExpr);
-      var hashFnLocals = {$id: hashKey};
-      this.itemHashGetter = function(index, value) {
-        hashFnLocals[self.keyExpr] = value;
-        hashFnLocals.$index = index;
-        return trackByGetter(self.scope, hashFnLocals);
-      };
-    } else {
-      this.itemHashGetter = function(index, value) {
-        return hashKey(value);
-      };
-    }
-
     this.attachedItems = {};
-    this.BACKUP_ITEMS_LENGTH = 10;
+    this.BACKUP_ITEMS_LENGTH = 20;
     this.backupItemsArray = [];
   }
   CollectionRepeatDataSource.prototype = {
     setup: function() {
+      if (this.isSetup) return;
+      this.isSetup = true;
       for (var i = 0; i < this.BACKUP_ITEMS_LENGTH; i++) {
         this.detachItem(this.createItem());
       }
@@ -581,22 +512,23 @@ function($cacheFactory, $parse, $rootScope) {
           height: this.heightGetter(this.scope, locals)
         };
       }, this);
+      this.dimensions = this.beforeSiblings.concat(this.dimensions).concat(this.afterSiblings);
+      this.dataStartIndex = this.beforeSiblings.length;
     },
     createItem: function() {
       var item = {};
-      item.scope = this.scope.$new();
 
+      item.scope = this.scope.$new();
       this.transcludeFn(item.scope, function(clone) {
         clone.css('position', 'absolute');
         item.element = clone;
       });
-
       this.transcludeParent.append(item.element);
 
       return item;
     },
-    getItem: function(hash) {
-      if ( (item = this.attachedItems[hash]) ) {
+    getItem: function(index) {
+      if ( (item = this.attachedItems[index]) ) {
         //do nothing, the item is good
       } else if ( (item = this.backupItemsArray.pop()) ) {
         reconnectScope(item.scope);
@@ -606,13 +538,18 @@ function($cacheFactory, $parse, $rootScope) {
       return item;
     },
     attachItemAtIndex: function(index) {
-      var value = this.data[index];
-      var hash = this.itemHashGetter(index, value);
-      var item = this.getItem(hash);
+      if (index < this.dataStartIndex) {
+        return this.beforeSiblings[index];
+      } else if (index > this.data.length) {
+        return this.afterSiblings[index - this.data.length - this.dataStartIndex];
+      }
 
-      if (item.scope.$index !== index || item.scope[this.keyExpr] !== value) {
+      var item = this.getItem(index);
+      var value = this.data[index];
+
+      if (item.index !== index || item.scope[this.keyExpr] !== value) {
+        item.index = item.scope.$index = index;
         item.scope[this.keyExpr] = value;
-        item.scope.$index = index;
         item.scope.$first = (index === 0);
         item.scope.$last = (index === (this.getLength() - 1));
         item.scope.$middle = !(item.scope.$first || item.scope.$last);
@@ -623,9 +560,7 @@ function($cacheFactory, $parse, $rootScope) {
           item.scope.$digest();
         }
       }
-
-      item.hash = hash;
-      this.attachedItems[hash] = item;
+      this.attachedItems[index] = item;
 
       return item;
     },
@@ -636,60 +571,42 @@ function($cacheFactory, $parse, $rootScope) {
       item.element = null;
     },
     detachItem: function(item) {
-      delete this.attachedItems[item.hash];
+      delete this.attachedItems[item.index];
 
+      //If it's an outside item, only hide it. These items aren't part of collection
+      //repeat's list, only sit outside
+      if (item.isOutside) {
+        hideWithTransform(item.element);
       // If we are at the limit of backup items, just get rid of the this element
-      if (this.backupItemsArray.length >= this.BACKUP_ITEMS_LENGTH) {
+      } else if (this.backupItemsArray.length >= this.BACKUP_ITEMS_LENGTH) {
         this.destroyItem(item);
       // Otherwise, add it to our backup items
       } else {
         this.backupItemsArray.push(item);
-        item.element.css(ionic.CSS.TRANSFORM, 'translate3d(-2000px,-2000px,0)');
+        hideWithTransform(item.element);
         //Don't .$destroy(), just stop watchers and events firing
         disconnectScope(item.scope);
       }
+
     },
     getLength: function() {
-      return this.data && this.data.length || 0;
+      return this.dimensions && this.dimensions.length || 0;
     },
-    setData: function(value) {
+    setData: function(value, beforeSiblings, afterSiblings) {
       this.data = value || [];
+      this.beforeSiblings = beforeSiblings || [];
+      this.afterSiblings = afterSiblings || [];
       this.calculateDataDimensions();
+
+      this.afterSiblings.forEach(function(item) {
+        item.element.css({position: 'absolute', top: '0', left: '0' });
+        hideWithTransform(item.element);
+      });
     },
   };
 
   return CollectionRepeatDataSource;
 }]);
-
-/**
-* Computes a hash of an 'obj'.
- * Hash of a:
- *  string is string
- *  number is number as string
- *  object is either result of calling $$hashKey function on the object or uniquely generated id,
- *         that is also assigned to the $$hashKey property of the object.
- *
- * @param obj
- * @returns {string} hash string such that the same input will have the same hash string.
- *         The resulting string key is in 'type:hashKey' format.
- */
-function hashKey(obj) {
-  var objType = typeof obj,
-      key;
-
-  if (objType == 'object' && obj !== null) {
-    if (typeof (key = obj.$$hashKey) == 'function') {
-      // must invoke on object to keep the right this
-      key = obj.$$hashKey();
-    } else if (key === undefined) {
-      key = obj.$$hashKey = ionic.Utils.nextUid();
-    }
-  } else {
-    key = obj;
-  }
-
-  return objType + ':' + key;
-}
 
 function disconnectScope(scope) {
   if (scope.$root === scope) {
@@ -834,7 +751,24 @@ function($rootScope, $timeout) {
       var secondaryScrollSize = this.secondaryScrollSize();
       var previousItem;
 
-      return this.dataSource.dimensions.map(function(dim) {
+      this.dataSource.beforeSiblings && this.dataSource.beforeSiblings.forEach(calculateSize, this);
+      var beforeSize = primaryPos + (previousItem ? previousItem.primarySize : 0);
+
+      primaryPos = secondaryPos = 0;
+      previousItem = null;
+
+
+      var dimensions = this.dataSource.dimensions.map(calculateSize, this);
+      var totalSize = primaryPos + (previousItem ? previousItem.primarySize : 0);
+
+      return {
+        beforeSize: beforeSize,
+        totalSize: totalSize,
+        dimensions: dimensions
+      };
+
+      function calculateSize(dim) {
+
         //Each dimension is an object {width: Number, height: Number} provided by
         //the dataSource
         var rect = {
@@ -863,17 +797,16 @@ function($rootScope, $timeout) {
 
         previousItem = rect;
         return rect;
-      }, this);
+      }
     },
     resize: function() {
-      this.dimensions = this.calculateDimensions();
-      var lastItem = this.dimensions[this.dimensions.length - 1];
-      this.viewportSize = lastItem ? lastItem.primaryPos + lastItem.primarySize : 0;
+      var result = this.calculateDimensions();
+      this.dimensions = result.dimensions;
+      this.viewportSize = result.totalSize;
+      this.beforeSize = result.beforeSize;
       this.setCurrentIndex(0);
       this.render(true);
-      if (!this.dataSource.backupItemsArray.length) {
-        this.dataSource.setup();
-      }
+      this.dataSource.setup();
     },
     /*
      * setCurrentIndex sets the index in the list that matches the scroller's position.
@@ -910,6 +843,7 @@ function($rootScope, $timeout) {
       }
       return this.scrollView.__$callback(transformLeft, transformTop, zoom, wasResize);
     }),
+
     renderIfNeeded: function(scrollPos) {
       if ((this.hasNextIndex && scrollPos >= this.nextPos) ||
           (this.hasPrevIndex && scrollPos < this.previousPos)) {
@@ -953,6 +887,7 @@ function($rootScope, $timeout) {
      * the data source to render the correct items into the DOM.
      */
     render: function(shouldRedrawAll) {
+      var self = this;
       var i;
       var isOutOfBounds = ( this.currentIndex >= this.dataSource.getLength() );
       // We want to remove all the items and redraw everything if we're out of bounds
@@ -992,10 +927,12 @@ function($rootScope, $timeout) {
       // Keep rendering items, adding them until we are past the end of the visible scroll area
       i = renderStartIndex;
       while ((rect = this.dimensions[i]) && (rect.primaryPos - rect.primarySize < scrollSizeEnd)) {
-        this.renderItem(i, rect.primaryPos, rect.secondaryPos);
-        i++;
+        doRender(i++);
       }
-      var renderEndIndex = i - 1;
+      //Add two more items at the end
+      doRender(i++);
+      doRender(i);
+      var renderEndIndex = i;
 
       // Remove any items that were rendered and aren't visible anymore
       for (i in this.renderedItems) {
@@ -1005,6 +942,17 @@ function($rootScope, $timeout) {
       }
 
       this.setCurrentIndex(startIndex);
+
+      function doRender(dataIndex) {
+        var rect = self.dimensions[dataIndex];
+        if (!rect) {
+
+        }else if (dataIndex < self.dataSource.dataStartIndex) {
+          // do nothing
+        } else {
+          self.renderItem(dataIndex, rect.primaryPos - self.beforeSize, rect.secondaryPos);
+        }
+      }
     },
     renderItem: function(dataIndex, primaryPos, secondaryPos) {
       // Attach an item, and set its transform position to the required value
@@ -1188,9 +1136,64 @@ IonicModule
   };
 }]);
 
+/**
+ * @ngdoc provider
+ * @name $ionicConfigProvider
+ * @module ionic
+ * @description $ionicConfigProvider can be used during the configuration phase of your app
+ * to change how Ionic works.
+ *
+ * @usage
+ * ```js
+ * var myApp = angular.module('reallyCoolApp', ['ionic']);
+ *
+ * myApp.config(function($ionicConfigProvider) {
+ *   $ionicConfigProvider.prefetchTemplates(false);
+ * });
+ * ```
+ */
+IonicModule
+.provider('$ionicConfig', function() {
+
+  var provider = this;
+  var config = {
+    prefetchTemplates: true
+  };
+
+  /**
+   * @ngdoc method
+   * @name $ionicConfigProvider#prefetchTemplates
+   * @description Set whether Ionic should prefetch all templateUrls defined in
+   * $stateProvider.state. Default true. If set to false, the user will have to wait
+   * for a template to be fetched the first time he/she is going to a a new page.
+   * @param shouldPrefetch Whether Ionic should prefetch templateUrls defined in
+   * `$stateProvider.state()`. Default true.
+   * @returns {boolean} Whether Ionic will prefetch templateUrls defined in $stateProvider.state.
+   */
+  this.prefetchTemplates = function(newValue) {
+    if (arguments.length) {
+      config.prefetchTemplates = newValue;
+    }
+    return config.prefetchTemplates;
+  };
+
+  // private: Service definition for internal Ionic use
+  /**
+   * @ngdoc service
+   * @name $ionicConfig
+   * @module ionic
+   * @private
+   */
+  this.$get = function() {
+    return config;
+  };
+});
+
 
 var LOADING_TPL =
-  '<div class="loading">' +
+  '<div class="loading-container">' +
+    '<div class="loading">' +
+    '</div>' +
   '</div>';
 
 var LOADING_HIDE_DEPRECATED = '$ionicLoading instance.hide() has been deprecated. Use $ionicLoading.hide().';
@@ -1220,8 +1223,32 @@ var LOADING_SET_DEPRECATED = '$ionicLoading instance.setContent() has been depre
  * });
  * ```
  */
+/**
+ * @ngdoc object
+ * @name $ionicLoadingConfig
+ * @module ionic
+ * @description
+ * Set the default options to be passed to the {@link ionic.service:$ionicLoading} service.
+ *
+ * @usage
+ * ```js
+ * var app = angular.module('myApp', ['ionic'])
+ * app.constant('$ionicLoadingConfig', {
+ *   template: 'Default Loading Template...'
+ * });
+ * app.controller('AppCtrl', function($scope, $ionicLoading) {
+ *   $scope.showLoading = function() {
+ *     $ionicLoading.show(); //options default to values in $ionicLoadingConfig
+ *   };
+ * });
+ * ```
+ */
 IonicModule
+.constant('$ionicLoadingConfig', {
+  template: '<i class="ion-loading-d"></i>'
+})
 .factory('$ionicLoading', [
+  '$ionicLoadingConfig',
   '$document',
   '$ionicTemplateLoader',
   '$ionicBackdrop',
@@ -1230,7 +1257,7 @@ IonicModule
   '$log',
   '$compile',
   '$ionicPlatform',
-function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
+function($ionicLoadingConfig, $document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $compile, $ionicPlatform) {
 
   var loaderInstance;
   //default values
@@ -1299,17 +1326,16 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
 
           templatePromise.then(function(html) {
             if (html) {
-              self.element.html(html);
-              $compile(self.element.contents())(self.scope);
+              var loading = self.element.children();
+              loading.html(html);
+              $compile(loading.contents())(self.scope);
             }
 
             //Don't show until template changes
             if (self.isShown) {
               self.element.addClass('visible');
-              ionic.DomUtil.centerElementByMarginTwice(self.element[0]);
               ionic.requestAnimationFrame(function() {
                 self.isShown && self.element.addClass('active');
-                ionic.DomUtil.centerElementByMarginTwice(self.element[0]);
                 $document[0].body.classList.add('loading-active');
               });
             }
@@ -1340,7 +1366,7 @@ function($document, $ionicTemplateLoader, $ionicBackdrop, $timeout, $q, $log, $c
   }
 
   function showLoader(options) {
-    options || (options = {});
+    options = extend($ionicLoadingConfig || {}, options || {});
     var delay = options.delay || options.showDelay || 0;
 
     //If loading.show() was called previously, cancel it and show with our new options
@@ -1493,11 +1519,11 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
      * @description Show this modal instance.
      * @returns {promise} A promise which is resolved when the modal is finished animating in.
      */
-    show: function() {
+    show: function(target) {
       var self = this;
 
       if(self.scope.$$destroyed) {
-        $log.error('Cannot call modal.show() after remove(). Please create a new modal instance using $ionicModal.');
+        $log.error('Cannot call ' +  self.viewType + '.show() after remove(). Please create a new ' +  self.viewType + ' instance.');
         return;
       }
 
@@ -1505,13 +1531,16 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
 
       self.el.classList.remove('hide');
       $timeout(function(){
-        $document[0].body.classList.add('modal-open');
+        $document[0].body.classList.add(self.viewType + '-open');
       }, 400);
-
 
       if(!self.el.parentElement) {
         modalEl.addClass(self.animation);
         $document[0].body.appendChild(self.el);
+      }
+
+      if(target && self.positionView) {
+        self.positionView(target, modalEl);
       }
 
       modalEl.addClass('ng-enter active')
@@ -1529,7 +1558,8 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
 
       $timeout(function(){
         modalEl.addClass('ng-enter-active');
-        self.scope.$parent && self.scope.$parent.$broadcast('modal.shown', self);
+        ionic.trigger('resize');
+        self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.shown', self);
         self.el.classList.add('active');
       }, 20);
 
@@ -1563,15 +1593,15 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
 
       self.$el.off('click');
       self._isShown = false;
-      self.scope.$parent && self.scope.$parent.$broadcast('modal.hidden', self);
+      self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.hidden', self);
       self._deregisterBackButton && self._deregisterBackButton();
 
       ionic.views.Modal.prototype.hide.call(self);
 
       return $timeout(function(){
-        $document[0].body.classList.remove('modal-open');
+        $document[0].body.classList.remove(self.viewType + '-open');
         self.el.classList.add('hide');
-      }, 500);
+      }, self.hideDelay || 500);
     },
 
     /**
@@ -1582,7 +1612,7 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
      */
     remove: function() {
       var self = this;
-      self.scope.$parent && self.scope.$parent.$broadcast('modal.removed', self);
+      self.scope.$parent && self.scope.$parent.$broadcast(self.viewType + '.removed', self);
 
       return self.hide().then(function() {
         self.scope.$destroy();
@@ -1604,6 +1634,8 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
     // Create a new scope for the modal
     var scope = options.scope && options.scope.$new() || $rootScope.$new(true);
 
+    options.viewType = options.viewType || 'modal';
+
     extend(scope, {
       $hasHeader: false,
       $hasSubheader: false,
@@ -1614,19 +1646,19 @@ function($rootScope, $document, $compile, $timeout, $ionicPlatform, $ionicTempla
     });
 
     // Compile the template
-    var element = $compile('<ion-modal>' + templateString + '</ion-modal>')(scope);
+    var element = $compile('<ion-' + options.viewType + '>' + templateString + '</ion-' + options.viewType + '>')(scope);
 
     options.$el = element;
     options.el = element[0];
-    options.modalEl = options.el.querySelector('.modal');
+    options.modalEl = options.el.querySelector('.' + options.viewType);
     var modal = new ModalView(options);
 
     modal.scope = scope;
 
-    // If this wasn't a defined scope, we can assign 'modal' to the isolated scope
+    // If this wasn't a defined scope, we can assign the viewType to the isolated scope
     // we created
     if(!options.scope) {
-      scope.modal = modal;
+      scope[ options.viewType ] = modal;
     }
 
     return modal;
@@ -1980,6 +2012,204 @@ IonicModule
 });
 
 
+/**
+ * @ngdoc service
+ * @name $ionicPopover
+ * @module ionic
+ * @description
+ *
+ * Related: {@link ionic.controller:ionicPopover ionicPopover controller}.
+ *
+ * The Popover is a view that floats above an app’s content. Popovers provide an
+ * easy way to present or gather information from the user and are
+ * commonly used in the following situations:
+ *
+ * - Show more info about the current view
+ * - Select a commonly used tool or configuration
+ * - Present a list of actions to perform inside one of your views
+ *
+ * Put the content of the popover inside of an `<ion-popover-view>` element.
+ *
+ * @usage
+ * ```html
+ * <p>
+ *   <button ng-click="openPopover($event)">Open Popover</button>
+ * </p>
+ *
+ * <script id="my-popover.html" type="text/ng-template">
+ *   <ion-popover-view>
+ *     <ion-header-bar>
+ *       <h1 class="title">My Popover Title</h1>
+ *     </ion-header-bar>
+ *     <ion-content>
+ *       Hello!
+ *     </ion-content>
+ *   </ion-popover-view>
+ * </script>
+ * ```
+ * ```js
+ * angular.module('testApp', ['ionic'])
+ * .controller('MyController', function($scope, $ionicPopover) {
+ *   $ionicPopover.fromTemplateUrl('my-popover.html', {
+ *     scope: $scope,
+ *   }).then(function(popover) {
+ *     $scope.popover = popover;
+ *   });
+ *   $scope.openPopover = function($event) {
+ *     $scope.popover.show($event);
+ *   };
+ *   $scope.closePopover = function() {
+ *     $scope.popover.hide();
+ *   };
+ *   //Cleanup the popover when we're done with it!
+ *   $scope.$on('$destroy', function() {
+ *     $scope.popover.remove();
+ *   });
+ *   // Execute action on hide popover
+ *   $scope.$on('popover.hidden', function() {
+ *     // Execute action
+ *   });
+ *   // Execute action on remove popover
+ *   $scope.$on('popover.removed', function() {
+ *     // Execute action
+ *   });
+ * });
+ * ```
+ */
+
+
+IonicModule
+.factory('$ionicPopover', ['$ionicModal', '$ionicPosition', '$document',
+function($ionicModal, $ionicPosition, $document) {
+
+  var POPOVER_BODY_PADDING = 6;
+
+  var POPOVER_OPTIONS = {
+    viewType: 'popover',
+    hideDelay: 1,
+    animation: 'none',
+    positionView: positionView
+  };
+
+  function positionView(target, popoverEle) {
+    var targetEle = angular.element(target.target || target);
+    var buttonOffset = $ionicPosition.offset( targetEle );
+    var popoverWidth = popoverEle.prop('offsetWidth');
+    var bodyWidth = $document[0].body.clientWidth;
+    var bodyHeight = $document[0].body.clientHeight;
+
+    var popoverCSS = {
+      top: buttonOffset.top + buttonOffset.height,
+      left: buttonOffset.left + buttonOffset.width / 2 - popoverWidth / 2
+    };
+
+    if(popoverCSS.left < POPOVER_BODY_PADDING) {
+      popoverCSS.left = POPOVER_BODY_PADDING;
+    } else if(popoverCSS.left + popoverWidth + POPOVER_BODY_PADDING > bodyWidth) {
+      popoverCSS.left = bodyWidth - popoverWidth - POPOVER_BODY_PADDING;
+    }
+
+    var arrowEle = popoverEle[0].querySelector('.popover-arrow');
+    angular.element(arrowEle).css({
+      left: (buttonOffset.left - popoverCSS.left) + (buttonOffset.width / 2) - (arrowEle.offsetWidth / 2) + 'px'
+    });
+
+    popoverEle.css({
+      top: popoverCSS.top + 'px',
+      left: popoverCSS.left + 'px',
+      marginLeft: '0',
+      opacity: '1'
+    });
+
+  }
+
+  /**
+   * @ngdoc controller
+   * @name ionicPopover
+   * @module ionic
+   * @description
+   * Instantiated by the {@link ionic.service:$ionicPopover} service.
+   *
+   * Be sure to call [remove()](#remove) when you are done with each popover
+   * to clean it up and avoid memory leaks.
+   *
+   * Note: a popover will broadcast 'popover.shown', 'popover.hidden', and 'popover.removed' events from its originating
+   * scope, passing in itself as an event argument. Both the popover.removed and popover.hidden events are
+   * called when the popover is removed.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#initialize
+   * @description Creates a new popover controller instance.
+   * @param {object} options An options object with the following properties:
+   *  - `{object=}` `scope` The scope to be a child of.
+   *    Default: creates a child of $rootScope.
+   *  - `{boolean=}` `focusFirstInput` Whether to autofocus the first input of
+   *    the popover when shown.  Default: false.
+   *  - `{boolean=}` `backdropClickToClose` Whether to close the popover on clicking the backdrop.
+   *    Default: true.
+   *  - `{boolean=}` `hardwareBackButtonClose` Whether the popover can be closed using the hardware
+   *    back button on Android and similar devices.  Default: true.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#show
+   * @description Show this popover instance.
+   * @param {$event} $event The $event or target element which the popover should align
+   * itself next to.
+   * @returns {promise} A promise which is resolved when the popover is finished animating in.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#hide
+   * @description Hide this popover instance.
+   * @returns {promise} A promise which is resolved when the popover is finished animating out.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#remove
+   * @description Remove this popover instance from the DOM and clean up.
+   * @returns {promise} A promise which is resolved when the popover is finished animating out.
+   */
+
+  /**
+   * @ngdoc method
+   * @name ionicPopover#isShown
+   * @returns boolean Whether this popover is currently shown.
+   */
+
+  return {
+    /**
+     * @ngdoc method
+     * @name $ionicPopover#fromTemplate
+     * @param {string} templateString The template string to use as the popovers's
+     * content.
+     * @param {object} options Options to be passed to the initialize method.
+     * @returns {object} An instance of an {@link ionic.controller:ionicPopover}
+     * controller ($ionicPopover is built on top of $ionicPopover).
+     */
+    fromTemplate: function(templateString, options) {
+      return $ionicModal.fromTemplate(templateString, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+    },
+    /**
+     * @ngdoc method
+     * @name $ionicPopover#fromTemplateUrl
+     * @param {string} templateUrl The url to load the template from.
+     * @param {object} options Options to be passed to the initialize method.
+     * @returns {promise} A promise that will be resolved with an instance of
+     * an {@link ionic.controller:ionicPopover} controller ($ionicPopover is built on top of $ionicPopover).
+     */
+    fromTemplateUrl: function(url, options, _) {
+      return $ionicModal.fromTemplateUrl(url, options, ionic.Utils.extend(options || {}, POPOVER_OPTIONS) );
+    }
+  };
+
+}]);
+
 
 var POPUP_TPL =
   '<div class="popup">' +
@@ -2008,6 +2238,11 @@ var POPUP_TPL =
  * The popup system has support for more flexible versions of the built in `alert()`, `prompt()`,
  * and `confirm()` functions that users are used to, in addition to allowing popups with completely
  * custom content and look.
+ *
+ * An input can be given an `autofocus` attribute so it automatically receives focus when
+ * the popup first shows. However, depending on certain use-cases this can cause issues with
+ * the tap/click system, which is why Ionic prefers using the `autofocus` attribute as
+ * an opt-in feature and not the default.
  *
  * @usage
  * A few basic examples, see below for details about all of the options available.
@@ -2313,7 +2548,7 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
           self.element.removeClass('popup-hidden');
           self.element.addClass('popup-showing active');
           ionic.DomUtil.centerElementByMarginTwice(self.element[0]);
-          focusInputOrButton(self.element);
+          focusInput(self.element);
         });
       };
       self.hide = function(callback) {
@@ -2385,10 +2620,10 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
         } else {
           //Remove popup-open & backdrop if this is last popup
           document.body.classList.remove('popup-open');
-          $ionicBackdrop.release();
           ($ionicPopup._backButtonActionDone || angular.noop)();
         }
-
+        // always release the backdrop since it has an internal backdrop counter
+        $ionicBackdrop.release();
         return result;
       });
     });
@@ -2405,16 +2640,9 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
     return resultPromise;
   }
 
-  function focusInputOrButton(element) {
-    var focusOn = element[0].querySelector('input[autofocus]');
-    if (!focusOn) {
-      focusOn = element[0].querySelector('input');
-      if (!focusOn) {
-        var buttons = element[0].querySelectorAll('button');
-        focusOn = buttons[buttons.length-1];
-      }
-    }
-    if(focusOn) {
+  function focusInput(element) {
+    var focusOn = element[0].querySelector('[autofocus]');
+    if (focusOn) {
       focusOn.focus();
     }
   }
@@ -2448,8 +2676,13 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
   function showPrompt(opts) {
     var scope = $rootScope.$new(true);
     scope.data = {};
+    var text = '';
+    if(opts.template && /<[a-z][\s\S]*>/i.test(opts.template) === false){
+      text = '<span>'+opts.template+'</span>';
+      delete opts.template;
+    }
     return showPopup( extend({
-      template: '<input ng-model="data.response" type="' + (opts.inputType || 'text') +
+      template: text+'<input ng-model="data.response" type="' + (opts.inputType || 'text') +
         '" placeholder="' + (opts.inputPlaceholder || '') + '">',
       scope: scope,
       buttons: [{
@@ -2467,6 +2700,101 @@ function($ionicTemplateLoader, $ionicBackdrop, $q, $timeout, $rootScope, $docume
   }
 }]);
 
+
+/**
+ * @ngdoc service
+ * @name $ionicPosition
+ * @module ionic
+ * @description
+ * A set of utility methods that can be use to retrieve position of DOM elements.
+ * It is meant to be used where we need to absolute-position DOM elements in
+ * relation to other, existing elements (this is the case for tooltips, popovers, etc.).
+ *
+ * Adapted from [AngularUI Bootstrap](https://github.com/angular-ui/bootstrap/blob/master/src/position/position.js),
+ * ([license](https://github.com/angular-ui/bootstrap/blob/master/LICENSE))
+ */
+IonicModule
+.factory('$ionicPosition', ['$document', '$window', function ($document, $window) {
+
+  function getStyle(el, cssprop) {
+    if (el.currentStyle) { //IE
+      return el.currentStyle[cssprop];
+    } else if ($window.getComputedStyle) {
+      return $window.getComputedStyle(el)[cssprop];
+    }
+    // finally try and get inline style
+    return el.style[cssprop];
+  }
+
+  /**
+   * Checks if a given element is statically positioned
+   * @param element - raw DOM element
+   */
+  function isStaticPositioned(element) {
+    return (getStyle(element, 'position') || 'static' ) === 'static';
+  }
+
+  /**
+   * returns the closest, non-statically positioned parentOffset of a given element
+   * @param element
+   */
+  var parentOffsetEl = function (element) {
+    var docDomEl = $document[0];
+    var offsetParent = element.offsetParent || docDomEl;
+    while (offsetParent && offsetParent !== docDomEl && isStaticPositioned(offsetParent) ) {
+      offsetParent = offsetParent.offsetParent;
+    }
+    return offsetParent || docDomEl;
+  };
+
+  return {
+    /**
+     * @ngdoc method
+     * @name $ionicPosition#position
+     * @description Get the current coordinates of the element, relative to the offset parent.
+     * Read-only equivalent of [jQuery's position function](http://api.jquery.com/position/).
+     * @param {element} element The element to get the position of.
+     * @returns {object} Returns an object containing the properties top, left, width and height.
+     */
+    position: function (element) {
+      var elBCR = this.offset(element);
+      var offsetParentBCR = { top: 0, left: 0 };
+      var offsetParentEl = parentOffsetEl(element[0]);
+      if (offsetParentEl != $document[0]) {
+        offsetParentBCR = this.offset(angular.element(offsetParentEl));
+        offsetParentBCR.top += offsetParentEl.clientTop - offsetParentEl.scrollTop;
+        offsetParentBCR.left += offsetParentEl.clientLeft - offsetParentEl.scrollLeft;
+      }
+
+      var boundingClientRect = element[0].getBoundingClientRect();
+      return {
+        width: boundingClientRect.width || element.prop('offsetWidth'),
+        height: boundingClientRect.height || element.prop('offsetHeight'),
+        top: elBCR.top - offsetParentBCR.top,
+        left: elBCR.left - offsetParentBCR.left
+      };
+    },
+
+    /**
+     * @ngdoc method
+     * @name $ionicPosition#offset
+     * @description Get the current coordinates of the element, relative to the document.
+     * Read-only equivalent of [jQuery's offset function](http://api.jquery.com/offset/).
+     * @param {element} element The element to get the offset of.
+     * @returns {object} Returns an object containing the properties top, left, width and height.
+     */
+    offset: function (element) {
+      var boundingClientRect = element[0].getBoundingClientRect();
+      return {
+        width: boundingClientRect.width || element.prop('offsetWidth'),
+        height: boundingClientRect.height || element.prop('offsetHeight'),
+        top: boundingClientRect.top + ($window.pageYOffset || $document[0].documentElement.scrollTop),
+        left: boundingClientRect.left + ($window.pageXOffset || $document[0].documentElement.scrollLeft)
+      };
+    }
+
+  };
+}]);
 
 
 /**
@@ -3105,7 +3433,7 @@ function($rootScope, $state, $location, $document, $animate, $ionicPlatform, $io
     return false;
   }
   $ionicPlatform.registerBackButtonAction(
-    onHardwareBackButton, 
+    onHardwareBackButton,
     PLATFORM_BACK_BUTTON_PRIORITY_VIEW
   );
 
@@ -3511,6 +3839,8 @@ function($rootScope, $state, $location, $window, $injector, $animate, $ionicNavV
                 }
               });
               return;
+            } else if(!doAnimation) {
+              document.body.classList.remove('disable-pointer-events');
             }
 
             // no animation
@@ -3573,21 +3903,23 @@ function($rootScope, $state, $location, $window, $injector, $animate, $ionicNavV
       histories = $rootScope.$viewHistory.histories,
       currentView = $rootScope.$viewHistory.currentView;
 
-      for(var historyId in histories) {
+      if(histories) {
+        for(var historyId in histories) {
 
-        if(histories[historyId].stack) {
-          histories[historyId].stack = [];
-          histories[historyId].cursor = -1;
+          if(histories[historyId].stack) {
+            histories[historyId].stack = [];
+            histories[historyId].cursor = -1;
+          }
+
+          if(currentView && currentView.historyId === historyId) {
+            currentView.backViewId = null;
+            currentView.forwardViewId = null;
+            histories[historyId].stack.push(currentView);
+          } else if(histories[historyId].destroy) {
+            histories[historyId].destroy();
+          }
+
         }
-
-        if(currentView.historyId === historyId) {
-          currentView.backViewId = null;
-          currentView.forwardViewId = null;
-          histories[historyId].stack.push(currentView);
-        } else if(histories[historyId].destroy) {
-          histories[historyId].destroy();
-        }
-
       }
 
       for(var viewId in $rootScope.$viewHistory.views) {
@@ -3596,7 +3928,9 @@ function($rootScope, $state, $location, $window, $injector, $animate, $ionicNavV
         }
       }
 
-      this.setNavViews(currentView.viewId);
+      if(currentView) {
+        this.setNavViews(currentView.viewId);
+      }
     }
 
   };
@@ -3678,14 +4012,14 @@ IonicModule
   /**
    * @ngdoc method
    * @name $ionicListDelegate#showDelete
-   * @param {boolean=} showReorder Set whether or not this list is showing its delete buttons.
+   * @param {boolean=} showDelete Set whether or not this list is showing its delete buttons.
    * @returns {boolean} Whether the delete buttons are shown.
    */
   'showDelete',
   /**
    * @ngdoc method
    * @name $ionicListDelegate#canSwipeItems
-   * @param {boolean=} showReorder Set whether or not this list is able to swipe to show
+   * @param {boolean=} canSwipeItems Set whether or not this list is able to swipe to show
    * option buttons.
    * @returns {boolean} Whether the list is able to swipe to show option buttons.
    */
@@ -3902,6 +4236,8 @@ IonicModule
 function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $location, $rootScope, $document, $ionicScrollDelegate) {
 
   var self = this;
+  // for testing
+  this.__timeout = $timeout;
 
   this._scrollViewOptions = scrollViewOptions; //for testing
 
@@ -3996,7 +4332,9 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
   };
 
   this.resize = function() {
-    return $timeout(resize);
+    return $timeout(resize).then(function() {
+      $element.triggerHandler('scroll.resize');
+    });
   };
 
   this.scrollTop = function(shouldAnimate) {
@@ -4028,12 +4366,19 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     this.resize().then(function() {
       var hash = $location.hash();
       var elm = hash && $document[0].getElementById(hash);
-      if (hash && elm) {
-        var scroll = ionic.DomUtil.getPositionInParent(elm, self.$element);
-        scrollView.scrollTo(scroll.left, scroll.top, !!shouldAnimate);
-      } else {
+      if (!(hash && elm)) {
         scrollView.scrollTo(0,0, !!shouldAnimate);
+        return;
       }
+      var curElm = elm;
+      var scrollLeft = 0, scrollTop = 0, levelsClimbed = 0;
+      do {
+        if(curElm !== null)scrollLeft += curElm.offsetLeft;
+        if(curElm !== null)scrollTop += curElm.offsetTop;
+        curElm = curElm.offsetParent;
+        levelsClimbed++;
+      } while (curElm.attributes != self.element.attributes && curElm.offsetParent);
+      scrollView.scrollTo(scrollLeft, scrollTop, !!shouldAnimate);
     });
   };
 
@@ -4063,14 +4408,26 @@ function($scope, scrollViewOptions, $timeout, $window, $$scrollValueCache, $loca
     var refresher = this.refresher = refresherElement;
     var refresherHeight = self.refresher.clientHeight || 0;
     scrollView.activatePullToRefresh(refresherHeight, function() {
+      // activateCallback
       refresher.classList.add('active');
       refresherScope.$onPulling();
     }, function() {
-      refresher.classList.remove('refreshing');
-      refresher.classList.remove('active');
+      // deactivateCallback
+      $timeout(function(){
+        refresher.classList.remove('active');
+        refresher.classList.remove('refreshing');
+        refresher.classList.add('invisible');
+      },300);
     }, function() {
+      // startCallback
       refresher.classList.add('refreshing');
       refresherScope.$onRefresh();
+    },function(){
+      // showCallback
+      refresher.classList.remove('invisible');
+    },function(){
+      // hideCallback
+      refresher.classList.add('invisible');
     });
   };
 }]);
@@ -4413,13 +4770,10 @@ IonicModule
  * Pixel amounts or percentages are allowed (see below).
  * 3. The elements rendered will be absolutely positioned: be sure to let your CSS work with
  * this (see below).
- * 4. Keep the HTML of your repeated elements as simple as possible.
- * The more complicated your elements, the more likely it is that the on-demand compilation will cause
- * some jerkiness in the user's scrolling.
- * 6. Each collection-repeat list will take up all of its parent scrollView's space.
+ * 4. Each collection-repeat list will take up all of its parent scrollView's space.
  * If you wish to have multiple lists on one page, put each list within its own
  * {@link ionic.directive:ionScroll ionScroll} container.
- * 7. You should not use the ng-show and ng-hide directives on your ion-content/ion-scroll elements that
+ * 5. You should not use the ng-show and ng-hide directives on your ion-content/ion-scroll elements that
  * have a collection-repeat inside.  ng-show and ng-hide apply the `display: none` css rule to the content's
  * style, causing the scrollView to read the width and height of the content as 0.  Resultingly,
  * collection-repeat will render elements that have just been un-hidden incorrectly.
@@ -4527,11 +4881,6 @@ var COLLECTION_REPEAT_ATTR_WIDTH_ERROR = "collection-repeat expected attribute c
 var COLLECTION_REPEAT_ATTR_REPEAT_ERROR = "collection-repeat expected expression in form of '_item_ in _collection_[ track by _id_]' but got '%'";
 
 IonicModule
-.directive({
-  ngSrc: collectionRepeatSrcDirective('ngSrc', 'src'),
-  ngSrcset: collectionRepeatSrcDirective('ngSrcset', 'srcset'),
-  ngHref: collectionRepeatSrcDirective('ngHref', 'href')
-})
 .directive('collectionRepeat', [
   '$collectionRepeatManager',
   '$collectionDataSource',
@@ -4545,6 +4894,10 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
     require: '^$ionicScroll',
     controller: [function(){}],
     link: function($scope, $element, $attr, scrollCtrl, $transclude) {
+      var wrap = jqLite('<div style="position:relative;">');
+      $element.parent()[0].insertBefore(wrap[0], $element[0]);
+      wrap.append($element);
+
       var scrollView = scrollCtrl.scrollView;
       if (scrollView.options.scrollingX && scrollView.options.scrollingY) {
         throw new Error(COLLECTION_REPEAT_SCROLLVIEW_XY_ERROR);
@@ -4607,28 +4960,61 @@ function($collectionRepeatManager, $collectionDataSource, $parse) {
         rerender(value);
       });
 
+      // Find every sibling before and after the repeated items, and pass them
+      // to the dataSource
+      var scrollViewContent = scrollCtrl.scrollView.__content;
       function rerender(value) {
+        var beforeSiblings = [];
+        var afterSiblings = [];
+        var before = true;
+
+        forEach(scrollViewContent.children, function(node, i) {
+          if ( ionic.DomUtil.elementIsDescendant($element[0], node, scrollViewContent) ) {
+            before = false;
+          } else {
+            if (node.hasAttribute('collection-repeat-ignore')) return;
+            var width = node.offsetWidth;
+            var height = node.offsetHeight;
+            if (width && height) {
+              var element = jqLite(node);
+              (before ? beforeSiblings : afterSiblings).push({
+                width: node.offsetWidth,
+                height: node.offsetHeight,
+                element: element,
+                scope: element.isolateScope() || element.scope(),
+                isOutside: true
+              });
+            }
+          }
+        });
+
         scrollView.resize();
-        dataSource.setData(value);
+        dataSource.setData(value, beforeSiblings, afterSiblings);
         collectionRepeatManager.resize();
       }
-      function onWindowResize() {
+      function rerenderOnResize() {
         rerender($scope.$eval(listExpr));
       }
 
-      ionic.on('resize', onWindowResize, window);
+      scrollCtrl.$element.on('scroll.resize', rerenderOnResize);
+      ionic.on('resize', rerenderOnResize, window);
 
       $scope.$on('$destroy', function() {
         collectionRepeatManager.destroy();
         dataSource.destroy();
-        ionic.off('resize', onWindowResize, window);
+        ionic.off('resize', rerenderOnResize, window);
       });
     }
   };
-}]);
+}])
+.directive({
+  ngSrc: collectionRepeatSrcDirective('ngSrc', 'src'),
+  ngSrcset: collectionRepeatSrcDirective('ngSrcset', 'srcset'),
+  ngHref: collectionRepeatSrcDirective('ngHref', 'href')
+});
 
 // Fix for #1674
-// Problem: if an ngSrc or ngHref expression evaluates to a falsy value, it will 
+// Problem: if an ngSrc or ngHref expression evaluates to a falsy value, it will
 // not erase the previous truthy value of the href.
 // In collectionRepeat, we re-use elements from before. So if the ngHref expression
 // evaluates to truthy for item 1 and then falsy for item 2, if an element changes
@@ -4639,12 +5025,10 @@ function collectionRepeatSrcDirective(ngAttrName, attrName) {
   return [function() {
     return {
       priority: '99', // it needs to run after the attributes are interpolated
-      require: '^?collectionRepeat',
-      link: function(scope, element, attr, collectionRepeatCtrl) {
-        if (!collectionRepeatCtrl) return;
+      link: function(scope, element, attr) {
         attr.$observe(ngAttrName, function(value) {
           if (!value) {
-            element.removeAttr(attrName);
+            element[0].removeAttribute(attrName);
           }
         });
       }
@@ -4684,7 +5068,6 @@ function collectionRepeatSrcDirective(ngAttrName, attrName) {
  * @param {boolean=} overflow-scroll Whether to use overflow-scrolling instead of
  * Ionic scroll.
  * @param {boolean=} scrollbar-x Whether to show the horizontal scrollbar. Default true.
- * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
  * @param {boolean=} scrollbar-y Whether to show the vertical scrollbar. Default true.
  * @param {string=} start-y Initial vertical scroll position. Default 0.
  * of the content.  Defaults to true on iOS, false on Android.
@@ -4792,13 +5175,11 @@ function($timeout, $controller, $ionicBind) {
   };
 }]);
 
+var GESTURE_DIRECTIVES = 'onHold onTap onTouch onRelease onDrag onDragUp onDragRight onDragDown onDragLeft onSwipe onSwipeUp onSwipeRight onSwipeDown onSwipeLeft'.split(' ');
 
-forEach(
-  'onHold onTap onTouch onRelease onDrag onDragUp onDragRight onDragDown onDragLeft onSwipe onSwipeUp onSwipeRight onSwipeBottom onSwipeLeft'.split(' '),
-  function(name) {
-    IonicModule.directive(name, gestureDirective(name));
-  }
-);
+GESTURE_DIRECTIVES.forEach(function(name) {
+  IonicModule.directive(name, gestureDirective(name));
+});
 
 
 /**
@@ -5180,7 +5561,8 @@ function headerFooterBarDirective(isHeader) {
       restrict: 'E',
       compile: function($element, $attr) {
         $element.addClass(isHeader ? 'bar bar-header' : 'bar bar-footer');
-
+        var parent = $element[0].parentNode;
+        if(parent.querySelector('.tabs-top'))$element.addClass('has-tabs-top');
         return { pre: prelink };
         function prelink($scope, $element, $attr) {
           var hb = new ionic.views.HeaderBar({
@@ -5284,24 +5666,19 @@ IonicModule
 .directive('ionInfiniteScroll', ['$timeout', function($timeout) {
   function calculateMaxValue(distance, maximum, isPercent) {
     return isPercent ?
-      maximum * (1 - parseInt(distance,10) / 100) :
-      maximum - parseInt(distance, 10);
+      maximum * (1 - parseFloat(distance,10) / 100) :
+      maximum - parseFloat(distance, 10);
   }
   return {
     restrict: 'E',
     require: ['^$ionicScroll', 'ionInfiniteScroll'],
-    template:
-      '<div class="scroll-infinite">' +
-        '<div class="scroll-infinite-content">' +
-          '<i class="icon {{icon()}} icon-refreshing"></i>' +
-        '</div>' +
-      '</div>',
+    template: '<i class="icon {{icon()}} icon-refreshing"></i>',
     scope: true,
     controller: ['$scope', '$attrs', function($scope, $attrs) {
       this.isLoading = false;
       this.scrollView = null; //given by link function
       this.getMaxScroll = function() {
-        var distance = ($attrs.distance || '1%').trim();
+        var distance = ($attrs.distance || '2.5%').trim();
         var isPercent = distance.indexOf('%') !== -1;
         var maxValues = this.scrollView.getScrollMax();
         return {
@@ -5333,6 +5710,7 @@ IonicModule
         $element[0].classList.remove('active');
         $timeout(function() {
           scrollView.resize();
+          checkBounds();
         }, 0, false);
         infiniteScrollCtrl.isLoading = false;
       };
@@ -5814,6 +6192,7 @@ function keyboardAttachGetClientHeight(element) {
 *
 * @param {string=} delegate-handle The handle used to identify this list with
 * {@link ionic.service:$ionicListDelegate}.
+* @param type {string=} The type of list to use (for example, list-inset for an inset list)
 * @param show-delete {boolean=} Whether the delete buttons for the items in the list are
 * currently shown or hidden.
 * @param show-reorder {boolean=} Whether the reorder buttons for the items in the list are
@@ -5832,7 +6211,8 @@ function($animate, $timeout) {
     controller: '$ionicList',
     compile: function($element, $attr) {
       var listEl = jqLite('<div class="list">')
-      .append( $element.contents() );
+      .append( $element.contents() )
+      .addClass($attr.type);
       $element.append(listEl);
 
       return function($scope, $element, $attrs, ctrls) {
@@ -5936,7 +6316,7 @@ function($animate, $timeout) {
  *
  * @usage
  * Below is an example of a link within a side menu. Tapping this link would
- * automatically close the currently opened menu
+ * automatically close the currently opened menu.
  *
  * ```html
  * <a menu-close href="#/home" class="item">Home</a>
@@ -6054,7 +6434,7 @@ IonicModule
  * ```html
  * <ion-nav-bar ng-controller="MyCtrl">
  *   <ion-nav-back-button class="button-clear"
- *     ng-click="doSomethingCool()">
+ *     ng-click="goBack()">
  *     <i class="ion-arrow-left-c"></i> Back
  *   </ion-nav-back-button>
  * </ion-nav-bar>
@@ -6696,6 +7076,34 @@ IonicModule
   };
 });
 
+/*
+ * We don't document the ionPopover directive, we instead document
+ * the $ionicPopover service
+ */
+IonicModule
+.directive('ionPopover', [function() {
+  return {
+    restrict: 'E',
+    transclude: true,
+    replace: true,
+    controller: [function(){}],
+    template: '<div class="popover-backdrop">' +
+                '<div class="popover-wrapper" ng-transclude></div>' +
+              '</div>'
+  };
+}]);
+
+IonicModule
+.directive('ionPopoverView', function() {
+  return {
+    restrict: 'E',
+    compile: function(element) {
+      element.append( angular.element('<div class="popover-arrow"></div>') );
+      element.addClass('popover');
+    }
+  };
+});
+
 /**
  * @ngdoc directive
  * @name ionRadio
@@ -6713,6 +7121,15 @@ IonicModule
  * <ion-radio ng-model="choice" ng-value="'B'">Choose B</ion-radio>
  * <ion-radio ng-model="choice" ng-value="'C'">Choose C</ion-radio>
  * ```
+ * 
+ * @param {string=} name The name of the radio input.
+ * @param {expression=} value The value of the radio input.
+ * @param {boolean=} disabled The state of the radio input.
+ * @param {string=} icon The icon to use when the radio input is selected.
+ * @param {expression=} ng-value Angular equivalent of the value attribute.
+ * @param {expression=} ng-model The angular model for the radio input.
+ * @param {boolean=} ng-disabled Angular equivalent of the disabled attribute.
+ * @param {expression=} ng-change Triggers given expression when radio input's model changes
  */
 IonicModule
 .directive('ionRadio', function() {
@@ -6720,25 +7137,30 @@ IonicModule
     restrict: 'E',
     replace: true,
     require: '?ngModel',
-    scope: {
-      ngModel: '=?',
-      ngValue: '=?',
-      ngDisabled: '=?',
-      ngChange: '&',
-      icon: '@',
-      name: '@'
-    },
     transclude: true,
-    template: '<label class="item item-radio">' +
-                '<input type="radio" name="radio-group"' +
-                ' ng-model="ngModel" ng-value="getValue()" ng-change="ngChange()" ng-disabled="ngDisabled">' +
-                '<div class="item-content disable-pointer-events" ng-transclude></div>' +
-                '<i class="radio-icon disable-pointer-events icon ion-checkmark"></i>' +
-              '</label>',
+    template:
+      '<label class="item item-radio">' +
+        '<input type="radio" name="radio-group">' +
+        '<div class="item-content disable-pointer-events" ng-transclude></div>' +
+        '<i class="radio-icon disable-pointer-events icon ion-checkmark"></i>' +
+      '</label>',
 
     compile: function(element, attr) {
-      if(attr.name) element.children().eq(0).attr('name', attr.name);
       if(attr.icon) element.children().eq(2).removeClass('ion-checkmark').addClass(attr.icon);
+      var input = element.find('input');
+      forEach({
+          'name': attr.name,
+          'value': attr.value,
+          'disabled': attr.disabled,
+          'ng-value': attr.ngValue,
+          'ng-model': attr.ngModel,
+          'ng-disabled': attr.ngDisabled,
+          'ng-change': attr.ngChange
+      }, function(value, name) {
+        if (isDefined(value)) {
+            input.attr(name, value);
+          }
+      });
 
       return function(scope, element, attr) {
         scope.getValue = function() {
@@ -6815,7 +7237,7 @@ IonicModule
     replace: true,
     require: '^$ionicScroll',
     template:
-    '<div class="scroll-refresher">' +
+    '<div class="scroll-refresher" collection-repeat-ignore>' +
       '<div class="ionic-refresher-content" ' +
       'ng-class="{\'ionic-refresher-with-text\': pullingText || refreshingText}">' +
         '<div class="icon-pulling">' +
@@ -6846,7 +7268,6 @@ IonicModule
         scrollCtrl._setRefresher($scope, $element[0]);
         $scope.$on('scroll.refreshComplete', function() {
           $scope.$evalAsync(function() {
-            $element[0].classList.remove('active');
             scrollCtrl.scrollView.finishPullToRefresh();
           });
         });
@@ -6860,10 +7281,26 @@ IonicModule
  * @name ionScroll
  * @module ionic
  * @delegate ionic.service:$ionicScrollDelegate
+ * @codepen mwFuh
  * @restrict E
  *
  * @description
  * Creates a scrollable container for all content inside.
+ * 
+ * @usage
+ *
+ * Basic usage:
+ *
+ * ```html
+ * <ion-scroll zooming="true" direction="xy" style="width: 500px; height: 500px">
+ *   <div style="width: 5000px; height: 5000px; background: url('https://upload.wikimedia.org/wikipedia/commons/a/ad/Europe_geological_map-en.jpg') repeat"></div>
+ *  </ion-scroll>
+ * ```
+ * 
+ * Note that it's important to set the height of the scroll box as well as the height of the inner
+ * content to enable scrolling. This makes it possible to have full control over scrollable areas.
+ * 
+ * If you'd just like to have a center content scrolling area, use {@link ionic.directive:ionContent} instead.
  *
  * @param {string=} delegate-handle The handle used to identify this scrollView
  * with {@link ionic.service:$ionicScrollDelegate}.
@@ -7056,6 +7493,8 @@ function($timeout, $ionicGesture) {
     compile: function(element, attr) {
       return { pre: prelink };
       function prelink($scope, $element, $attr, sideMenuCtrl) {
+        var startCoord = null;
+        var primaryScrollAxis = null;
 
         $element.addClass('menu-content pane');
 
@@ -7071,48 +7510,75 @@ function($timeout, $ionicGesture) {
           $scope.$watch(attr.edgeDragThreshold, function(value) {
             sideMenuCtrl.edgeDragThreshold(value);
           });
-         }
-
-        var defaultPrevented = false;
-        var isDragging = false;
+        }
 
         // Listen for taps on the content to close the menu
-        function contentTap(e) {
+        function onContentTap(e) {
           if(sideMenuCtrl.getOpenAmount() !== 0) {
             sideMenuCtrl.close();
             e.gesture.srcEvent.preventDefault();
+            startCoord = null;
+            primaryScrollAxis = null;
           }
         }
-        ionic.on('tap', contentTap, $element[0]);
 
-        var dragFn = function(e) {
-          if(defaultPrevented || !sideMenuCtrl.isDraggableTarget(e)) return;
-          isDragging = true;
-          sideMenuCtrl._handleDrag(e);
-          e.gesture.srcEvent.preventDefault();
-        };
+        function onDragX(e) {
+          if(!sideMenuCtrl.isDraggableTarget(e)) return;
 
-        var dragVertFn = function(e) {
-          if(isDragging) {
+          if( getPrimaryScrollAxis(e) == 'x') {
+            sideMenuCtrl._handleDrag(e);
             e.gesture.srcEvent.preventDefault();
           }
-        };
+        }
 
-        //var dragGesture = Gesture.on('drag', dragFn, $element);
-        var dragRightGesture = $ionicGesture.on('dragright', dragFn, $element);
-        var dragLeftGesture = $ionicGesture.on('dragleft', dragFn, $element);
-        var dragUpGesture = $ionicGesture.on('dragup', dragVertFn, $element);
-        var dragDownGesture = $ionicGesture.on('dragdown', dragVertFn, $element);
-
-        var dragReleaseFn = function(e) {
-          isDragging = false;
-          if(!defaultPrevented) {
-            sideMenuCtrl._endDrag(e);
+        function onDragY(e) {
+          if( getPrimaryScrollAxis(e) == 'x' ) {
+            e.gesture.srcEvent.preventDefault();
           }
-          defaultPrevented = false;
-        };
+        }
 
-        var releaseGesture = $ionicGesture.on('release', dragReleaseFn, $element);
+        function onDragRelease(e) {
+          sideMenuCtrl._endDrag(e);
+          startCoord = null;
+          primaryScrollAxis = null;
+        }
+
+        function getPrimaryScrollAxis(gestureEvt) {
+          // gets whether the user is primarily scrolling on the X or Y
+          // If a majority of the drag has been on the Y since the start of
+          // the drag, but the X has moved a little bit, it's still a Y drag
+
+          if(primaryScrollAxis) {
+            // we already figured out which way they're scrolling
+            return primaryScrollAxis;
+          }
+
+          if(gestureEvt && gestureEvt.gesture) {
+
+            if(!startCoord) {
+              // get the starting point
+              startCoord = ionic.tap.pointerCoord(gestureEvt.gesture.srcEvent);
+
+            } else {
+              // we already have a starting point, figure out which direction they're going
+              var endCoord = ionic.tap.pointerCoord(gestureEvt.gesture.srcEvent);
+
+              var xDistance = Math.abs(endCoord.x - startCoord.x);
+              var yDistance = Math.abs(endCoord.y - startCoord.y);
+
+              var scrollAxis = ( xDistance > yDistance ? 'x' : 'y' );
+
+              if( Math.max(xDistance, yDistance) > 30 ) {
+                // ok, we pretty much know which way they're going
+                // let's lock it in
+                primaryScrollAxis = scrollAxis;
+              }
+
+              return scrollAxis;
+            }
+
+          }
+        }
 
         sideMenuCtrl.setContent({
           element: element[0],
@@ -7128,25 +7594,31 @@ function($timeout, $ionicGesture) {
             });
           }),
           enableAnimation: function() {
-            //this.el.classList.add(this.animateClass);
             $scope.animationEnabled = true;
             $element[0].classList.add('menu-animated');
           },
           disableAnimation: function() {
-            //this.el.classList.remove(this.animateClass);
             $scope.animationEnabled = false;
             $element[0].classList.remove('menu-animated');
           }
         });
 
+        // add gesture handlers
+        var dragRightGesture = $ionicGesture.on('dragright', onDragX, $element);
+        var dragLeftGesture = $ionicGesture.on('dragleft', onDragX, $element);
+        var dragUpGesture = $ionicGesture.on('dragup', onDragY, $element);
+        var dragDownGesture = $ionicGesture.on('dragdown', onDragY, $element);
+        var releaseGesture = $ionicGesture.on('release', onDragRelease, $element);
+        var contentTapGesture = $ionicGesture.on('tap', onContentTap, $element);
+
         // Cleanup
         $scope.$on('$destroy', function() {
-          $ionicGesture.off(dragLeftGesture, 'dragleft', dragFn);
-          $ionicGesture.off(dragRightGesture, 'dragright', dragFn);
-          $ionicGesture.off(dragUpGesture, 'dragup', dragFn);
-          $ionicGesture.off(dragDownGesture, 'dragdown', dragFn);
-          $ionicGesture.off(releaseGesture, 'release', dragReleaseFn);
-          ionic.off('tap', contentTap, $element[0]);
+          $ionicGesture.off(dragLeftGesture, 'dragleft', onDragX);
+          $ionicGesture.off(dragRightGesture, 'dragright', onDragX);
+          $ionicGesture.off(dragUpGesture, 'dragup', onDragY);
+          $ionicGesture.off(dragDownGesture, 'dragdown', onDragY);
+          $ionicGesture.off(releaseGesture, 'release', onDragRelease);
+          $ionicGesture.off(contentTapGesture, 'tap', onContentTap);
         });
       }
     }
@@ -7167,11 +7639,18 @@ IonicModule
  * and/or right side menu to be toggled by dragging the main content area side
  * to side.
  *
+ * To automatically close an opened menu you can add the {@link ionic.directive:menuClose}
+ * attribute directive. Including the `menu-close` attribute is usually added to
+ * links and buttons within `ion-side-menu` content, so that when the element is
+ * clicked then the opened side menu will automatically close.
+ *
  * ![Side Menu](http://ionicframework.com.s3.amazonaws.com/docs/controllers/sidemenu.gif)
  *
- * For more information on side menus, check out the documenation for
- * {@link ionic.directive:ionSideMenuContent} and
- * {@link ionic.directive:ionSideMenu}.
+ * For more information on side menus, check out:
+ *
+ * - {@link ionic.directive:ionSideMenuContent}
+ * - {@link ionic.directive:ionSideMenu}
+ * - {@link ionic.directive:menuClose}
  *
  * @usage
  * To use side menus, add an `<ion-side-menus>` parent element,
@@ -7205,12 +7684,19 @@ IonicModule
  * with {@link ionic.service:$ionicSideMenuDelegate}.
  *
  */
-.directive('ionSideMenus', [function() {
+.directive('ionSideMenus', ['$document', function($document) {
   return {
     restrict: 'ECA',
     controller: '$ionicSideMenus',
     compile: function(element, attr) {
       attr.$set('class', (attr['class'] || '') + ' view');
+
+      return function($scope) {
+        $scope.$on('$destroy', function(){
+          $document[0].body.classList.remove('menu-open');
+        });
+
+      };
     }
   };
 }]);
@@ -7769,6 +8255,10 @@ function($ionicGesture, $timeout) {
         }
       });
 
+      if(attr.toggleClass) {
+        element[0].getElementsByTagName('label')[0].classList.add(attr.toggleClass);
+      }
+
       return function($scope, $element, $attr) {
          var el, checkbox, track, handle;
 
@@ -7886,4 +8376,1125 @@ IonicModule
   };
 }]);
 
+!function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.collide=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+(function (process){
+// Generated by CoffeeScript 1.6.3
+(function() {
+  var getNanoSeconds, hrtime, loadTime;
+
+  if ((typeof performance !== "undefined" && performance !== null) && performance.now) {
+    module.exports = function() {
+      return performance.now();
+    };
+  } else if ((typeof process !== "undefined" && process !== null) && process.hrtime) {
+    module.exports = function() {
+      return (getNanoSeconds() - loadTime) / 1e6;
+    };
+    hrtime = process.hrtime;
+    getNanoSeconds = function() {
+      var hr;
+      hr = hrtime();
+      return hr[0] * 1e9 + hr[1];
+    };
+    loadTime = getNanoSeconds();
+  } else if (Date.now) {
+    module.exports = function() {
+      return Date.now() - loadTime;
+    };
+    loadTime = Date.now();
+  } else {
+    module.exports = function() {
+      return new Date().getTime() - loadTime;
+    };
+    loadTime = new Date().getTime();
+  }
+
+}).call(this);
+
+/*
+//@ sourceMappingURL=performance-now.map
+*/
+
+}).call(this,_dereq_("qhDIRT"))
+},{"qhDIRT":13}],2:[function(_dereq_,module,exports){
+var now = _dereq_('performance-now')
+  , global = typeof window === 'undefined' ? {} : window
+  , vendors = ['moz', 'webkit']
+  , suffix = 'AnimationFrame'
+  , raf = global['request' + suffix]
+  , caf = global['cancel' + suffix] || global['cancelRequest' + suffix]
+
+for(var i = 0; i < vendors.length && !raf; i++) {
+  raf = global[vendors[i] + 'Request' + suffix]
+  caf = global[vendors[i] + 'Cancel' + suffix]
+      || global[vendors[i] + 'CancelRequest' + suffix]
+}
+
+// Some versions of FF have rAF but not cAF
+if(!raf || !caf) {
+  var last = 0
+    , id = 0
+    , queue = []
+    , frameDuration = 1000 / 60
+
+  raf = function(callback) {
+    if(queue.length === 0) {
+      var _now = now()
+        , next = Math.max(0, frameDuration - (_now - last))
+      last = next + _now
+      setTimeout(function() {
+        var cp = queue.slice(0)
+        // Clear queue here to prevent
+        // callbacks from appending listeners
+        // to the current frame's queue
+        queue.length = 0
+        for (var i = 0; i < cp.length; i++) {
+          if (!cp[i].cancelled) {
+            cp[i].callback(last)
+          }
+        }
+      }, next)
+    }
+    queue.push({
+      handle: ++id,
+      callback: callback,
+      cancelled: false
+    })
+    return id
+  }
+
+  caf = function(handle) {
+    for(var i = 0; i < queue.length; i++) {
+      if(queue[i].handle === handle) {
+        queue[i].cancelled = true
+      }
+    }
+  }
+}
+
+module.exports = function() {
+  // Wrap in a new function to prevent
+  // `cancel` potentially being assigned
+  // to the native rAF function
+  return raf.apply(global, arguments)
+}
+module.exports.cancel = function() {
+  caf.apply(global, arguments)
+}
+
+},{"performance-now":3}],3:[function(_dereq_,module,exports){
+module.exports=_dereq_(1)
+},{"qhDIRT":13}],4:[function(_dereq_,module,exports){
+
+// Interpolation disabled for now
+// var interpolate = require('./core/interpolate');
+// var cssFeature = require('feature/css');
+
+var timeline = _dereq_('./core/timeline');
+var dynamics = _dereq_('./core/dynamics');
+var easingFunctions = _dereq_('./core/easing-functions');
+
+var uid = _dereq_('./util/uid');
+var EventEmitter = _dereq_('./util/simple-emitter');
+
+function clamp(min, n, max) { return Math.max(min, Math.min(n, max)); }
+
+module.exports = Animator;
+
+function Animator(opts) {
+  //if `new` keyword isn't provided, do it for user
+  if (!(this instanceof Animator)) {
+    return new Animator(opts);
+  }
+
+  opts = opts || {};
+
+  //Private state goes in this._
+  this._ = {
+    id: uid(),
+    percent: 0,
+    duration: 500,
+    isReverse: false
+  };
+
+  var emitter = this._.emitter = new EventEmitter();
+  this._.onDestroy = function() {
+    emitter.emit('destroy');
+  };
+  this._.onStop = function(wasCompleted) {
+    emitter.emit('stop', wasCompleted);
+    wasCompleted && emitter.emit('complete');
+  };
+  this._.onStart = function() {
+    emitter.emit('start');
+  };
+  this._.onStep = function(v) {
+    emitter.emit('step', v);
+  };
+
+  opts.duration && this.duration(opts.duration);
+  opts.percent && this.percent(opts.percent);
+  opts.easing && this.easing(opts.easing);
+  opts.reverse && this.reverse(opts.reverse);
+}
+
+Animator.prototype = {
+
+  reverse: function(reverse) {
+    if (arguments.length) {
+      this._.isReverse = !!reverse;
+      return this;
+    }
+    return this._.isReverse;
+  },
+
+  easing: function(easing) {
+    var type = typeof easing;
+    if (arguments.length) {
+      if (type === 'function' || type === 'string' || type === 'object') {
+        this._.easing = figureOutEasing(easing);
+      }
+      return this;
+    }
+    return this._.easing;
+  },
+
+  percent: function(percent) {
+    if (arguments.length) {
+      if (typeof percent === 'number') {
+        this._.percent = clamp(0, percent, 1);
+      }
+      if (!this.isRunning()) {
+        this._.onStep(this._getValueForPercent(this._.percent));
+      }
+      return this;
+    }
+    return this._.percent;
+  },
+
+  duration: function(duration) {
+    if (arguments.length) {
+      if (typeof duration === 'number' && duration > 0) {
+        this._.duration = duration;
+      }
+      return this;
+    }
+    return this._.duration;
+  },
+
+  /**
+   * Interpolation is disabled for now.
+   */
+  // addInterpolation: function(el, startingStyles, endingStyles) {
+  //   var interpolators;
+  //   if (arguments.length) {
+  //     syncStyles(startingStyles, endingStyles, window.getComputedStyle(el));
+  //     interpolators = makePropertyInterpolators(startingStyles, endingStyles);
+
+  //     this.on('step', setStyles);
+  //     return function unbind() {
+  //       this.off('step', setStyles);
+  //     };
+  //   }
+  //   function setStyles(v) {
+  //     for (var property in interpolators) {
+  //       el.style[property] = interpolators[property](v);
+  //     }
+  //   }
+  // },
+
+  isRunning: function() { 
+    return !!this._.isRunning; 
+  },
+
+  promise: function() {
+    var self = this;
+    return {
+      then: function(cb) {
+        self.once('stop', cb);
+      }
+    };
+  },
+
+  on: function(eventType, listener) {
+    this._.emitter.on(eventType, listener);
+    return this;
+  },
+  once: function(eventType, listener) {
+    this._.emitter.once(eventType, listener);
+    return this;
+  },
+  off: function(eventType, listener) {
+    this._.emitter.off(eventType, listener);
+    return this;
+  },
+
+  destroy: function() {
+    this.stop();
+    this._.onDestroy();
+    this.off();
+    return this;
+  },
+
+  stop: function() {
+    if (!this._.isRunning) return;
+
+    this._.isRunning = false;
+    timeline.animationStopped(this);
+
+    this._.onStop(this._isComplete());
+    return this;
+  },
+
+  restart: function(immediate) {
+    if (this._.isRunning) return;
+
+    this._.percent = this._getStartPercent();
+
+    return this.start(!!immediate);
+  },
+
+  start: function(immediate) {
+    if (this._.isRunning) return;
+
+    if (immediate) {
+      this._.onStep(this._getValueForPercent(this._.percent));
+    } else {
+      this._.isStarting = true;
+    }
+
+    this._.isRunning = true;
+    timeline.animationStarted(this);
+
+    this._.onStart();
+    return this;
+  },
+
+  _isComplete: function() {
+    return !this._.isRunning && 
+      this._.percent === this._getEndPercent();
+  },
+  _getEndPercent: function() {
+    return this._.isReverse ? 0 : 1;
+  },
+  _getStartPercent: function() {
+    return this._.isReverse ? 1 : 0;
+  },
+
+  _getValueForPercent: function(percent) {
+    if (this._.easing) {
+      return this._.easing(percent, this._.duration);
+    }
+    return percent;
+  },
+
+  _tick: function(deltaT) {
+    var state = this._;
+
+    //First tick, don't up the percent
+    if (state.isStarting) {
+      state.isStarting = false;
+    } else if (state.isReverse) {
+      state.percent = Math.max(0, state.percent - (deltaT / state.duration));
+    } else {
+      state.percent = Math.min(1, state.percent + (deltaT / state.duration));
+    }
+    
+    state.onStep(this._getValueForPercent(state.percent));
+
+    if (state.percent === this._getEndPercent()) {
+      this.stop();
+    }
+  },
+
+};
+
+function figureOutEasing(easing) {
+  if (typeof easing === 'object') {
+    var dynamicType = typeof easing.type === 'string' &&
+      easing.type.toLowerCase().trim();
+
+    if (!dynamics[dynamicType]) {
+      throw new Error(
+        'Invalid easing dynamics object type "' + easing.type + '". ' +
+        'Available dynamics types: ' + Object.keys(dynamics).join(', ') + '.'
+      );
+    }
+    return dynamics[dynamicType](easing);
+
+  } else if (typeof easing === 'string') {
+    easing = easing.toLowerCase().trim();
+    
+    if (easing.indexOf('cubic-bezier(') === 0) {
+      var parts = easing
+        .replace('cubic-bezier(', '')
+        .replace(')', '')
+        .split(',')
+        .map(function(v) {
+          return v.trim();
+        });
+      return easingFunctions['cubic-bezier'](parts[0], parts[1], parts[2], parts[3]);
+    } else {
+      var fn = easingFunctions[easing];
+      if (!fn) {
+        throw new Error(
+          'Invalid easing function "' + easing + '". ' +
+          'Available easing functions: ' + Object.keys(easingFunctions).join(', ') + '.'
+        );
+      }
+      return easingFunctions[easing]();
+    }
+  } else if (typeof easing === 'function') {
+    return easing;
+  }
+}
+
+// /*
+//  * Tweening helpers
+//  */
+// function syncStyles(startingStyles, endingStyles, computedStyle) {
+//   var property;
+//   for (property in startingStyles) {
+//     if (!endingStyles.hasOwnProperty(property)) {
+//       delete startingStyles[property];
+//     }
+//   }
+//   for (property in endingStyles) {
+//     if (!startingStyles.hasOwnProperty(property)) {
+//       startingStyles[property] = computedStyle[vendorizePropertyName(property)];
+//     }
+//   }
+// }
+
+// function makePropertyInterpolators(startingStyles, endingStyles) {
+//   var interpolators = {};
+//   var property;
+//   for (property in startingStyles) {
+//     interpolators[vendorizePropertyName(property)] = interpolate.propertyInterpolator(
+//       property, startingStyles[property], endingStyles[property]
+//     );
+//   }
+//   return interpolators;
+// }
+
+// var transformProperty;
+// function vendorizePropertyName(property) {
+//   if (property === 'transform') {
+//     //Set transformProperty lazily, to be sure DOM has loaded already when using it
+//     return transformProperty || 
+//       (transformProperty = cssFeature('transform').property);
+//   } else {
+//     return property;
+//   }
+// }
+
+},{"./core/dynamics":6,"./core/easing-functions":7,"./core/timeline":8,"./util/simple-emitter":11,"./util/uid":12}],5:[function(_dereq_,module,exports){
+/*
+ * Copyright (C) 2008 Apple Inc. All Rights Reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+// http://www.w3.org/TR/css3-transitions/#transition-easing-function
+module.exports =  {
+  /*
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param duration {number} the duration of the animation in milliseconds
+   * @return {number} the y value along the bezier curve
+   */
+  linear: unitBezier(0.0, 0.0, 1.0, 1.0),
+
+  /*
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param duration {number} the duration of the animation in milliseconds
+   * @return {number} the y value along the bezier curve
+   */
+  ease: unitBezier(0.25, 0.1, 0.25, 1.0),
+
+  /*
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param duration {number} the duration of the animation in milliseconds
+   * @return {number} the y value along the bezier curve
+   */
+  easeIn: unitBezier(0.42, 0, 1.0, 1.0),
+
+  /*
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param duration {number} the duration of the animation in milliseconds
+   * @return {number} the y value along the bezier curve
+   */
+  easeOut: unitBezier(0, 0, 0.58, 1.0),
+
+  /*
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param duration {number} the duration of the animation in milliseconds
+   * @return {number} the y value along the bezier curve
+   */
+  easeInOut: unitBezier(0.42, 0, 0.58, 1.0),
+
+  /*
+   * @param p1x {number} X component of control point 1
+   * @param p1y {number} Y component of control point 1
+   * @param p2x {number} X component of control point 2
+   * @param p2y {number} Y component of control point 2
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param duration {number} the duration of the animation in milliseconds
+   * @return {number} the y value along the bezier curve
+   */
+  cubicBezier: function(p1x, p1y, p2x, p2y) {
+    return unitBezier(p1x, p1y, p2x, p2y);
+  }
+};
+
+function B1(t) { return t*t*t; }
+function B2(t) { return 3*t*t*(1-t); }
+function B3(t) { return 3*t*(1-t)*(1-t); }
+function B4(t) { return (1-t)*(1-t)*(1-t); }
+
+/*
+ * JavaScript port of Webkit implementation of CSS cubic-bezier(p1x.p1y,p2x,p2y) by http://mck.me
+ * http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/platform/graphics/UnitBezier.h
+ */
+
+/*
+ * Duration value to use when one is not specified (400ms is a common value).
+ * @const
+ * @type {number}
+ */
+var DEFAULT_DURATION = 400;//ms
+
+/*
+ * The epsilon value we pass to UnitBezier::solve given that the animation is going to run over |dur| seconds.
+ * The longer the animation, the more precision we need in the easing function result to avoid ugly discontinuities.
+ * http://svn.webkit.org/repository/webkit/trunk/Source/WebCore/page/animation/AnimationBase.cpp
+ */
+function solveEpsilon(duration) {
+  return 1.0 / (200.0 * duration);
+}
+
+/*
+ * Defines a cubic-bezier curve given the middle two control points.
+ * NOTE: first and last control points are implicitly (0,0) and (1,1).
+ * @param p1x {number} X component of control point 1
+ * @param p1y {number} Y component of control point 1
+ * @param p2x {number} X component of control point 2
+ * @param p2y {number} Y component of control point 2
+ */
+function unitBezier(p1x, p1y, p2x, p2y) {
+
+  // private members --------------------------------------------
+
+  // Calculate the polynomial coefficients, implicit first and last control points are (0,0) and (1,1).
+
+  /*
+   * X component of Bezier coefficient C
+   * @const
+   * @type {number}
+   */
+  var cx = 3.0 * p1x;
+
+  /*
+   * X component of Bezier coefficient B
+   * @const
+   * @type {number}
+   */
+  var bx = 3.0 * (p2x - p1x) - cx;
+
+  /*
+   * X component of Bezier coefficient A
+   * @const
+   * @type {number}
+   */
+  var ax = 1.0 - cx -bx;
+
+  /*
+   * Y component of Bezier coefficient C
+   * @const
+   * @type {number}
+   */
+  var cy = 3.0 * p1y;
+
+  /*
+   * Y component of Bezier coefficient B
+   * @const
+   * @type {number}
+   */
+  var by = 3.0 * (p2y - p1y) - cy;
+
+  /*
+   * Y component of Bezier coefficient A
+   * @const
+   * @type {number}
+   */
+  var ay = 1.0 - cy - by;
+
+  /*
+   * @param t {number} parametric easing value
+   * @return {number}
+   */
+  var sampleCurveX = function(t) {
+    // `ax t^3 + bx t^2 + cx t' expanded using Horner's rule.
+    return ((ax * t + bx) * t + cx) * t;
+  };
+
+  /*
+   * @param t {number} parametric easing value
+   * @return {number}
+   */
+  var sampleCurveY = function(t) {
+    return ((ay * t + by) * t + cy) * t;
+  };
+
+  /*
+   * @param t {number} parametric easing value
+   * @return {number}
+   */
+  var sampleCurveDerivativeX = function(t) {
+    return (3.0 * ax * t + 2.0 * bx) * t + cx;
+  };
+
+  /*
+   * Given an x value, find a parametric value it came from.
+   * @param x {number} value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param epsilon {number} accuracy limit of t for the given x
+   * @return {number} the t value corresponding to x
+   */
+  var solveCurveX = function(x, epsilon) {
+    var t0;
+    var t1;
+    var t2;
+    var x2;
+    var d2;
+    var i;
+
+    // First try a few iterations of Newton's method -- normally very fast.
+    for (t2 = x, i = 0; i < 8; i++) {
+      x2 = sampleCurveX(t2) - x;
+      if (Math.abs (x2) < epsilon) {
+        return t2;
+      }
+      d2 = sampleCurveDerivativeX(t2);
+      if (Math.abs(d2) < 1e-6) {
+        break;
+      }
+      t2 = t2 - x2 / d2;
+    }
+
+    // Fall back to the bisection method for reliability.
+    t0 = 0.0;
+    t1 = 1.0;
+    t2 = x;
+
+    if (t2 < t0) {
+      return t0;
+    }
+    if (t2 > t1) {
+      return t1;
+    }
+
+    while (t0 < t1) {
+      x2 = sampleCurveX(t2);
+      if (Math.abs(x2 - x) < epsilon) {
+        return t2;
+      }
+      if (x > x2) {
+        t0 = t2;
+      } else {
+        t1 = t2;
+      }
+      t2 = (t1 - t0) * 0.5 + t0;
+    }
+
+    // Failure.
+    return t2;
+  };
+
+  /*
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param epsilon {number} the accuracy of t for the given x
+   * @return {number} the y value along the bezier curve
+   */
+  var solve = function(x, epsilon) {
+    return sampleCurveY(solveCurveX(x, epsilon));
+  };
+
+  // public interface --------------------------------------------
+
+  /*
+   * Find the y of the cubic-bezier for a given x with accuracy determined by the animation duration.
+   * @param x {number} the value of x along the bezier curve, 0.0 <= x <= 1.0
+   * @param duration {number} the duration of the animation in milliseconds
+   * @return {number} the y value along the bezier curve
+   */
+  return function(x, duration) {
+    return solve(x, solveEpsilon(+duration || DEFAULT_DURATION));
+  };
+}
+
+
+},{}],6:[function(_dereq_,module,exports){
+/**
+ * A HUGE thank you to dynamics.js which inspired these dynamics simulations.
+ * https://github.com/michaelvillar/dynamics.js
+ *
+ * Also licensed under MIT
+ */
+
+var extend = _dereq_('../util/extend');
+
+module.exports = {
+  spring: dynamicsSpring,
+  gravity: dynamicsGravity
+};
+
+var springDefaults = {
+  frequency: 15,
+  friction: 200,
+  anticipationStrength: 0,
+  anticipationSize: 0
+};
+function dynamicsSpring(opts) {
+  opts = extend({}, springDefaults, opts || {});
+
+  return function at(t, duration) {
+    var A, At, a, angle, b, decal, frequency, friction, frictionT, s, v, y0, yS,
+    _opts = opts;
+    frequency = Math.max(1, opts.frequency);
+    friction = Math.pow(20, opts.friction / 100);
+    s = opts.anticipationSize / 100;
+    decal = Math.max(0, s);
+    frictionT = (t / (1 - s)) - (s / (1 - s));
+    if (t < s) {
+      A = function(t) {
+        var M, a, b, x0, x1;
+        M = 0.8;
+        x0 = s / (1 - s);
+        x1 = 0;
+        b = (x0 - (M * x1)) / (x0 - x1);
+        a = (M - b) / x0;
+        return (a * t * _opts.anticipationStrength / 100) + b;
+      };
+      yS = (s / (1 - s)) - (s / (1 - s));
+      y0 = (0 / (1 - s)) - (s / (1 - s));
+      b = Math.acos(1 / A(yS));
+      a = (Math.acos(1 / A(y0)) - b) / (frequency * (-s));
+    } else {
+      A = function(t) {
+        return Math.pow(friction / 10, -t) * (1 - t);
+      };
+      b = 0;
+      a = 1;
+    }
+    At = A(frictionT);
+    angle = frequency * (t - s) * a + b;
+    v = 1 - (At * Math.cos(angle));
+    //return [t, v, At, frictionT, angle];
+    return v;
+  };
+}
+
+var gravityDefaults = {
+  bounce: 40,
+  gravity: 1000,
+  initialForce: false
+};
+function dynamicsGravity(opts) {
+  opts = extend({}, gravityDefaults, opts || {});
+  var curves = [];
+
+  init();
+
+  return at;
+
+  function length() {
+    var L, b, bounce, curve, gravity;
+    bounce = Math.min(opts.bounce / 100, 80);
+    gravity = opts.gravity / 100;
+    b = Math.sqrt(2 / gravity);
+    curve = {
+      a: -b,
+      b: b,
+      H: 1
+    };
+    if (opts.initialForce) {
+      curve.a = 0;
+      curve.b = curve.b * 2;
+    }
+    while (curve.H > 0.001) {
+      L = curve.b - curve.a;
+      curve = {
+        a: curve.b,
+        b: curve.b + L * bounce,
+        H: curve.H * bounce * bounce
+      };
+    }
+    return curve.b;
+  }
+
+  function init() {
+    var L, b, bounce, curve, gravity, _results;
+
+    L = length();
+    gravity = (opts.gravity / 100) * L * L;
+    bounce = Math.min(opts.bounce / 100, 80);
+    b = Math.sqrt(2 / gravity);
+    curves = [];
+    curve = {
+      a: -b,
+      b: b,
+      H: 1
+    };
+    if (opts.initialForce) {
+      curve.a = 0;
+      curve.b = curve.b * 2;
+    }
+    curves.push(curve);
+    _results = [];
+    while (curve.b < 1 && curve.H > 0.001) {
+      L = curve.b - curve.a;
+      curve = {
+        a: curve.b,
+        b: curve.b + L * bounce,
+        H: curve.H * bounce * bounce
+      };
+      _results.push(curves.push(curve));
+    }
+    return _results;
+  }
+
+  function calculateCurve(a, b, H, t){
+    var L, c, t2;
+    L = b - a;
+    t2 = (2 / L) * t - 1 - (a * 2 / L);
+    c = t2 * t2 * H - H + 1;
+    if (opts.initialForce) {
+      c = 1 - c;
+    }
+    return c;
+  }
+
+  function at(t, duration) {
+    var bounce, curve, gravity, i, v;
+    bounce = opts.bounce / 100;
+    gravity = opts.gravity;
+    i = 0;
+    curve = curves[i];
+    while (!(t >= curve.a && t <= curve.b)) {
+      i += 1;
+      curve = curves[i];
+      if (!curve) {
+        break;
+      }
+    }
+    if (!curve) {
+      v = opts.initialForce ? 0 : 1;
+    } else {
+      v = calculateCurve(curve.a, curve.b, curve.H, t);
+    }
+    //return [t, v];
+    return v;
+  }
+
+};
+
+},{"../util/extend":10}],7:[function(_dereq_,module,exports){
+var dynamics = _dereq_('./dynamics');
+var bezier = _dereq_('./bezier');
+
+module.exports = {
+  'linear': function() {
+    return function(t, duration) {
+      return bezier.linear(t, duration);
+    };
+  },
+  'ease': function() {
+    return function(t, duration) {
+      return bezier.ease(t, duration);
+    };
+  },
+  'ease-in': function() {
+    return function(t, duration) {
+      return bezier.easeIn(t, duration);
+    };
+  },
+  'ease-out': function() {
+    return function(t, duration) {
+      return bezier.easeOut(t, duration);
+    };
+  },
+  'ease-in-out': function() {
+    return function(t, duration) {
+      return bezier.easeInOut(t, duration);
+    };
+  },
+  'cubic-bezier': function(x1, y1, x2, y2, duration) {
+    var bz = bezier.cubicBezier(x1, y1, x2, y2);//, t, duration);
+    return function(t, duration) {
+      return bz(t, duration);
+    };
+  }
+};
+
+},{"./bezier":5,"./dynamics":6}],8:[function(_dereq_,module,exports){
+
+var raf = _dereq_('raf');
+var time = _dereq_('performance-now');
+
+var self = module.exports = {
+  _running: {},
+
+  animationStarted: function(instance) {
+    self._running[instance._.id] = instance;
+
+    if (!self.isTicking) {
+      self.tick();
+    }
+  },
+
+  animationStopped: function(instance) {
+    delete self._running[instance._.id];
+    self.maybeStopTicking();
+  },
+
+  tick: function() {
+    var lastFrame = time();
+
+    self.isTicking = true;
+    self._rafId = raf(step);
+
+    function step() {
+      self._rafId = raf(step);
+
+      // Get current time
+      var now = time();
+      var deltaT = now - lastFrame;
+
+      for (var animationId in self._running) {
+        self._running[animationId]._tick(deltaT);
+      }
+
+      lastFrame = now;
+    }
+  },
+
+  maybeStopTicking: function() {
+    if (self.isTicking && !Object.keys(self._running).length) {
+      raf.cancel(self._rafId);
+      self.isTicking = false;
+    }
+  },
+
+};
+
+
+},{"performance-now":1,"raf":2}],9:[function(_dereq_,module,exports){
+module.exports = {
+  animator: _dereq_('./animator')
+};
+
+},{"./animator":4}],10:[function(_dereq_,module,exports){
+
+/*
+ * There really is no tiny minimal extend() on npm to find,
+ * so we just use our own.
+ */
+
+module.exports = function extend(obj) {
+   var args = Array.prototype.slice.call(arguments, 1);
+   for(var i = 0; i < args.length; i++) {
+     var source = args[i];
+     if (source) {
+       for (var prop in source) {
+         obj[prop] = source[prop];
+       }
+     }
+   }
+   return obj;
+};
+
+},{}],11:[function(_dereq_,module,exports){
+
+// All we want is an eventEmitter that doesn't use #call or #apply,
+// by expecting 0-1 arguments. 
+// We couldn't find this on npm, so we make our own.
+
+module.exports = SimpleEventEmitter;
+
+function SimpleEventEmitter() {
+}
+
+SimpleEventEmitter.prototype = {
+  listeners: [],
+  on: function(eventType, fn) {
+    if (typeof fn !== 'function') return;
+    this.listeners[eventType] || (this.listeners[eventType] = []);
+    this.listeners[eventType].push(fn);
+  },
+  once: function(eventType, fn) {
+    var self = this;
+    function onceFn() {
+      self.off(eventType, fn);
+      self.off(eventType, onceFn);
+    }
+    this.on(eventType, fn);
+    this.on(eventType, onceFn);
+  },
+  // Built-in limitation: we only expect 0-1 arguments
+  // This is to save as much perf as possible when sending
+  // events every frame.
+  emit: function(eventType, eventArg) {
+    var listeners = this.listeners[eventType] || [];
+    var i = 0;
+    var len = listeners.length;
+    if (arguments.length === 2) {
+      for (i; i < len; i++) listeners[i] && listeners[i](eventArg);
+    } else {
+      for (i; i < len; i++) listeners[i] && listeners[i]();
+    }
+  },
+  off: function(eventType, fnToRemove) {
+    if (!eventType) {
+      //Remove all listeners
+      for (var type in this.listeners) {
+        this.off(type);
+      }
+    } else  {
+      var listeners = this.listeners[eventType];
+      if (listeners) {
+        if (!fnToRemove) {
+          listeners.length = 0;
+        } else {
+          var index = listeners.indexOf(fnToRemove);
+          listeners.splice(index, 1);
+        }
+      }
+    }
+  } 
+};
+
+},{}],12:[function(_dereq_,module,exports){
+
+/**
+ * nextUid() from angular.js
+ * License MIT
+ * http://github.com/angular/angular.js
+ *
+ * A consistent way of creating unique IDs in angular. The ID is a sequence of alpha numeric
+ * characters such as '012ABC'. The reason why we are not using simply a number counter is that
+ * the number string gets longer over time, and it can also overflow, where as the nextId
+ * will grow much slower, it is a string, and it will never overflow.
+ *
+ * @returns an unique alpha-numeric string
+ */
+var uid = [];
+
+module.exports = function nextUid() {
+  var index = uid.length;
+  var digit;
+
+  while(index) {
+    index--;
+    digit = uid[index].charCodeAt(0);
+    if (digit == 57 /*'9'*/) {
+      uid[index] = 'A';
+      return uid.join('');
+    }
+    if (digit == 90  /*'Z'*/) {
+      uid[index] = '0';
+    } else {
+      uid[index] = String.fromCharCode(digit + 1);
+      return uid.join('');
+    }
+  }
+  uid.unshift('0');
+  return uid.join('');
+};
+
+},{}],13:[function(_dereq_,module,exports){
+// shim for using process in browser
+
+var process = module.exports = {};
+
+process.nextTick = (function () {
+    var canSetImmediate = typeof window !== 'undefined'
+    && window.setImmediate;
+    var canPost = typeof window !== 'undefined'
+    && window.postMessage && window.addEventListener
+    ;
+
+    if (canSetImmediate) {
+        return function (f) { return window.setImmediate(f) };
+    }
+
+    if (canPost) {
+        var queue = [];
+        window.addEventListener('message', function (ev) {
+            var source = ev.source;
+            if ((source === window || source === null) && ev.data === 'process-tick') {
+                ev.stopPropagation();
+                if (queue.length > 0) {
+                    var fn = queue.shift();
+                    fn();
+                }
+            }
+        }, true);
+
+        return function nextTick(fn) {
+            queue.push(fn);
+            window.postMessage('process-tick', '*');
+        };
+    }
+
+    return function nextTick(fn) {
+        setTimeout(fn, 0);
+    };
+})();
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+
+process.binding = function (name) {
+    throw new Error('process.binding is not supported');
+}
+
+// TODO(shtylman)
+process.cwd = function () { return '/' };
+process.chdir = function (dir) {
+    throw new Error('process.chdir is not supported');
+};
+
+},{}]},{},[9])
+(9)
+});
 })();
