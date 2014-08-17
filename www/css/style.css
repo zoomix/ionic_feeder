@@ -273,6 +273,8 @@ h1, h2, h3, h4 { color: #fff;}
   border-right: none;
   margin: 0px;
   padding: 0px 25px;
+  min-height: 50px;
+  min-width: 32%;
 }
 .sources .button:FIRST-CHILD {
   border-top-left-radius: 50px;

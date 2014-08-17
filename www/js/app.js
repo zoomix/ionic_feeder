@@ -28,7 +28,7 @@ angular.module('starter', ['ionic'])
     vibrations.setVibrateInterval(vibrateInterval);
   }
 
-  $scope.version = "0.1.1";
+  $scope.version = "0.2.0";
 
   $scope.share = function() {
     var userId = storage.getUserId();
@@ -134,7 +134,6 @@ angular.module('starter', ['ionic'])
   $scope.mostRecentFinishedFeeding=false;
   $scope.updateTimeInMs = 1000;
   $scope.showInfoOverlay = true;
-
 
   $scope.todaysFeedings = function() {
     return $scope.feedingDays[$scope.feedingDays.length - 1];
@@ -352,7 +351,7 @@ angular.module('starter', ['ionic'])
 
   $scope.editFeeding = function(feeding) {
     $scope.editedFeedingOrig = feeding;
-    $scope.editedFeedingModel = { startTime: $filter('date')(feeding.startTime, 'HH:mm'), 
+    $scope.editedFeedingModel = { startTime: feeding.startTime, 
                                   duration: $filter('date')(feeding.duration, 'm'),
                                   supplier: feeding.supplier,
                                   volume: (feeding.volume) ? feeding.volume/10 : 0};
@@ -377,6 +376,19 @@ angular.module('starter', ['ionic'])
       ]
     });
   };
+
+  $scope.editDate = function() {
+    datePicker.show({date: new Date($scope.editedFeedingModel.startTime), mode:'date'}, function(time){
+      alert("Ny tid " + time);  
+    });
+  }
+  $scope.editTime = function() {
+    datePicker.show({date: new Date($scope.editedFeedingModel.startTime), mode:'time'}, function(time){
+      alert("Ny tid " + time);  
+    });
+  }
+
+
 
   $scope.bottleFeeding = function() {
     $scope.bottleFeedingModel = { volume: 15 }

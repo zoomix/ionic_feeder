@@ -117,6 +117,8 @@ Ionic Baby Feeder
     cordova plugin rm org.apache.cordova.core.dialogs
     cordova plugin rm org.apache.cordova.core.vibration
 
+    cordova plugin add https://github.com/VitaliiBlagodir/cordova-plugin-datepicker
+
 ##Tried..
 
     cordova plugin add https://github.com/EddyVerbruggen/LaunchMyApp-PhoneGap-Plugin.git --variable URL_SCHEME=ionicfdr  

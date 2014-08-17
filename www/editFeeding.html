@@ -6,6 +6,26 @@
     <button class="button {{editedFeedingModel.supplier === 'R' && 'selected' || ''}}" ng-click="editedFeedingModel.supplier = 'R'">R</button>
   </div>
 
+  <span class="row editDateAndTimeOuter">
+    <span class="col" ng-click="editDate()">
+      <div class="datepickerButton">
+        <span class="editDay">{{editedFeedingModel.startTime | date:'EEEE' }}</span><br>
+        <span class="editDate">{{editedFeedingModel.startTime | date:'dd MMM' }}</span>
+        <i class="ion-android-dropdown"></i>
+      </div>
+    </span>
+    <span class="col" ng-click="editTime()">
+      <div class="datepickerButton">
+        <span class="editTime">
+          {{editedFeedingModel.startTime | date:'HH:mm' }}
+        </span>
+        <i class="ion-android-dropdown"></i>
+      </div>
+    </span>
+  </span>
+
+  <hr>
+
   <div class="newFeedingVolume" ng-show="editedFeedingModel.supplier === 'B'">
     <div class="header">Volume</div>
     <div>{{editedFeedingModel.volume}}0 ml</div>
@@ -16,6 +36,7 @@
     <div>{{editedFeedingModel.duration}} min</div>
     <div class="range"><input type="range" min="0" max="30" value="{{editedFeedingModel.duration}}" ng-model="editedFeedingModel.duration"></div>
   </div>
+
 
   <button class="button button-block button-round" ng-click="deleteEditedFeeding()">Delete</button>
 

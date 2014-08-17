@@ -1,0 +1,30 @@
+.editDateAndTimeOuter {
+  height: 50px;
+  margin-top: 12px !important;
+  margin-bottom: 18px;
+  color: #FCC108;
+  text-transform: uppercase;
+}
+.editDateAndTimeOuter .col {
+  padding: 0px 10px;  
+  text-align: center;
+}
+.editDateAndTimeOuter .col:first-child {
+  border-right: 1px solid #555;
+}
+.datepickerButton .editDay  { font-size: 10px; line-height: 20px; }
+.datepickerButton .editDate { font-size: 18px; line-height: 20px; }
+.datepickerButton .editTime { font-size: 26px; line-height: 50px; }
+
+.datepickerButton {
+  position: relative;
+  height: 50px;
+  width: 110px;
+  margin: 0px auto;
+}
+
+.ion-android-dropdown {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+}
