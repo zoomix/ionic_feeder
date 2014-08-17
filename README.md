@@ -15,10 +15,10 @@ Ionic Baby Feeder
 * ion-refresher stops updating of timer on samsung s3 running 4.3. =/
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
 * When an ongoing feeding is resynced it is marked as updated. Following syncs will reload the list unecessariliy. 
+* Vibrator fails on 4.4.4. =/
 
 ##FUTURE:
 * MOTD
-* Menu button opens menu
 * Feedback in background without user having to send email.
 * Split up controllers. Extract list controller to save on updating everything on every second
 * Sanitize model.js
@@ -105,6 +105,7 @@ Ionic Baby Feeder
 * Do we need a "start feeding" text between timer and feeding-buttons? Only the first time?
 * Step down the update interval when app is sleeping
 * Feedback
+* Edit feeding time
 
 
 ##Used plugins
