@@ -365,11 +365,20 @@ angular.module('starter', ['ionic'])
         { text: 'Cancel' },
         { text: 'Save', 
           onTap: function (e) {
+            var reloadDays = $scope.editedFeedingModel.timeChanged && [$scope.editedFeedingOrig.startTime, $scope.editedFeedingModel.startTime]
             $scope.editedFeedingOrig.supplier = $scope.editedFeedingModel.supplier;
             $scope.editedFeedingOrig.duration = parseInt($scope.editedFeedingModel.duration) * 60 * 1000;
             $scope.editedFeedingOrig.volume   = $scope.editedFeedingModel.volume * 10;
+            $scope.editedFeedingOrig.startTime= $scope.editedFeedingModel.startTime;
             $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
+            if(reloadDays) {
+              reloadDays = [util.getDaysFromToday(reloadDays[0]), util.getDaysFromToday(reloadDays[1])];
+              $scope.loadData(HISTORY_DAYS - reloadDays[0]);
+              if(reloadDays[0] !== reloadDays[1]) {
+                $scope.loadData(HISTORY_DAYS - reloadDays[1]);
+              }
+            }
             $scope.fetchAndSetTimeSinceLast();
           }
         }
@@ -378,13 +387,25 @@ angular.module('starter', ['ionic'])
   };
 
   $scope.editDate = function() {
-    datePicker.show({date: new Date($scope.editedFeedingModel.startTime), mode:'date'}, function(time){
-      alert("Ny tid " + time);  
+    var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'date', maxDate:new Date()};
+    datePicker.show(options, function(time){
+      if(time) {
+        var oldTime = new Date($scope.editedFeedingModel.startTime);
+        time.setHours(oldTime.getHours());
+        time.setMinutes(oldTime.getMinutes());
+        time.setSeconds(oldTime.getSeconds());
+        $scope.editedFeedingModel.timeChanged = true;
+        $scope.editedFeedingModel.startTime = time.getTime();
+      }
     });
   }
   $scope.editTime = function() {
-    datePicker.show({date: new Date($scope.editedFeedingModel.startTime), mode:'time'}, function(time){
-      alert("Ny tid " + time);  
+    var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'time', maxDate:new Date()};
+    datePicker.show(options, function(time){
+      if(time) {
+        $scope.editedFeedingModel.timeChanged = true;
+        $scope.editedFeedingModel.startTime = time.getTime();
+      }
     });
   }
 

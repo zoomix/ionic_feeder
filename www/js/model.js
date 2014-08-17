@@ -82,6 +82,11 @@ var util = {
     now.setSeconds(0);
     now.setMilliseconds(0);
     return "" + (now.getTime() + offset * 1000 * 60 * 60 * 24);
+  }, 
+
+  getDaysFromToday: function(otherDate) {
+    var msBetween = new Date().getTime() - otherDate;
+    return Math.floor(msBetween / 1000 / 60 / 60 / 24);
   }
 
 }
