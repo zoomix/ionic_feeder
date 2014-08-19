@@ -119,6 +119,27 @@ angular.module('starter', ['ionic'])
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
+
+
+  $ionicModal.fromTemplateUrl('charts.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(chartsModal) {
+    $scope.chartsModal = chartsModal;
+  });
+  $scope.closeChartsModal = function() {
+    $scope.chartsModal.hide();
+  };
+  $scope.$on('$destroy', function() {
+    $scope.chartsModal.remove();
+  });
+  $scope.enterCharts = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+    $scope.chartsModal.show();
+    histogram.draw();
+  }
+
+
 })
 
 .controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
