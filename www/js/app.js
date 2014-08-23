@@ -389,7 +389,7 @@ angular.module('starter', ['ionic'])
   $scope.editDate = function() {
     var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'date', maxDate:new Date()};
     datePicker.show(options, function(time){
-      if(time) {
+      if(time && !isNaN(time.getTime())) {
         var oldTime = new Date($scope.editedFeedingModel.startTime);
         time.setHours(oldTime.getHours());
         time.setMinutes(oldTime.getMinutes());
@@ -402,7 +402,7 @@ angular.module('starter', ['ionic'])
   $scope.editTime = function() {
     var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'time', maxDate:new Date()};
     datePicker.show(options, function(time){
-      if(time) {
+      if(time && !isNaN(time.getTime())) {
         $scope.editedFeedingModel.timeChanged = true;
         $scope.editedFeedingModel.startTime = time.getTime();
       }
