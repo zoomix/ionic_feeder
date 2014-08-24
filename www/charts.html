@@ -5,10 +5,18 @@
   <ion-content ng-controller="ChartsController" id="ChartsController">
 
 
-    <h1>{{daysOfHistory}}</h1>
-    <canvas id="myHistogram"></canvas>
-
-    <canvas id="myPercentage"></canvas>
+    <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
+      <ion-slide> 
+        <canvas id="myHistogram"></canvas>
+        <h3>Feeding time by hour</h3>
+        <p>This chart shows the accumulated number of feedings per hour for the last {{daysOfHistory}} days. It's interesting. You fed your baby <strong>{{histogramPeakTimes()}} times</strong> at around <strong>{{histogramPeakHour()}}</strong> o'clock. That was you max.</p>
+      </ion-slide>  
+      <ion-slide> 
+        <canvas id="myPercentage"></canvas>
+        <h3>Feeding trends</h3>
+        <p>Feedings by source. You see left breaste, right breast and bottle feedings per day.</p>
+      </ion-slide>
+    </ion-slide-box>
 
   </ion-content>
 </div>
