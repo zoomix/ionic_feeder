@@ -136,7 +136,8 @@ angular.module('starter', ['ionic'])
   $scope.enterCharts = function() {
     $ionicSideMenuDelegate.toggleLeft();
     $scope.chartsModal.show();
-    histogram.draw();
+    var chartsScope = angular.element(document.getElementById('ChartsController')).scope();
+    chartsScope.$broadcast("loaded", null);
   }
 
 
@@ -474,5 +475,6 @@ angular.module('starter', ['ionic'])
 
   setTimeout($scope.init(), 1);
 
-
 })
+
+.controller('ChartsController', ChartsController);

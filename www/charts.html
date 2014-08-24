@@ -2,9 +2,13 @@
   <ion-header-bar>
     <h1 class="title">Charts</h1>
   </ion-header-bar>
-  <ion-content>
+  <ion-content ng-controller="ChartsController" id="ChartsController">
 
-    <canvas id="myHistogram" height="200" width="450"></canvas>
+
+    <h1>{{daysOfHistory}}</h1>
+    <canvas id="myHistogram"></canvas>
+
+    <canvas id="myPercentage"></canvas>
 
   </ion-content>
 </div>

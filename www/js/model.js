@@ -203,16 +203,16 @@ var storage = {
     }, this.errorCB);
   },
 
-  getTimesOlderThan: function(startTime, resultCB) {
+  getRowsOlderThan: function(startTime, resultCB) {
     this.db.transaction(function(tx) {
-      tx.executeSql('SELECT startTime FROM ' + storage.tableName + ' where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
-        var times = [];
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
+        var datas = [];
         var len = results.rows.length;
         for (var i = 0; i < len; i++) {
           var row = results.rows.item(i);
-          times.push(row.startTime);
+          datas.push(storage.rowFromDbItem(row));
         }
-        resultCB(times);
+        resultCB(datas);
       }, this.errorCB);
     }, this.errorCB);
   },
