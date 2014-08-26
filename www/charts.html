@@ -8,16 +8,18 @@
     <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
       <ion-slide> 
         <canvas id="myHistogram"></canvas>
-        <select ng-model="histogramTime" ng-options="time.name for time in times" ng-change="updateTime(histogramTime)">
+        <select ng-model="histogramTime" ng-options="time.name for time in times" ng-change="updateHistogramTime(histogramTime)">
         </select>
 
         <h3>Feeding time by hour</h3>
-        <p>This chart shows the accumulated number of feedings per hour for the last {{daysOfHistory}} days. It's interesting. You fed your baby <strong>{{histogramPeakTimes()}} times</strong> at around <strong>{{histogramPeakHour()}}</strong> o'clock. That was you max.</p>
+        <p>This chart shows the accumulated number of feedings per hour for the last {{histogramTime.key}} days. It's interesting. You fed your baby <strong>{{histogramPeakTimes()}} times</strong> at around <strong>{{histogramPeakHour()}}</strong> o'clock. That was you max.</p>
       </ion-slide>  
       <ion-slide> 
         <canvas id="myPercentage"></canvas>
+        <select ng-model="percentageTime" ng-options="time.name for time in times" ng-change="updatePercentageTime(percentageTime)">
+        </select>
         <h3>Feeding trends</h3>
-        <p>Feedings by source. You see left breaste, right breast and bottle feedings per day.</p>
+        <p>Feedings by source. You see <span class="leftColor">left breast</span>, <span class="rightColor">right breast</span> and <span class="bottleColor">bottle feedings</span> per day.</p>
       </ion-slide>
     </ion-slide-box>
 

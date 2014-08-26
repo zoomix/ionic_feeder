@@ -72,19 +72,71 @@ var percentage = {
               'R': new Array(this.nofDaysHistory),
               'B': new Array(this.nofDaysHistory)},
   drawn: false,
+  chart: null,
+  chartData: {
+      labels: [],
+      datasets: [
+        {
+        label: "Left",
+        fillColor: "rgba(220,130,130,0.2)",
+        strokeColor: "rgba(220,130,130,1)",
+        data: []//percentage.suppliers['L']
+        },
+        {
+        label: "Right",
+        fillColor: "rgba(130,220,130,0.2)",
+        strokeColor: "rgba(130,220,130,1)",
+        data: []//percentage.suppliers['R']
+        },
+        {
+        label: "Bottle",
+        fillColor: "rgba(130,130,220,0.2)",
+        strokeColor: "rgba(130,130,220,1)",
+        data: []//percentage.suppliers['B']
+        }
+      ]},
+  chartOptions: { responsive: true,
+                  scaleSteps: 4, 
+                  scaleGridLineWidth : 1,
+                  barValueSpacing: 2,
+                  scaleFontSize: 8,
+                  showTooltips: false,
+                  animation: false,
+                  scaleLabel : "<%if(value%2==0) {%><%=Math.round(value)%><%} else {%><%=''%><%}%>",
+                  pointDot : false },
 
   draw: function() {
     this._fillData(this._makeGraph);
     this.drawn = true;
   },
 
+  update: function() {
+    percentage._fillData(function () {
+      percentage.chartData.datasets[0].data = percentage.suppliers['L'];
+      percentage.chartData.datasets[1].data = percentage.suppliers['R'];
+      percentage.chartData.datasets[2].data = percentage.suppliers['B'];
+      percentage.chart.Line(percentage.chartData, percentage.chartOptions);
+    })
+  },
+
   _fillData: function(doneCB) {
     storage.getRowsOlderThan(util.getToday(-this.nofDaysHistory), function(rows) {
-      var supplier, hour;
+      var supplier;
       console.log("_fillData plows through " + rows.length + " start times");
-      percentage.suppliers = {'L': new Array(percentage.nofDaysHistory),
-                        'R': new Array(percentage.nofDaysHistory),
-                        'B': new Array(percentage.nofDaysHistory)};
+      percentage.suppliers = {'L': Array.apply(null, new Array(percentage.nofDaysHistory)).map(Number.prototype.valueOf,0),
+                              'R': Array.apply(null, new Array(percentage.nofDaysHistory)).map(Number.prototype.valueOf,0),
+                              'B': Array.apply(null, new Array(percentage.nofDaysHistory)).map(Number.prototype.valueOf,0)};
+      percentage.chartData.labels = new Array();
+      var partitionMod = percentage.nofDaysHistory / 4;
+      for(var i=0; i<percentage.nofDaysHistory; i++) {
+        if(i%partitionMod == 0) {
+          var date = new Date(parseInt(util.getToday(-percentage.nofDaysHistory + i)));
+          percentage.chartData.labels.push(date.format("dd MMM"));
+        } else {
+          percentage.chartData.labels.push('');
+        }
+      }
+      percentage.chartData.labels.push('Today');
       var day = 0;
       for(var i=0; i<rows.length; i++) {
         day = percentage.nofDaysHistory - util.getDaysFromToday(parseInt(rows[i].startTime));
@@ -97,38 +149,11 @@ var percentage = {
 
   _makeGraph: function() {
     var ctx = document.getElementById("myPercentage").getContext("2d");
-    var data = {
-      labels: [],
-      datasets: [
-        {
-        label: "Left",
-        fillColor: "rgba(220,130,130,0.2)",
-        strokeColor: "rgba(220,130,130,1)",
-        data: percentage.suppliers['L']
-        },
-        {
-        label: "Right",
-        fillColor: "rgba(130,220,130,0.2)",
-        strokeColor: "rgba(130,220,130,1)",
-        data: percentage.suppliers['R']
-        },
-        {
-        label: "Bottle",
-        fillColor: "rgba(130,130,220,0.2)",
-        strokeColor: "rgba(130,130,220,1)",
-        data: percentage.suppliers['B']
-        }
-      ]};
-    for(var i=0; i<percentage.nofDaysHistory; i++) {
-      data.labels.push(-percentage.nofDaysHistory + i);
-    }
-    var options = { responsive: true, 
-                    scaleGridLineWidth : 1,
-                    barValueSpacing: 2,
-                    scaleFontSize: 8,
-                    showTooltips: false,
-                    pointDot : false }
-    var myLineChart = new Chart(ctx).Line(data, options);
+    percentage.chart = new Chart(ctx);
+    percentage.chartData.datasets[0].data = percentage.suppliers['L'];
+    percentage.chartData.datasets[1].data = percentage.suppliers['R'];
+    percentage.chartData.datasets[2].data = percentage.suppliers['B'];
+    percentage.chart.Line(percentage.chartData, percentage.chartOptions);
   }
 
 }

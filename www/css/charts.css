@@ -15,3 +15,7 @@
 .Charts strong {
   color: #FCC108;
 }
+
+.Charts .leftColor   { color: rgba(220,130,130,1);}
+.Charts .rightColor  { color: rgba(130,220,130,1);}
+.Charts .bottleColor { color: rgba(130,130,220,1);}
