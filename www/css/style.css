@@ -504,9 +504,3 @@ input[type="range"]::-webkit-slider-thumb:before {
   top: 130px;
   left: -151px;
 }
-
-canvas{
-  width: 100% !important;
-  height: auto !important;
-}
-.slider-pager {top: 0px;}

@@ -1,0 +1,17 @@
+.Charts canvas{
+  width: 100% !important;
+  height: auto !important;
+  margin-top: 40px;
+}
+
+.Charts .slider-pager {top: 0px;}
+
+.Charts select {
+  width: 100%;
+  height: 40px;
+  background-color: #242730;
+}
+
+.Charts strong {
+  color: #FCC108;
+}

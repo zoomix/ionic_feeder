@@ -2,12 +2,15 @@
   <ion-header-bar>
     <h1 class="title">Charts</h1>
   </ion-header-bar>
-  <ion-content ng-controller="ChartsController" id="ChartsController">
+  <ion-content ng-controller="ChartsController" id="ChartsController" class="Charts">
 
 
     <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
       <ion-slide> 
         <canvas id="myHistogram"></canvas>
+        <select ng-model="histogramTime" ng-options="time.name for time in times" ng-change="updateTime(histogramTime)">
+        </select>
+
         <h3>Feeding time by hour</h3>
         <p>This chart shows the accumulated number of feedings per hour for the last {{daysOfHistory}} days. It's interesting. You fed your baby <strong>{{histogramPeakTimes()}} times</strong> at around <strong>{{histogramPeakHour()}}</strong> o'clock. That was you max.</p>
       </ion-slide>  
