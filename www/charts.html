@@ -8,7 +8,7 @@
     <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
       <ion-slide> 
         <canvas id="myHistogram"></canvas>
-        <select ng-model="histogramTime" ng-options="time.name for time in times" ng-change="updateHistogramTime(histogramTime)">
+        <select ng-model="histogramTime" ng-options="time.name for time in histogramTimes" ng-change="updateHistogramTime(histogramTime)">
         </select>
 
         <h3>Feeding time by hour</h3>
@@ -17,7 +17,7 @@
       </ion-slide>  
       <ion-slide> 
         <canvas id="myPercentage"></canvas>
-        <select ng-model="percentageTime" ng-options="time.name for time in times" ng-change="updatePercentageTime(percentageTime)">
+        <select ng-model="percentageTime" ng-options="time.name for time in percentageTimes" ng-change="updatePercentageTime(percentageTime)">
         </select>
         <h3>Feeding trends</h3>
         <p>Feedings by source. You see <span class="leftColor">left breast</span>, <span class="rightColor">right breast</span> and <span class="bottleColor">bottle feedings</span> per day.</p>

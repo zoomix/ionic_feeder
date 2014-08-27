@@ -1,16 +1,20 @@
 var ChartsController = function($scope) {
-  $scope.times = [{key: 3,  name: "3 days"},
-                  {key: 7,  name: "1 week"},
-                  {key: 14, name: "2 weeks"},
-                  {key: 28, name: "4 weeks"} ]
-  $scope.histogramTime = $scope.times[2];
+  $scope.histogramTimes = [{key: 3,  name: "3 days"},
+                           {key: 7,  name: "1 week"},
+                           {key: 14, name: "2 weeks"},
+                           {key: 28, name: "4 weeks"} ]
+  $scope.histogramTime = $scope.histogramTimes[2];
   $scope.updateHistogramTime = function(newHistogramTime) {
     $scope.histogramTime = newHistogramTime;
     histogram.nofDaysHistory = $scope.histogramTime.key;
     histogram.update();
   }
 
-  $scope.percentageTime = $scope.times[2];
+  $scope.percentageTimes = [{key: 7,  name: "1 week"},
+                            {key: 14, name: "2 weeks"},
+                            {key: 28, name: "4 weeks"},
+                            {key: 56, name: "8 weeks"} ]
+  $scope.percentageTime = $scope.percentageTimes[1];
   $scope.updatePercentageTime = function(newpercentageTime) {
     $scope.percentageTime = newpercentageTime;
     percentage.nofDaysHistory = $scope.percentageTime.key;

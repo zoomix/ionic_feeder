@@ -123,9 +123,9 @@ var percentage = {
     storage.getRowsOlderThan(util.getToday(-this.nofDaysHistory), function(rows) {
       var supplier;
       console.log("_fillData plows through " + rows.length + " start times");
-      percentage.suppliers = {'L': Array.apply(null, new Array(percentage.nofDaysHistory)).map(Number.prototype.valueOf,0),
-                              'R': Array.apply(null, new Array(percentage.nofDaysHistory)).map(Number.prototype.valueOf,0),
-                              'B': Array.apply(null, new Array(percentage.nofDaysHistory)).map(Number.prototype.valueOf,0)};
+      percentage.suppliers = {'L': Array.apply(null, new Array(percentage.nofDaysHistory+1)).map(Number.prototype.valueOf,0),
+                              'R': Array.apply(null, new Array(percentage.nofDaysHistory+1)).map(Number.prototype.valueOf,0),
+                              'B': Array.apply(null, new Array(percentage.nofDaysHistory+1)).map(Number.prototype.valueOf,0)};
       percentage.chartData.labels = new Array();
       var partitionMod = percentage.nofDaysHistory / 4;
       for(var i=0; i<percentage.nofDaysHistory; i++) {
