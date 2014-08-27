@@ -78,20 +78,20 @@ var percentage = {
       datasets: [
         {
         label: "Left",
-        fillColor: "rgba(220,130,130,0.2)",
-        strokeColor: "rgba(220,130,130,1)",
+        fillColor: "rgba(252,193,8,0.2)",
+        strokeColor: "rgba(252,193,8,1)",
         data: []//percentage.suppliers['L']
         },
         {
         label: "Right",
-        fillColor: "rgba(130,220,130,0.2)",
-        strokeColor: "rgba(130,220,130,1)",
+        fillColor: "rgba(6,224,198,0.2)",
+        strokeColor: "rgba(6,224,198,1)",
         data: []//percentage.suppliers['R']
         },
         {
         label: "Bottle",
-        fillColor: "rgba(130,130,220,0.2)",
-        strokeColor: "rgba(130,130,220,1)",
+        fillColor: "rgba(255,255,255,0.2)",
+        strokeColor: "rgba(255,255,255,1)",
         data: []//percentage.suppliers['B']
         }
       ]},

@@ -55,6 +55,11 @@ var ChartsController = function($scope) {
   $scope.percentageBeginDistro = function(supplier) {
     return percentage.suppliers[supplier][0];
   }
+  $scope.percentageHasDataAtBegin = function(supplier) {
+    return $scope.percentageBeginDistro('L') > 0 ||
+           $scope.percentageBeginDistro('R') > 0 ||
+           $scope.percentageBeginDistro('B') > 0;
+  }
   $scope.percentageEndDistro = function(supplier) {
     return percentage.suppliers[supplier][percentage.suppliers[supplier].length - 1];
   }
