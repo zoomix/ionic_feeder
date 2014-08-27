@@ -26,6 +26,7 @@ Ionic Baby Feeder
 * Share code via nfc. phonegap-nfc
 * Refresh button in main view instead of menu?
 * Skins for app
+* Predictive charts
 * More tests
 
 
@@ -106,6 +107,7 @@ Ionic Baby Feeder
 * Step down the update interval when app is sleeping
 * Feedback
 * Edit feeding time
+* Charts
 
 
 ##Used plugins
