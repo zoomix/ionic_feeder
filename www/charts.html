@@ -12,7 +12,8 @@
         </select>
 
         <h3>Feeding time by hour</h3>
-        <p>This chart shows the accumulated number of feedings per hour for the last {{histogramTime.key}} days. It's interesting. You fed your baby <strong>{{histogramPeakTimes()}} times</strong> at around <strong>{{histogramPeakHour()}}</strong> o'clock. That was you max.</p>
+        <p>This chart shows the accumulated number of feedings per hour for the last {{histogramTime.key}} days. It's interesting.</p>
+        <p ng-show="histogramPeakTimes() > 2">You fed your baby <strong>{{histogramPeakTimes()}} times</strong> at around <strong>{{histogramPeakHour()}} o'clock</strong>. That was you max.</p>
       </ion-slide>  
       <ion-slide> 
         <canvas id="myPercentage"></canvas>
@@ -20,6 +21,7 @@
         </select>
         <h3>Feeding trends</h3>
         <p>Feedings by source. You see <span class="leftColor">left breast</span>, <span class="rightColor">right breast</span> and <span class="bottleColor">bottle feedings</span> per day.</p>
+        <p>At the begining of the period it was <span class="leftColor">{{percentageBeginDistro('L')}}</span> and <span class="rightColor">{{percentageBeginDistro('R')}}</span> feedings a day per left and right breast, and <span class="bottleColor">{{percentageBeginDistro('B')}}</span> bottle feedings. Now it's <span class="leftColor">{{percentageEndDistro('L')}}</span> left and <span class="rightColor">{{percentageEndDistro('R')}}</span> right breast with <span class="bottleColor">{{percentageEndDistro('B')}}</span> bottle feedings.</p>
       </ion-slide>
     </ion-slide-box>
 

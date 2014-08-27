@@ -48,4 +48,11 @@ var ChartsController = function($scope) {
     return maxIndex;
   }
 
+  $scope.percentageBeginDistro = function(supplier) {
+    return percentage.suppliers[supplier][0];
+  }
+  $scope.percentageEndDistro = function(supplier) {
+    return percentage.suppliers[supplier][percentage.suppliers[supplier].length - 1];
+  }
+
 }
