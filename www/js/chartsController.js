@@ -27,29 +27,11 @@ var ChartsController = function($scope) {
   });
 
   $scope.histogramPeakTimes = function() {
-    var max = 0;
-    var maxIndex = 0;
-    for (var i = 0; i < histogram.hours.length; i++) {
-      var val = histogram.hours[i];
-      if (val > max) {
-        max = val;
-        maxIndex = i;
-      }
-    };
-    return max;
+    return histogram.peakTimes;
   }
 
   $scope.histogramPeakHour = function() {
-    var max = 0;
-    var maxIndex = 0;
-    for (var i = 0; i < histogram.hours.length; i++) {
-      var val = histogram.hours[i];
-      if (val > max) {
-        max = val;
-        maxIndex = i;
-      }
-    };
-    return maxIndex;
+    return histogram.peakHour;
   }
 
   $scope.percentageBeginDistro = function(supplier) {

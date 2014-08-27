@@ -2,6 +2,8 @@ var histogram = {
   hours: new Array(24),
   drawn: false,
   nofDaysHistory: 14,
+  peakHour: 0,
+  peakTimes: 0,
   chart: null,
   chartOptions: { responsive: true, 
                   animation: false,
@@ -46,8 +48,23 @@ var histogram = {
         hour = date.getHours();
         histogram.hours[hour] = (histogram.hours[hour] || 0) + 1
       }
+      histogram._setPeaks();
       doneCB();
     });
+  },
+
+  _setPeaks: function() {
+    var max = 0;
+    var maxIndex = 0;
+    for (var i = 0; i < histogram.hours.length; i++) {
+      var val = histogram.hours[i];
+      if (val > max) {
+        max = val;
+        maxIndex = i;
+      }
+    };
+    histogram.peakTimes = max;
+    histogram.peakHour = maxIndex;
   },
 
   _makeGraph: function() {
