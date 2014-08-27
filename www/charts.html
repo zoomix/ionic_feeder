@@ -13,7 +13,16 @@
 
         <h3>Feeding times by hour</h3>
         <p>This chart shows the accumulated number of feedings per hour for the last {{histogramTime.key}} days. It's interesting.</p>
-        <p ng-show="histogramPeakTimes() > 2">You fed your baby <strong>{{histogramPeakTimes()}} times</strong> at around <strong>{{histogramPeakHour()}} o'clock</strong>. That was you max.</p>
+
+        <hr>
+        <div class="chartDescContent">
+          <div class="chartDescHead">Most common time</div>
+          <div class="chartDescText">
+            You fed your baby</span><br>
+            <strong>{{histogramPeakTimes()}} times</strong> at
+          </div>
+          <span class="tag"><span class="bottleColor">{{histogramPeakHour()}}</span>o'clock</span>
+        </div>
       </ion-slide>
 
       <ion-slide> 
@@ -24,14 +33,14 @@
         <p>This chart shows the number of feedings by source. You see <span class="leftColor">left breast</span>, <span class="rightColor">right breast</span> and <span class="bottleColor">bottle feedings</span> per day.</p>
         
         <hr>
-        <div class="percentageContent">
-          <div class="percentageHead">Today</div>
+        <div class="chartDescContent">
+          <div class="chartDescHead">Today</div>
           <span class="tag"><span class="leftColor">{{percentageEndDistro('L')}}</span>left</span>
           <span class="tag"><span class="bottleColor">{{percentageEndDistro('B')}}</span>bottle</span>
           <span class="tag"><span class="rightColor">{{percentageEndDistro('R')}}</span>right</span>
         </div>
-        <div class="percentageContent" ng-show="percentageHasDataAtBegin()">
-          <div class="percentageHead">{{percentageTime.name}} ago</div>
+        <div class="chartDescContent" ng-show="percentageHasDataAtBegin()">
+          <div class="chartDescHead">{{percentageTime.name}} ago</div>
           <span class="tag"><span class="leftColor">{{percentageBeginDistro('L')}}</span>left</span>
           <span class="tag"><span class="bottleColor">{{percentageBeginDistro('B')}}</span>bottle</span>
           <span class="tag"><span class="rightColor">{{percentageBeginDistro('R')}}</span>right</span>
