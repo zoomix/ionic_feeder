@@ -1,0 +1,54 @@
+<div class="modal">
+  <ion-header-bar>
+    <h1 class="title">Charts</h1>
+  </ion-header-bar>
+  <ion-content ng-controller="ChartsController" id="ChartsController" class="Charts">
+
+
+    <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
+      <ion-slide> 
+        <canvas id="myHistogram"></canvas>
+        <select ng-model="histogramTime" ng-options="time.name for time in histogramTimes" ng-change="updateHistogramTime(histogramTime)">
+        </select>
+
+        <h3>Feeding times by hour</h3>
+        <p class="chartDescText">This chart shows the accumulated number of feedings per hour for the last {{histogramTime.key}} days. It's interesting.</p>
+
+        <hr>
+        <div class="chartDescContent">
+          <div class="chartDescHead">Most common time</div>
+          <div class="chartDescText">
+            You fed your baby</span><br>
+            <strong>{{histogramPeakTimes()}} times</strong> at
+          </div>
+          <span class="tag"><span class="bottleColor">{{histogramPeakHour()}}</span>o'clock</span>
+        </div>
+      </ion-slide>
+
+      <ion-slide> 
+        <canvas id="myPercentage"></canvas>
+        <select ng-model="percentageTime" ng-options="time.name for time in percentageTimes" ng-change="updatePercentageTime(percentageTime)">
+        </select>
+        <h3>Feeding trends</h3>
+        <p class="chartDescText">This chart shows the number of feedings by source. You see <span class="leftColor">left breast</span>, <span class="rightColor">right breast</span> and <span class="bottleColor">bottle feedings</span> per day.</p>
+        
+        <hr>
+        <div class="chartDescContent">
+          <div class="chartDescHead">Today</div>
+          <span class="tag"><span class="leftColor">{{percentageEndDistro('L')}}</span>left</span>
+          <span class="tag"><span class="bottleColor">{{percentageEndDistro('B')}}</span>bottle</span>
+          <span class="tag"><span class="rightColor">{{percentageEndDistro('R')}}</span>right</span>
+        </div>
+        <div class="chartDescContent" ng-show="percentageHasDataAtBegin()">
+          <div class="chartDescHead">{{percentageTime.name}} ago</div>
+          <span class="tag"><span class="leftColor">{{percentageBeginDistro('L')}}</span>left</span>
+          <span class="tag"><span class="bottleColor">{{percentageBeginDistro('B')}}</span>bottle</span>
+          <span class="tag"><span class="rightColor">{{percentageBeginDistro('R')}}</span>right</span>
+        </div>
+
+      </ion-slide>
+    </ion-slide-box>
+
+  </ion-content>
+</div>
+

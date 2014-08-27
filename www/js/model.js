@@ -203,6 +203,20 @@ var storage = {
     }, this.errorCB);
   },
 
+  getRowsOlderThan: function(startTime, resultCB) {
+    this.db.transaction(function(tx) {
+      tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
+        var datas = [];
+        var len = results.rows.length;
+        for (var i = 0; i < len; i++) {
+          var row = results.rows.item(i);
+          datas.push(storage.rowFromDbItem(row));
+        }
+        resultCB(datas);
+      }, this.errorCB);
+    }, this.errorCB);
+  },
+
   getMostRecentFinishedFeeding: function(resultCB) {
     this.db.transaction(function(tx) {
       tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and ongoing <> "true" order by startTime desc limit 1', [], function(tx, results) {

@@ -8,6 +8,7 @@
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/editFeeding.css" rel="stylesheet">
+    <link href="css/charts.css" rel="stylesheet">
 
     <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
     <link href="css/ionic.app.css" rel="stylesheet">
@@ -25,10 +26,13 @@
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
+    <script src="lib/chartjs/Chart.js"></script>
     <script src="js/config.js"></script>
     <script src="js/protos.js"></script>
     <script src="js/model.js"></script>
+    <script src="js/chartsController.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/chartData.js"></script>
   </head>
   <body ng-app="starter">
 
@@ -112,13 +116,14 @@
         <ion-list>
           <div class="version">&copy; Ionic Baby Feeder v{{version}}</div>
           <div class="settings">
-            <!-- <ion-item ng-click="toggleDemoMode()" class="item item-icon-right">Demo mode<i ng-show="demoModeOn" class="icon ion-toggle-filled"></i><i ng-show="!demoModeOn" class="icon ion-toggle"></i></ion-item> -->
+            <ion-item ng-click="toggleDemoMode()" class="item item-icon-right">Demo mode<i ng-show="demoModeOn" class="icon ion-toggle-filled"></i><i ng-show="!demoModeOn" class="icon ion-toggle"></i></ion-item>
             <ion-item ng-click="toggleVibrate()"  class="item item-icon-right">Buzz every 5 min<i ng-show="vibrateOn" class="icon ion-toggle-filled"></i><i ng-show="!vibrateOn" class="icon ion-toggle"></i></ion-item>
           </div>
 
           <div class="tools">
             <ion-item ng-click="resyncToday()"    class="noicon">Refresh</ion-item>
             <ion-item ng-click="connectDevices()" class="noicon">Connect devices</ion-item>
+            <ion-item ng-click="enterCharts()"    class="noicon">Charts</ion-item>
             <ion-item ng-click="feedback()"       class="noicon">Email us feedback</ion-item>
             <ion-item ng-click="exitApp()"        class="noicon">Exit</ion-item>
           </div>
@@ -127,8 +132,6 @@
     </ion-side-menu>
 
   </ion-side-menus>
-
-
 
   </body>
 </html>

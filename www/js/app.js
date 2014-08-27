@@ -119,6 +119,28 @@ angular.module('starter', ['ionic'])
   $scope.$on('$destroy', function() {
     $scope.modal.remove();
   });
+
+
+  $ionicModal.fromTemplateUrl('charts.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(chartsModal) {
+    $scope.chartsModal = chartsModal;
+  });
+  $scope.closeChartsModal = function() {
+    $scope.chartsModal.hide();
+  };
+  $scope.$on('$destroy', function() {
+    $scope.chartsModal.remove();
+  });
+  $scope.enterCharts = function() {
+    $ionicSideMenuDelegate.toggleLeft();
+    $scope.chartsModal.show();
+    var chartsScope = angular.element(document.getElementById('ChartsController')).scope();
+    chartsScope.$broadcast("loaded", null);
+  }
+
+
 })
 
 .controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
@@ -453,5 +475,6 @@ angular.module('starter', ['ionic'])
 
   setTimeout($scope.init(), 1);
 
-
 })
+
+.controller('ChartsController', ChartsController);
