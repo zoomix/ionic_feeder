@@ -273,7 +273,7 @@ h1, h2, h3, h4 { color: #fff;}
   border-right: none;
   margin: 0px;
   padding: 0px 25px;
-  min-height: 50px;
+  min-height: 45px;
   min-width: 32%;
 }
 .sources .button:FIRST-CHILD {
@@ -290,7 +290,7 @@ h1, h2, h3, h4 { color: #fff;}
 .popup .button-block {
   border-color: #8b8b8b;
   font-size: 16px;
-  margin: 0px 4px 20px;
+  margin: 0px 0px 20px;
 }
 
 .item-input {

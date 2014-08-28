@@ -19,10 +19,13 @@
 .datepickerButton {
   position: relative;
   height: 50px;
-  width: 110px;
+  width: 102px;
   margin: 0px auto;
 }
 
+.deleteButtonContainer  {
+  padding: 0px 4px;
+}
 .ion-android-dropdown {
   position: absolute;
   right: 0px;
