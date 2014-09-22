@@ -149,7 +149,7 @@ angular.module('starter', ['ionic'])
   $scope.rClass="";
   $scope.updateTimeInMs = 1000;
 
-  var mytimeout = null;
+  var counterTimeout = null;
 
   $scope.onTimeout = function(){
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
@@ -159,7 +159,7 @@ angular.module('starter', ['ionic'])
         $scope.toggleFeeding($scope.currentFeeding.supplier);
       }
       vibrations.doVibrate($scope.currentFeeding.duration);
-      mytimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
+      counterTimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
     }
   };
 
@@ -250,6 +250,8 @@ angular.module('starter', ['ionic'])
   $scope.showInfoOverlay = true;
   $scope.updateTimeInMs = 30000;
 
+  var mytimeout = null;
+
   $scope.todaysFeedings = function() {
     return $scope.feedingDays[$scope.feedingDays.length - 1];
   }
@@ -293,25 +295,24 @@ angular.module('starter', ['ionic'])
   });
 
   $scope.reloadTodaysFeedings = function() {
-      $scope.loading += 1; //Start loading
-      $scope.fetchAndSetTimeSinceLast();
-      storage.getOngoingFeeding(function(ongoingFeeding) {
-        ongoingFeeding && $scope.continue(ongoingFeeding);
-      });
-      storage.getDataForDay(0, function (rows) {
-        var latestRow = rows.length > 0 && rows[0];
-        $scope.setFeedingDay(HISTORY_DAYS, rows);
-        util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
-        $scope.setPredictedSupplier(rows);
-        $scope.loadData(HISTORY_DAYS - 1); //load yesterdays data too
-        $scope.$apply();
-        mytimeout = $timeout($scope.onTimeout,$scope.updateTimeInMs);
-        // $scope.setupDocumentEvents(latestRow);
-        $scope.loading += 1; //Start syncing
-        app.getNewFeedings(latestRow.startTime, $scope.postSync);
-        $scope.loading -= 1; //Stop loading
-        $scope.resizeList();
-      });
+    $scope.loading += 1; //Start loading
+    $scope.fetchAndSetTimeSinceLast();
+    storage.getOngoingFeeding(function(ongoingFeeding) {
+      ongoingFeeding && $scope.continue(ongoingFeeding);
+    });
+    storage.getDataForDay(0, function (rows) {
+      var latestRow = rows.length > 0 && rows[0];
+      $scope.setFeedingDay(HISTORY_DAYS, rows);
+      util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
+      $scope.setPredictedSupplier(rows);
+      $scope.loadData(HISTORY_DAYS - 1); //load yesterdays data too
+      $scope.$apply();
+      mytimeout = $timeout($scope.onTimeout,$scope.updateTimeInMs);
+      $scope.loading += 1; //Start syncing
+      app.getNewFeedings(latestRow.startTime, $scope.postSync);
+      $scope.loading -= 1; //Stop loading
+      $scope.resizeList();
+    });
   }
 
   $scope.postSync = function(needReloading, ongoingFeeding) {
@@ -323,6 +324,7 @@ angular.module('starter', ['ionic'])
       $scope.fetchAndSetTimeSinceLast();
     }
     $scope.loading -= 1;
+    $scope.$apply();
   }
 
   $scope.setPredictedSupplier = function(feedings) {
