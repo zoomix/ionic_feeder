@@ -255,6 +255,10 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.setupDocumentEvents(new Date().getTime());
+  storage.getOngoingFeeding(function(ongoingFeeding) {
+    $scope.currentFeeding = ongoingFeeding;
+    ongoingFeeding && $scope.continue(ongoingFeeding);
+  });
 
 })
 
@@ -314,9 +318,6 @@ angular.module('starter', ['ionic'])
   $scope.reloadTodaysFeedings = function() {
     $scope.loading += 1; //Start loading
     $scope.fetchAndSetTimeSinceLast();
-    storage.getOngoingFeeding(function(ongoingFeeding) {
-      ongoingFeeding && $scope.continue(ongoingFeeding);
-    });
     storage.getDataForDay(0, function (rows) {
       var latestRow = rows.length > 0 && rows[0];
       $scope.setFeedingDay(HISTORY_DAYS, rows);
