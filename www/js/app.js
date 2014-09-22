@@ -225,6 +225,23 @@ angular.module('starter', ['ionic'])
     });
   }
 
+  $scope.setPredictedSupplier = function(feedings) {
+    storage.predictSupplier(feedings, function(supplier) {
+      $scope.lClass = "";
+      $scope.rClass = "";
+      if( $scope.ongoingFeeding ) {
+        return;
+      }
+      if(supplier === 'L') {
+        $scope.lClass = "selected";
+      } else if(supplier === 'R') {
+        $scope.rClass = "selected";
+      }
+    })
+  }
+
+
+
   $scope.setupDocumentEvents = function(timeSinceLastUpdate) {
     document.addEventListener('resume', function () {
       $scope.updateTimeInMs = 1000;
@@ -304,7 +321,7 @@ angular.module('starter', ['ionic'])
       var latestRow = rows.length > 0 && rows[0];
       $scope.setFeedingDay(HISTORY_DAYS, rows);
       util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
-      $scope.setPredictedSupplier(rows);
+      $scope.$$childHead.setPredictedSupplier(rows);
       $scope.loadData(HISTORY_DAYS - 1); //load yesterdays data too
       $scope.$apply();
       mytimeout = $timeout($scope.onTimeout,$scope.updateTimeInMs);
@@ -318,28 +335,13 @@ angular.module('starter', ['ionic'])
   $scope.postSync = function(needReloading, ongoingFeeding) {
     ongoingFeeding && $scope.continue(ongoingFeeding);
     $scope.setTimeSinceLast();
-    $scope.setPredictedSupplier();
+    $scope.$$childHead.setPredictedSupplier();
     if (needReloading) {
       $scope.reloadActivePage();
       $scope.fetchAndSetTimeSinceLast();
     }
     $scope.loading -= 1;
     $scope.$apply();
-  }
-
-  $scope.setPredictedSupplier = function(feedings) {
-    storage.predictSupplier(feedings, function(supplier) {
-      $scope.lClass = "";
-      $scope.rClass = "";
-      if( $scope.ongoingFeeding ) {
-        return;
-      }
-      if(supplier === 'L') {
-        $scope.lClass = "selected";
-      } else if(supplier === 'R') {
-        $scope.rClass = "selected";
-      }
-    })
   }
 
   $scope.slideHasChanged = function(index) {
@@ -396,7 +398,7 @@ angular.module('starter', ['ionic'])
         $scope.editedFeedingOrig.updatedAt= new Date().getTime();
         storage.storeAndSync($scope.editedFeedingOrig);
         $scope.reloadActivePage();
-        $scope.setPredictedSupplier();
+        $scope.$$childHead.setPredictedSupplier();
         $scope.fetchAndSetTimeSinceLast();
         $scope.editFeedingPopup.close();
       } else {
