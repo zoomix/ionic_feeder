@@ -159,8 +159,8 @@ angular.module('starter', ['ionic'])
         $scope.toggleFeeding($scope.currentFeeding.supplier);
       }
       vibrations.doVibrate($scope.currentFeeding.duration);
+      mytimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
     }
-    mytimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
   };
 
   $scope.toggleFeeding = function(supplier) {
