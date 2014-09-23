@@ -82,10 +82,6 @@ angular.module('starter', ['ionic'])
     })
   }
 
-  $scope.postAllFeedings = function() {
-    app.postAllFeedings();
-  }
-
   $scope.userId = function() {
     return storage.getUserId();
   }
@@ -152,6 +148,7 @@ angular.module('starter', ['ionic'])
   var counterTimeout = null;
 
   $scope.onTimeout = function(){
+    console.log("timeout: CounterCtrl " + new Date());
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
       $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
       if($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
@@ -282,6 +279,7 @@ angular.module('starter', ['ionic'])
   }
 
   $scope.onTimeout = function() {
+    console.log("timeout: ListCtrl " + new Date());
     $scope.setTimeSinceLast();  
     mytimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
   }

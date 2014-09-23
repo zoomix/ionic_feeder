@@ -259,7 +259,8 @@ h1, h2, h3, h4 { color: #fff;}
 }
 
 .popup {
-  background-color: #242730;
+  background-color: #242730 !important;
+  width: 80% !important;
 }
 
 .popup-buttons .button, .popup-buttons .button:HOVER, .popup-buttons .button:FIRST-CHILD, .popup-buttons .button:LAST-CHILD {
@@ -285,8 +286,11 @@ h1, h2, h3, h4 { color: #fff;}
   border-bottom-right-radius: 50px;
   border-right: 2px solid #06E0C6;
 }
-.popup .sources { text-align: center; display: inline-table;}
-.popup { width: 80%}
+.popup .sources { 
+  text-align: center;
+  min-height: 45px;
+  padding: 8px;
+}
 .popup .button-block {
   border-color: #8b8b8b;
   font-size: 16px;
