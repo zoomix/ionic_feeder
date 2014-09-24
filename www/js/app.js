@@ -82,10 +82,6 @@ angular.module('starter', ['ionic'])
     })
   }
 
-  $scope.postAllFeedings = function() {
-    app.postAllFeedings();
-  }
-
   $scope.userId = function() {
     return storage.getUserId();
   }
@@ -139,98 +135,20 @@ angular.module('starter', ['ionic'])
     var chartsScope = angular.element(document.getElementById('ChartsController')).scope();
     chartsScope.$broadcast("loaded", null);
   }
-
-
 })
 
 .controller('CounterCtrl', function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
-  $scope.feedingDays = new Array(1);
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
   $scope.lClass="";
   $scope.rClass="";
-  $scope.timeSinceLast = "";
-  $scope.activeSlide = HISTORY_DAYS;
-  $scope.loading=0;
-  $scope.mostRecentFinishedFeeding=false;
   $scope.updateTimeInMs = 1000;
-  $scope.showInfoOverlay = true;
 
-  $scope.todaysFeedings = function() {
-    return $scope.feedingDays[$scope.feedingDays.length - 1];
-  }
-
-  $scope.getFeedingDay = function(slideNr) {
-    return $scope.feedingDays[slideNr];
-  }
-
-  $scope.setFeedingDay = function(slideNr, feedings) {
-    console.log("Setting @" + slideNr + " value " + feedings);
-    var index = HISTORY_DAYS - slideNr;
-    if (index > $scope.feedingDays.length) {
-      $scope.feedingDays.unshift(null);
-      $scope.setFeedingDay(slideNr, feedings);
-    } else {
-      $scope.feedingDays[slideNr] = feedings;
-    }
-  }
-
-  $scope.fetchAndSetTimeSinceLast = function() {
-    storage.getMostRecentFinishedFeeding(function(row) {
-      $scope.mostRecentFinishedFeeding = row;
-      $scope.setTimeSinceLast();
-    });
-  }
-  $scope.setTimeSinceLast = function() {
-    if($scope.mostRecentFinishedFeeding) {
-      var sinceLastStart = util.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime);
-      var sinceLastEnd = util.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime - $scope.mostRecentFinishedFeeding.duration);
-      $scope.timeSinceLast = sinceLastEnd;
-    }
-  }
-
-  var mytimeout = null;
-
-  $scope.$on("resync", function (event, args) {
-    $scope.reloadTodaysFeedings();
-  });
-
-  $scope.reloadTodaysFeedings = function() {
-      $scope.loading += 1; //Start loading
-      $scope.fetchAndSetTimeSinceLast();
-      storage.getOngoingFeeding(function(ongoingFeeding) {
-        ongoingFeeding && $scope.continue(ongoingFeeding);
-      });
-      storage.getDataForDay(0, function (rows) {
-        var latestRow = rows.length > 0 && rows[0];
-        $scope.setFeedingDay(HISTORY_DAYS, rows);
-        util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
-        $scope.setPredictedSupplier(rows);
-        $scope.loadData(HISTORY_DAYS - 1); //load yesterdays data too
-        $scope.$apply();
-        mytimeout = $timeout($scope.onTimeout,$scope.updateTimeInMs);
-        $scope.setupDocumentEvents(latestRow);
-        $scope.loading += 1; //Start syncing
-        app.getNewFeedings(latestRow.startTime, $scope.postSync);
-        $scope.loading -= 1; //Stop loading
-        $scope.resizeList();
-      });
-  }
-
-  $scope.setupDocumentEvents = function(latestRow) {
-    document.addEventListener('resume', function () {
-      $scope.updateTimeInMs = 1000;
-      $scope.onTimeout(); //Better not wait for the sleeping timeout (>10s) to trigger. Trigger it not to keep ticking.
-      $scope.loading += 1; //Start syncing on resume
-      app.getNewFeedings(latestRow.startTime, $scope.postSync);
-    }, false);
-    document.addEventListener('pause', function () {
-      $scope.updateTimeInMs = 15000;
-    }, false);
-  }
+  var counterTimeout = null;
 
   $scope.onTimeout = function(){
+    console.log("timeout: CounterCtrl " + new Date());
     if($scope.currentFeeding && $scope.currentFeeding.ongoing) {
       $scope.currentFeeding.duration = new Date().getTime() - $scope.currentFeeding.startTime;
       if($scope.currentFeeding.duration > MAX_TIME_MINUTES * 60 * 1000) {
@@ -238,9 +156,8 @@ angular.module('starter', ['ionic'])
         $scope.toggleFeeding($scope.currentFeeding.supplier);
       }
       vibrations.doVibrate($scope.currentFeeding.duration);
+      counterTimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
     }
-    $scope.setTimeSinceLast();  
-    mytimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
   };
 
   $scope.toggleFeeding = function(supplier) {
@@ -264,6 +181,7 @@ angular.module('starter', ['ionic'])
     } else if(feeding.supplier === 'R') {
       $scope.rightSign = STOP_SIGN;
     }
+    $scope.onTimeout();
     $scope.lClass = "";
     $scope.rClass = "";
   }
@@ -276,21 +194,32 @@ angular.module('starter', ['ionic'])
     util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
     $scope.mostRecentFinishedFeeding = clonedFeeding;
     storage.storeAndSync(clonedFeeding);
+    $scope.fetchAndSetTimeSinceLast();
     vibrations.reset();
     $scope.setPredictedSupplier([clonedFeeding]);
     $scope.leftSign = 'L';
     $scope.rightSign= 'R';
   }
 
-  $scope.postSync = function(needReloading, ongoingFeeding) {
-    ongoingFeeding && $scope.continue(ongoingFeeding);
-    $scope.setTimeSinceLast();
-    $scope.setPredictedSupplier();
-    if (needReloading) {
-      $scope.reloadActivePage();
-      $scope.fetchAndSetTimeSinceLast();
-    }
-    $scope.loading -= 1;
+  $scope.bottleFeeding = function() {
+    $scope.bottleFeedingModel = { volume: 15 }
+    var editFeedingPopup = $ionicPopup.show({
+      title: 'New bottle feeding',
+      templateUrl: 'newBottleFeeding.html',
+      scope: $scope,
+      buttons: [
+        { text: 'Cancel' },
+        { text: 'Add', 
+          onTap: function (e) {
+            var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.bottleFeedingModel.volume, ongoing: false }
+            storage.storeAndSync(feeding);
+            $scope.todaysFeedings().unshift(feeding);
+            $scope.fetchAndSetTimeSinceLast();
+            util.populateTimeBetween($scope.todaysFeedings(), []);
+          }
+        }
+      ]
+    });
   }
 
   $scope.setPredictedSupplier = function(feedings) {
@@ -306,6 +235,113 @@ angular.module('starter', ['ionic'])
         $scope.rClass = "selected";
       }
     })
+  }
+
+
+
+  $scope.setupDocumentEvents = function(timeSinceLastUpdate) {
+    document.addEventListener('resume', function () {
+      $scope.updateTimeInMs = 1000;
+      $scope.onTimeout(); //Better not wait for the sleeping timeout (>10s) to trigger. Trigger it not to keep ticking.
+      $scope.loading += 1; //Start syncing on resume
+      app.getNewFeedings(timeSinceLastUpdate, $scope.postSync);
+    }, false);
+    document.addEventListener('pause', function () {
+      $scope.updateTimeInMs = 15000;
+    }, false);
+  }
+
+  $scope.setupDocumentEvents(new Date().getTime());
+  storage.getOngoingFeeding(function(ongoingFeeding) {
+    $scope.currentFeeding = ongoingFeeding;
+    ongoingFeeding && $scope.continue(ongoingFeeding);
+  });
+
+})
+
+.controller('ListCtrl', function($scope, $ionicPopup, $timeout, $filter, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
+  $scope.feedingDays = new Array(1);
+  $scope.timeSinceLast = "";
+  $scope.activeSlide = HISTORY_DAYS;
+  $scope.loading=0;
+  $scope.mostRecentFinishedFeeding=false;
+  $scope.showInfoOverlay = true;
+  $scope.updateTimeInMs = 30000;
+
+  var mytimeout = null;
+
+  $scope.todaysFeedings = function() {
+    return $scope.feedingDays[$scope.feedingDays.length - 1];
+  }
+
+  $scope.getFeedingDay = function(slideNr) {
+    return $scope.feedingDays[slideNr];
+  }
+
+  $scope.onTimeout = function() {
+    console.log("timeout: ListCtrl " + new Date());
+    $scope.setTimeSinceLast();  
+    mytimeout = $timeout($scope.onTimeout, $scope.updateTimeInMs);
+  }
+
+  $scope.setFeedingDay = function(slideNr, feedings) {
+    console.log("Setting @" + slideNr + " value " + feedings);
+    var index = HISTORY_DAYS - slideNr;
+    if (index > $scope.feedingDays.length) {
+      $scope.feedingDays.unshift(null);
+      $scope.setFeedingDay(slideNr, feedings);
+    } else {
+      $scope.feedingDays[slideNr] = feedings;
+    }
+  }
+
+  $scope.fetchAndSetTimeSinceLast = function() {
+    storage.getMostRecentFinishedFeeding(function(row) {
+      $scope.mostRecentFinishedFeeding = row;
+      $scope.setTimeSinceLast();
+      $scope.$apply();
+    });
+  }
+  $scope.setTimeSinceLast = function() {
+    if($scope.mostRecentFinishedFeeding) {
+      var sinceLastStart = util.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime);
+      var sinceLastEnd = util.getTimeAgo((new Date().getTime()) - $scope.mostRecentFinishedFeeding.startTime - $scope.mostRecentFinishedFeeding.duration);
+      $scope.timeSinceLast = sinceLastEnd;
+    }
+  }
+
+  $scope.$on("resync", function (event, args) {
+    $scope.reloadTodaysFeedings();
+  });
+
+  $scope.reloadTodaysFeedings = function() {
+    $scope.loading += 1; //Start loading
+    $scope.fetchAndSetTimeSinceLast();
+    storage.getDataForDay(0, function (rows) {
+      var latestRow = rows.length > 0 && rows[0];
+      $scope.setFeedingDay(HISTORY_DAYS, rows);
+      util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
+      $scope.$$childHead.setPredictedSupplier(rows);
+      $scope.loadData(HISTORY_DAYS - 1); //load yesterdays data too
+      $scope.$apply();
+      mytimeout = $timeout($scope.onTimeout,$scope.updateTimeInMs);
+      $scope.loading += 1; //Start syncing
+      app.getNewFeedings(latestRow.startTime, $scope.postSync);
+      $scope.loading -= 1; //Stop loading
+      $scope.resizeList();
+    });
+  }
+
+  $scope.postSync = function(needReloading, ongoingFeeding) {
+    ongoingFeeding && $scope.continue(ongoingFeeding);
+    $scope.setTimeSinceLast();
+    $scope.$$childHead.setPredictedSupplier();
+    if (needReloading) {
+      $scope.reloadActivePage();
+      $scope.fetchAndSetTimeSinceLast();
+    }
+    $scope.loading -= 1;
+    $scope.$apply();
   }
 
   $scope.slideHasChanged = function(index) {
@@ -362,7 +398,7 @@ angular.module('starter', ['ionic'])
         $scope.editedFeedingOrig.updatedAt= new Date().getTime();
         storage.storeAndSync($scope.editedFeedingOrig);
         $scope.reloadActivePage();
-        $scope.setPredictedSupplier();
+        $scope.$$childHead.setPredictedSupplier();
         $scope.fetchAndSetTimeSinceLast();
         $scope.editFeedingPopup.close();
       } else {
@@ -433,27 +469,6 @@ angular.module('starter', ['ionic'])
 
 
 
-  $scope.bottleFeeding = function() {
-    $scope.bottleFeedingModel = { volume: 15 }
-    var editFeedingPopup = $ionicPopup.show({
-      title: 'New bottle feeding',
-      templateUrl: 'newBottleFeeding.html',
-      scope: $scope,
-      buttons: [
-        { text: 'Cancel' },
-        { text: 'Add', 
-          onTap: function (e) {
-            var feeding = { supplier: "B", startTime: new Date().getTime(), duration: 0, volume: 10*$scope.bottleFeedingModel.volume, ongoing: false }
-            storage.storeAndSync(feeding);
-            $scope.todaysFeedings().unshift(feeding);
-            $scope.fetchAndSetTimeSinceLast();
-            util.populateTimeBetween($scope.todaysFeedings(), []);
-          }
-        }
-      ]
-    });
-  }
-
   $scope.getToday = function(day) {
     return util.getToday(day);
   }
@@ -476,5 +491,6 @@ angular.module('starter', ['ionic'])
   setTimeout($scope.init(), 1);
 
 })
+
 
 .controller('ChartsController', ChartsController);

@@ -44,7 +44,7 @@
 
     <!-- Center content -->
     <ion-side-menu-content>
-      <ion-content id="CounterApp" ng-controller="CounterCtrl">
+      <ion-content id="CounterApp" ng-controller="ListCtrl">
 
         <div class="infoOverlay hidden {{showInfoOverlay ? 'forceVisible' : ''}}" 
           ng-show="showInfoOverlay">
@@ -67,7 +67,7 @@
         </div>
 
 
-        <div class="counter">
+        <div class="counter" ng-controller="CounterCtrl">
           <button menu-toggle="left" class="button button-icon icon ion-navicon button-menu"></button>
           <div class="ongoing">
             <span class="duration" ng-show="currentFeeding">{{currentFeeding.duration | date:'m:ss'}}</span>
@@ -75,7 +75,6 @@
           </div>
 
           <div class="suppliers">
-            <!-- <div class="feedingText">Start feeding</div> -->
             <button class="button button-round {{lClass}}" id="breastL" ng-click="toggleFeeding('L')" ng-bind-html="leftSign"></button> 
             <button class="button button-round button-bottle" id="bottle"  ng-click="bottleFeeding()"><i class="ion-waterdrop"></i></button> 
             <button class="button button-round {{rClass}}" id="breastR" ng-click="toggleFeeding('R')" ng-bind-html="rightSign"></button> 

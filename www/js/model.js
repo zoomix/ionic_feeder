@@ -144,8 +144,8 @@ var storage = {
           rows.push(row);
         }
         resultCB(rows);
-      }, this.errorCB);
-    }, this.errorCB);
+      }, storage.errorCB);
+    }, storage.errorCB);
   },
 
   getOngoingFeeding: function(resultCB) {
