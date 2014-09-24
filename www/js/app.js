@@ -28,7 +28,7 @@ angular.module('starter', ['ionic'])
     vibrations.setVibrateInterval(vibrateInterval);
   }
 
-  $scope.version = "0.2.0";
+  $scope.version = "0.3.0";
 
   $scope.share = function() {
     var userId = storage.getUserId();
