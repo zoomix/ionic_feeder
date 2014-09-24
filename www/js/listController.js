@@ -1,4 +1,4 @@
-var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
+var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
   $scope.feedingDays = new Array(1);
   $scope.timeSinceLast = "";
   $scope.activeSlide = HISTORY_DAYS;

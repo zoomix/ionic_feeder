@@ -1,4 +1,4 @@
-var CounterCtrl = function($scope, $timeout, $ionicPopup, $filter, $ionicScrollDelegate, $ionicSideMenuDelegate, $ionicSlideBoxDelegate ) {
+var CounterCtrl = function($scope, $timeout, $ionicPopup) {
   $scope.currentFeeding = false;
   $scope.leftSign = "L";
   $scope.rightSign= "R";
