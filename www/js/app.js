@@ -299,6 +299,7 @@ angular.module('starter', ['ionic'])
     storage.getMostRecentFinishedFeeding(function(row) {
       $scope.mostRecentFinishedFeeding = row;
       $scope.setTimeSinceLast();
+      $scope.$apply();
     });
   }
   $scope.setTimeSinceLast = function() {
