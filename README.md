@@ -12,8 +12,6 @@ Ionic Baby Feeder
 * Rename the app =)
 
 ##BUGS:
-* changing date and time at the same time doesn't work
-* changing date screws the lists up if there's only one feeding that day.
 * Charts look awful on tablets.
 * ion-refresher stops updating of timer on samsung s3 running 4.3. =/
 * Are timezones going to be a real problem in using timestamps? Cross device? Time syncs?
@@ -111,6 +109,8 @@ Ionic Baby Feeder
 * Edit feeding time
 * Charts
 * Split up controllers. Extract list controller to save on updating everything on every second
+* changing date and time at the same time doesn't work
+* changing date screws the lists up if there's only one feeding that day.
 
 
 ##Used plugins

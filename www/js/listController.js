@@ -148,7 +148,9 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
 
   $scope.editFeeding = function(feeding) {
     $scope.editedFeedingOrig = feeding;
-    $scope.editedFeedingModel = { startTime: feeding.startTime, 
+    $scope.editedFeedingModel = { startTime: feeding.startTime,
+                                  editTime: feeding.startTime,
+                                  editDate: feeding.startTime,
                                   duration: $filter('date')(feeding.duration, 'm'),
                                   supplier: feeding.supplier,
                                   volume: (feeding.volume) ? feeding.volume/10 : 0};
@@ -187,12 +189,10 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
     var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'date', maxDate:new Date()};
     datePicker.show(options, function(time){
       if(time && !isNaN(time.getTime())) {
-        var oldTime = new Date($scope.editedFeedingModel.startTime);
-        time.setHours(oldTime.getHours());
-        time.setMinutes(oldTime.getMinutes());
-        time.setSeconds(oldTime.getSeconds());
         $scope.editedFeedingModel.timeChanged = true;
-        $scope.editedFeedingModel.startTime = time.getTime();
+        $scope.editedFeedingModel.editDate = time;
+        $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
+        $scope.$digest();
       }
     });
   }
@@ -201,12 +201,12 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
     datePicker.show(options, function(time){
       if(time && !isNaN(time.getTime())) {
         $scope.editedFeedingModel.timeChanged = true;
-        $scope.editedFeedingModel.startTime = time.getTime();
+        $scope.editedFeedingModel.editTime = time;
+        $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
+        $scope.$digest();
       }
     });
   }
-
-
 
   $scope.getToday = function(day) {
     return util.getToday(day);

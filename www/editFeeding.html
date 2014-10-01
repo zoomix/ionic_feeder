@@ -9,15 +9,15 @@
   <span class="row editDateAndTimeOuter">
     <span class="col" ng-click="editDate()">
       <div class="datepickerButton">
-        <span class="editDay">{{editedFeedingModel.startTime | date:'EEEE' }}</span><br>
-        <span class="editDate">{{editedFeedingModel.startTime | date:'dd MMM' }}</span>
+        <span class="editDay">{{editedFeedingModel.editDate | date:'EEEE' }}</span><br>
+        <span class="editDate">{{editedFeedingModel.editDate | date:'dd MMM' }}</span>
         <i class="ion-android-dropdown"></i>
       </div>
     </span>
     <span class="col" ng-click="editTime()">
       <div class="datepickerButton">
         <span class="editTime">
-          {{editedFeedingModel.startTime | date:'HH:mm' }}
+          {{editedFeedingModel.editTime | date:'HH:mm' }}
         </span>
         <i class="ion-android-dropdown"></i>
       </div>
