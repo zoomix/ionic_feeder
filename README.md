@@ -8,9 +8,6 @@ Ionic Baby Feeder
     load test/model.html in chrome browser. Preferably in a private window
 
 
-##TODO:
-* Rename the app =)
-
 ##BUGS:
 * Charts look awful on tablets.
 * ion-refresher stops updating of timer on samsung s3 running 4.3. =/
@@ -18,8 +15,9 @@ Ionic Baby Feeder
 * When an ongoing feeding is resynced it is marked as updated. Following syncs will reload the list unecessariliy. 
 * Vibrator fails on 4.4.4. =/
 
-##FUTURE:
+##TODO:
 * MOTD
+* Export to excel
 * Feedback in background without user having to send email.
 * Sanitize model.js
 * Update counter in notifications.

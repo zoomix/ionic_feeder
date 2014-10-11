@@ -85,8 +85,8 @@ var util = {
   }, 
 
   getDaysFromToday: function(otherDate) {
-    var msBetween = new Date().getTime() - otherDate;
-    return Math.floor(msBetween / 1000 / 60 / 60 / 24);
+    var msBetween = parseInt(util.getToday(0)) - otherDate;
+    return Math.ceil(msBetween / 1000 / 60 / 60 / 24);
   },
 
   getCombinedTimeInMs: function(dateInMs, timeInMs) {

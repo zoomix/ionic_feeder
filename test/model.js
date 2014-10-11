@@ -31,6 +31,22 @@ describe("model test", function () {
     it('verifies breastfeeding for provider null', function() {
       expect(util.isBreastFeeding(null)).to.not.be.ok();
     });
+
+
+    describe("getDaysFromToday", function() {
+      it('returns 0 for things that have happened today', function() {
+        var todayInMs = parseInt(util.getToday(0));
+        expect(util.getDaysFromToday(todayInMs + 100)).to.be.eql(0);
+      });
+      it('returns 1 for things that have happened yesterday', function() {
+        var todayInMs = parseInt(util.getToday(0));
+        expect(util.getDaysFromToday(todayInMs - 100)).to.be.eql(1);
+      });
+      it('returns 6 for things that have happened 6 days ago', function() {
+        var todayInMs = parseInt(util.getToday(0));
+        expect(util.getDaysFromToday(todayInMs - 6 * 24 * 60 * 60 * 1000 + 100)).to.be.eql(6);
+      });
+    });
   });
 
 
