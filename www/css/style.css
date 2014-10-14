@@ -512,3 +512,16 @@ input[type="range"]::-webkit-slider-thumb:before {
 .view {
   background-color: #242730;
 }
+
+@media (min-width: 680px) {
+  .modal {
+    top: 2%;
+    bottom: 2%;
+  }
+}
+@media (min-width: 1000px) {
+  .modal {
+    top: 10%;
+    bottom: 10%;
+  }
+}

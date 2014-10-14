@@ -40,3 +40,17 @@
 .chartDescContent .tag .leftColor   { border-color: rgba(252,193,8,1);}
 .chartDescContent .tag .rightColor  { border-color: rgba(6,224,198,1);}
 .chartDescContent .tag .bottleColor { border-color: rgba(255,255,255,1);}
+
+@media all and (min-width: 1000px) {
+  .ChartAndTitle {
+    width: 60%;
+    float: left;
+  }
+  .chartDescContent {
+    width: 39%;
+    float: left;
+  }
+  hr {
+    display: none;
+  }
+}
