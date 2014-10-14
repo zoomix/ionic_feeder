@@ -11,7 +11,7 @@ var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate
   $scope.export = function() {
     console.log("Exporting");
     storage.allData(function(rows) {
-      var csvContent = "Feeding time;Left/Bottle/Right;Feeding duration (minutes);Feeding volume (ml)";
+      var csvContent = "Feeding time;Left/Bottle/Right;Feeding duration (minutes);Feeding volume (ml)\n";
       for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
         var csvRow = $filter('date')(row.startTime, 'yyyy-MMM-dd HH:mm') + ";" + 
