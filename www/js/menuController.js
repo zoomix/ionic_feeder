@@ -14,7 +14,7 @@ var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate
       var csvContent = "Feeding time;Left/Bottle/Right;Feeding duration (minutes);Feeding volume (ml)\n";
       for (var i = 0; i < rows.length; i++) {
         var row = rows[i];
-        var csvRow = $filter('date')(row.startTime, 'yyyy-MMM-dd HH:mm') + ";" + 
+        var csvRow = $filter('date')(row.startTime, 'yyyyMMdd HH:mm') + ";" + 
                      row.supplier + ";" + 
                      $filter('date')(row.duration, 'm') + ";" + 
                      row.volume + "\n";
