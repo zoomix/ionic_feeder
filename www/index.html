@@ -26,6 +26,7 @@
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
+    <script src="js/fileout.js"></script>
     <script src="lib/chartjs/Chart.js"></script>
     <script src="js/config.js"></script>
     <script src="js/protos.js"></script>
@@ -123,6 +124,7 @@
             <ion-item ng-click="connectDevices()" class="noicon">Connect devices</ion-item>
             <ion-item ng-click="enterCharts()"    class="noicon">Statistics</ion-item>
             <ion-item ng-click="feedback()"       class="noicon">Email us feedback</ion-item>
+            <ion-item ng-click="export()"         class="noicon">Export to Excel</ion-item>
             <ion-item ng-click="exitApp()"        class="noicon">Exit</ion-item>
           </div>
         </ion-list>

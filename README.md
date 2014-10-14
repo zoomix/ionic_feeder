@@ -115,6 +115,7 @@ Ionic Baby Feeder
 
     cordova plugin add https://github.com/EddyVerbruggen/Toast-PhoneGap-Plugin.git
     cordova plugin add https://github.com/EddyVerbruggen/SocialSharing-PhoneGap-Plugin.git
+    cordova plugin add org.apache.cordova.file
 
     cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-vibration.git
     cordova plugin add https://git-wip-us.apache.org/repos/asf/cordova-plugin-dialogs.git
