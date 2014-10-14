@@ -1,4 +1,4 @@
-var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate) {
+var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate, $filter) {
 
   $scope.vibrateOn = vibrations.getVibrateInteral();
   $scope.toggleVibrate = function() {
@@ -6,6 +6,22 @@ var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate
     vibrateInterval = (vibrateInterval ? 0 : VIBRATE_INTERVAL);
     $scope.vibrateOn = vibrateInterval;
     vibrations.setVibrateInterval(vibrateInterval);
+  }
+
+  $scope.export = function() {
+    console.log("Exporting");
+    storage.allData(function(rows) {
+      var csvContent = "Feeding time;Left/Bottle/Right;Feeding duration (minutes);Feeding volume (ml)";
+      for (var i = 0; i < rows.length; i++) {
+        var row = rows[i];
+        var csvRow = $filter('date')(row.startTime, 'yyyy-MMM-dd HH:mm') + ";" + 
+                     row.supplier + ";" + 
+                     $filter('date')(row.duration, 'm') + ";" + 
+                     row.volume + "\n";
+        csvContent += csvRow;
+      };
+      exportCsv(csvContent);
+    })
   }
 
   $scope.version = "0.3.0";

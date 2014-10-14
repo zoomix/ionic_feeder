@@ -11,18 +11,11 @@ function exportCsv(csvContent) {
       lastFileUrl = fileEntry.toURL();
       console.log("Last file was written to " + lastFileUrl);
       fileEntry.createWriter(function(fileWriter) {
-        fileWriter.onwriteend = function(e) {
-          console.log('Write completed.');
-        };
-        fileWriter.onerror = function(e) {
-          console.log('Write failed: ' + e.toString());
-        };
-        console.log("Wrinting " + textToWrite);
+        fileWriter.onwriteend = function(e) { console.log('Write completed.'); };
+        fileWriter.onerror = function(e)    { console.log('Write failed: ' + e.toString()); };
         fileWriter.write(textToWrite);
-        window.plugins.socialsharing.share(null, null, lastFileUrl, null);
-
+        window.plugins.socialsharing.share("All registered data for your baby's feedings.", "Baby feeding data", lastFileUrl, null);
       }, errorHandler);
     }, errorHandler);
-
   }, errorHandler);
 }
