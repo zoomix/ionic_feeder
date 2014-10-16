@@ -9,8 +9,11 @@
       <ion-slide> 
         <div class="ChartAndTitle">
           <canvas id="myHistogram"></canvas>
-          <select ng-model="histogramTime" ng-options="time.name for time in histogramTimes" ng-change="updateHistogramTime(histogramTime)">
-          </select>
+          <div class="SelectWorkaround">
+            <select ng-model="histogramTime" ng-options="time.name for time in histogramTimes" ng-change="updateHistogramTime(histogramTime)">
+            </select>
+            <i class="ion-android-dropdown"></i>
+          </div>
 
           <h3>Feeding times by hour</h3>
           <p class="chartDescText">This chart shows the accumulated number of feedings per hour for the last {{histogramTime.key}} days. It's interesting.</p>
@@ -30,8 +33,11 @@
       <ion-slide> 
         <div class="ChartAndTitle">
           <canvas id="myPercentage"></canvas>
-          <select ng-model="percentageTime" ng-options="time.name for time in percentageTimes" ng-change="updatePercentageTime(percentageTime)">
-          </select>
+          <div class="SelectWorkaround">
+            <select ng-model="percentageTime" ng-options="time.name for time in percentageTimes" ng-change="updatePercentageTime(percentageTime)">
+            </select>
+            <i class="ion-android-dropdown"></i>
+          </div>
           <h3>Feeding trends</h3>
           <p class="chartDescText">This chart shows the number of feedings by source. You see <span class="leftColor">left breast</span>, <span class="rightColor">right breast</span> and <span class="bottleColor">bottle feedings</span> per day.</p>
         </div>

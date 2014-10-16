@@ -6,10 +6,23 @@
 
 .Charts .slider-pager {top: 0px;}
 
+.Charts .SelectWorkaround {
+  width: 100%;
+  height: 40px;
+  position: relative;
+  padding: 0;
+}
+.Charts .SelectWorkaround I {
+  right: 6px;
+}
 .Charts select {
   width: 100%;
   height: 40px;
+  line-height: 40px;
+  -webkit-appearance: listbox;
   background-color: #242730;
+  padding: 0 18px;
+  margin: auto 0px;
 }
 
 .Charts strong {
