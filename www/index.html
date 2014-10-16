@@ -37,6 +37,11 @@
     <script src="js/chartsController.js"></script>
     <script src="js/app.js"></script>
     <script src="js/chartData.js"></script>
+
+    <script type="text/javascript">
+      // Fix weird menu-overlay behavior on android 4.1. We only ever run on grade a platforms anyway. =) 
+      ionic.Platform.ready(function(){ionic.Platform.setGrade('a');})
+    </script>
   </head>
   <body ng-app="starter">
 
