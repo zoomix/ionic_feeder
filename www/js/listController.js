@@ -212,6 +212,10 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
     return util.getToday(day);
   }
 
+  $scope.getDayForSlide = function(slideIndex) {
+    return util.getToday(slideIndex - HISTORY_DAYS);
+  }
+
   $scope.hideInfoOverlay = function() {
     $scope.showInfoOverlay = false;
     $ionicSideMenuDelegate.canDragContent(true);

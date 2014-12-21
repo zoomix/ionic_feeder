@@ -93,7 +93,7 @@
             <ion-list>
               <div class="day">
                 <i ng-show="$index > 0 && feedingDays[$index-1]" class="ion-arrow-left-b"></i>
-                {{getToday($index) | date:'EEEE d MMM'}}
+                {{getDayForSlide($index) | date:'EEEE d MMM'}}
                 <i class="ion-arrow-right-b"></i>
               </div>
               <div ng-show="feedingDay && feedingDay.length" ng-repeat="feeding in feedingDay"><ng-include src="'list.html'" /></div>
