@@ -8,7 +8,11 @@ var scatter = {
   },
 
   _heightOfDay: function(date) {
-    return Math.round( 100 - (100 * (date.getTime() % util.msInDay)) / (util.msInDay)) + "%";
+    var timezoneCompensated = (date.getTime() - parseInt(util.getToday(0))) % util.msInDay;
+    if(timezoneCompensated < 0) {
+      timezoneCompensated += util.msInDay;
+    }
+    return 100 - (100 * timezoneCompensated / util.msInDay) + "%";
   },
 
   _dayPos: function(date, nofDays) {
