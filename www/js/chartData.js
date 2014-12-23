@@ -1,7 +1,11 @@
 var spread = {
 
+  nofDaysHistory: 14,
   drawn: false,
   items: new Array(),
+  getItems: function() {
+    return spread.items;
+  },
 
   _heightOfDay: function(date) {
     return Math.round( 100 - (100 * (date.getTime() % util.msInDay)) / (util.msInDay)) + "%";
@@ -13,7 +17,6 @@ var spread = {
   },
 
   _size: function(row) {
-    // debugger;
     var size = 0;
     if (row.supplier === 'B') {
       size = Math.ceil(20 * row.volume / 300);
@@ -24,16 +27,17 @@ var spread = {
   },
 
   update: function(doneCB) {
-    console.log("updating spread");
-    storage.getRowsOlderThan(util.getToday(-30), function(rows) {
+    console.log("updating spread. Looking back " + spread.nofDaysHistory + " days.");
+    storage.getRowsOlderThan(util.getToday(-spread.nofDaysHistory), function(rows) {
       var date;
+      spread.items.length = 0;
       console.log("update spread plows through " + rows.length + " start times");
       for(var i=0; i<rows.length; i++) {
         date = new Date(parseInt(rows[i].startTime));
         var item = {};
         item['size'] = spread._size(rows[i]);
         item['height'] = spread._heightOfDay(date);
-        item['day'] = spread._dayPos(date, 30);
+        item['day'] = spread._dayPos(date, spread.nofDaysHistory);
         spread.items.push(item);
       }
       doneCB();
