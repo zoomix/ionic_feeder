@@ -97,7 +97,9 @@ var util = {
     date.setMinutes(time.getMinutes());
     date.setSeconds(time.getSeconds());
     return date.getTime();
-  }
+  },
+
+  msInDay: 24*60*60*1000
 
 }
 

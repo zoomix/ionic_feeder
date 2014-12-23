@@ -6,6 +6,39 @@
 
 
     <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
+      <ion-slide>
+        <div class="ChartAndTitle">
+
+          <div class="ScatterChart">
+            <div class="Bars">
+              <div class="HorizontalBar"></div>
+            </div>
+            <div class="Bars">
+              <div class="VerticalBar"></div>
+              <div class="VerticalBar Bold">21:00</div>
+              <div class="VerticalBar">18:00</div>
+              <div class="VerticalBar Bold">15:00</div>
+              <div class="VerticalBar">12:00</div>
+              <div class="VerticalBar Bold">9:00</div>
+              <div class="VerticalBar">6:00</div>
+              <div class="VerticalBar Bold">3:00</div>
+            </div>
+            <div class="Blobb" style="width: {{item.size}}; height: {{item.size}}; top: {{item.height}}; left: {{item.day}}" ng-repeat="item in spread.items"></div>
+          </div>
+
+          <div class="SelectWorkaround">
+            <select ng-model="histogramTime" ng-options="time.name for time in histogramTimes" ng-change="updateHistogramTime(histogramTime)">
+            </select>
+            <i class="ion-android-dropdown"></i>
+          </div>
+        </div>
+
+        <hr>
+        <div class="chartDescContent">
+
+        </div>
+      </ion-slide>
+
       <ion-slide> 
         <div class="ChartAndTitle">
           <canvas id="myHistogram"></canvas>

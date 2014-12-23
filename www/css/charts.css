@@ -54,6 +54,47 @@
 .chartDescContent .tag .rightColor  { border-color: rgba(6,224,198,1);}
 .chartDescContent .tag .bottleColor { border-color: rgba(255,255,255,1);}
 
+.ScatterChart {
+  width: 100%;
+  height: 600px;
+  position: relative;
+  margin: 2em 0em;
+  overflow: visible;
+  border-top: 1px solid gray;
+}
+.Blobb {
+  position: absolute;
+  background-color: red;
+  border-radius: 50%;
+  -webkit-transform: translate(-50%, -50%); 
+}
+
+.Bars {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+.Bars .VerticalBar {
+  border-bottom: 1px dashed gray;
+  height: 12.5%;
+  font-size: 8px;
+  text-align: right;
+  padding: 0 1em 0 0;
+}
+.Bars .Bold {
+  border-bottom-style: solid !important;
+  border-right-style: solid !important;
+}
+.Bars .HorizontalBar {
+  border-right: 1px dashed gray;
+  width: 12.5%;
+  height: 100%;
+  display: inline-block;
+  -webkit-transform: translate(-50%, 0%); 
+}
+
 @media all and (min-width: 1000px) {
   .ChartAndTitle {
     width: 60%;

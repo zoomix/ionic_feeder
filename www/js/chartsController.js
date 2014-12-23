@@ -1,4 +1,7 @@
 var ChartsController = function($scope) {
+
+  $scope.spread = spread;
+
   $scope.histogramTimes = [{key: 3,  name: "3 days"},
                            {key: 7,  name: "1 week"},
                            {key: 14, name: "2 weeks"},
@@ -22,7 +25,8 @@ var ChartsController = function($scope) {
   }
 
   $scope.$on("loaded", function (event, args) {
-    if(!histogram.drawn) { histogram.draw(); }
+    if(!spread.drawn)     { spread.update(function() {}); }
+    if(!histogram.drawn)  { histogram.draw(); }
     if(!percentage.drawn) { percentage.draw(); }
   });
 
@@ -45,5 +49,6 @@ var ChartsController = function($scope) {
   $scope.percentageEndDistro = function(supplier) {
     return percentage.suppliers[supplier][percentage.suppliers[supplier].length - 1];
   }
+
 
 }
