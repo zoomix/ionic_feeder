@@ -1,4 +1,4 @@
-.Charts canvas{
+.Charts canvas, .Charts .ScatterChart {
   width: 100% !important;
   height: auto !important;
   margin-top: 40px;
@@ -54,19 +54,18 @@
 .chartDescContent .tag .rightColor  { border-color: rgba(6,224,198,1);}
 .chartDescContent .tag .bottleColor { border-color: rgba(255,255,255,1);}
 
-.ScatterChart {
-  width: 100%;
-  height: 600px;
+.Charts .ScatterChart {
+  height: 300px !important;
   position: relative;
   margin: 2em 0em;
-  overflow: visible;
+  overflow: hidden;
   border-top: 1px solid gray;
 }
 .Blobb {
   position: absolute;
-  background-color: red;
+  background-color: rgba(6,224,198,0.75);
   border-radius: 50%;
-  -webkit-transform: translate(-50%, -50%); 
+  -webkit-transform: translate(-50%, -50%);
 }
 
 .Bars {
