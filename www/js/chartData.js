@@ -21,13 +21,13 @@ var scatter = {
   },
 
   _size: function(row) {
-    var size = 0;
+    var size = 5;
     if (row.supplier === 'B') {
-      size = Math.ceil(20 * row.volume / 300);
+      size += Math.ceil(15 * row.volume / 300);
     } else {
-      size = Math.ceil(20 * row.duration / (MAX_TIME_MINUTES * 60 * 1000));
+      size += Math.ceil(15 * row.duration / (MAX_TIME_MINUTES * 60 * 1000));
     }
-    return Math.min(20, 3 + size) + "px";
+    return Math.min(20, size) + "px";
   },
 
   update: function(doneCB) {
