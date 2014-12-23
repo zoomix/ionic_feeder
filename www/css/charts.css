@@ -75,8 +75,9 @@
   position: absolute;
   top: 0px;
   left: 0px;
+  overflow: hidden;
 }
-.Bars .VerticalBar {
+.Bars .HorizontalBar {
   border-bottom: 1px dashed gray;
   height: 12.5%;
   font-size: 8px;
@@ -87,12 +88,13 @@
   border-bottom-style: solid !important;
   border-right-style: solid !important;
 }
-.Bars .HorizontalBar {
+.Bars .Hidden {
+  visibility: hidden !important;
+}
+.Bars .VerticalBar {
   border-right: 1px dashed gray;
-  width: 12.5%;
   height: 100%;
   display: inline-block;
-  -webkit-transform: translate(-50%, 0%); 
 }
 
 @media all and (min-width: 1000px) {

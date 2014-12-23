@@ -11,17 +11,18 @@
 
           <div class="ScatterChart">
             <div class="Bars">
-              <div class="HorizontalBar"></div>
+              <div class="VerticalBar {{bar}}" ng-repeat="bar in spreadTime.vbars track by $index"
+                   style="width: {{spreadVerticalBarWidth()}}" ></div>
             </div>
             <div class="Bars">
-              <div class="VerticalBar"></div>
-              <div class="VerticalBar Bold">21:00</div>
-              <div class="VerticalBar">18:00</div>
-              <div class="VerticalBar Bold">15:00</div>
-              <div class="VerticalBar">12:00</div>
-              <div class="VerticalBar Bold">9:00</div>
-              <div class="VerticalBar">6:00</div>
-              <div class="VerticalBar Bold">3:00</div>
+              <div class="HorizontalBar"></div>
+              <div class="HorizontalBar Bold">21:00</div>
+              <div class="HorizontalBar">18:00</div>
+              <div class="HorizontalBar Bold">15:00</div>
+              <div class="HorizontalBar">12:00</div>
+              <div class="HorizontalBar Bold">9:00</div>
+              <div class="HorizontalBar">6:00</div>
+              <div class="HorizontalBar Bold">3:00</div>
             </div>
             <div class="Blobb" style="width: {{item.size}}; height: {{item.size}}; top: {{item.height}}; left: {{item.day}}" ng-repeat="item in spread.items"></div>
           </div>
