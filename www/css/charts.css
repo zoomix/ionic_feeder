@@ -63,7 +63,7 @@
 }
 .Blobb {
   position: absolute;
-  background-color: rgba(6,224,198,0.75);
+  background-color: #06E0C6;
   border-radius: 50%;
   -webkit-transform: translate(-50%, -50%);
 }
