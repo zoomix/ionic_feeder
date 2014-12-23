@@ -11,8 +11,8 @@
 
           <div class="ScatterChart">
             <div class="Bars">
-              <div class="VerticalBar {{bar}}" ng-repeat="bar in spreadTime.vbars track by $index"
-                   style="width: {{spreadVerticalBarWidth()}}" ></div>
+              <div class="VerticalBar {{bar}}" ng-repeat="bar in scatterTime.vbars track by $index"
+                   style="width: {{scatterVerticalBarWidth()}}" ></div>
             </div>
             <div class="Bars">
               <div class="HorizontalBar"></div>
@@ -24,11 +24,11 @@
               <div class="HorizontalBar">6:00</div>
               <div class="HorizontalBar Bold">3:00</div>
             </div>
-            <div class="Blobb" style="width: {{item.size}}; height: {{item.size}}; top: {{item.height}}; left: {{item.day}}" ng-repeat="item in spread.items"></div>
+            <div class="Blobb" style="width: {{item.size}}; height: {{item.size}}; top: {{item.height}}; left: {{item.day}}" ng-repeat="item in scatter.items"></div>
           </div>
 
           <div class="SelectWorkaround">
-            <select ng-model="spreadTime" ng-options="time.name for time in spreadTimes" ng-change="updateSpreadTime(spreadTime)">
+            <select ng-model="scatterTime" ng-options="time.name for time in scatterTimes" ng-change="updateSpreadTime(scatterTime)">
             </select>
             <i class="ion-android-dropdown"></i>
           </div>

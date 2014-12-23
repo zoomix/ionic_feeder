@@ -1,10 +1,10 @@
-var spread = {
+var scatter = {
 
   nofDaysHistory: 14,
   drawn: false,
   items: new Array(),
   getItems: function() {
-    return spread.items;
+    return scatter.items;
   },
 
   _heightOfDay: function(date) {
@@ -27,18 +27,18 @@ var spread = {
   },
 
   update: function(doneCB) {
-    console.log("updating spread. Looking back " + spread.nofDaysHistory + " days.");
-    storage.getRowsOlderThan(util.getToday(-spread.nofDaysHistory), function(rows) {
+    console.log("updating scatter. Looking back " + scatter.nofDaysHistory + " days.");
+    storage.getRowsOlderThan(util.getToday(-scatter.nofDaysHistory), function(rows) {
       var date;
-      spread.items.length = 0;
-      console.log("update spread plows through " + rows.length + " start times");
+      scatter.items.length = 0;
+      console.log("update scatter plows through " + rows.length + " start times");
       for(var i=0; i<rows.length; i++) {
         date = new Date(parseInt(rows[i].startTime));
         var item = {};
-        item['size'] = spread._size(rows[i]);
-        item['height'] = spread._heightOfDay(date);
-        item['day'] = spread._dayPos(date, spread.nofDaysHistory);
-        spread.items.push(item);
+        item['size'] = scatter._size(rows[i]);
+        item['height'] = scatter._heightOfDay(date);
+        item['day'] = scatter._dayPos(date, scatter.nofDaysHistory);
+        scatter.items.push(item);
       }
       doneCB();
     });

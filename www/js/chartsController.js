@@ -1,18 +1,18 @@
 var ChartsController = function($scope) {
 
-  $scope.spread = spread;
-  $scope.spreadTimes = [{key: 7,  name: "1 week" , vbars: ['Hidden']},
+  $scope.scatter = scatter;
+  $scope.scatterTimes = [{key: 7,  name: "1 week" , vbars: ['Hidden']},
                         {key: 14, name: "2 weeks", vbars: ['Bold','Hidden']},
                         {key: 28, name: "4 weeks", vbars: ['','Bold','','Hidden']},
                         {key: 56, name: "8 weeks", vbars: ['','','','Bold','','','','Hidden']}]
-  $scope.spreadTime = $scope.spreadTimes[1];
-  $scope.updateSpreadTime = function(newspreadTime) {
-    $scope.spreadTime = newspreadTime;
-    spread.nofDaysHistory = $scope.spreadTime.key;
-    spread.update(function() {$scope.$apply();});
+  $scope.scatterTime = $scope.scatterTimes[1];
+  $scope.updateSpreadTime = function(newscatterTime) {
+    $scope.scatterTime = newscatterTime;
+    scatter.nofDaysHistory = $scope.scatterTime.key;
+    scatter.update(function() {$scope.$apply();});
   }
-  $scope.spreadVerticalBarWidth = function() {
-    return 100/$scope.spreadTime.vbars.length + "%";
+  $scope.scatterVerticalBarWidth = function() {
+    return 100/$scope.scatterTime.vbars.length + "%";
   }
 
 
@@ -39,7 +39,7 @@ var ChartsController = function($scope) {
   }
 
   $scope.$on("loaded", function (event, args) {
-    if(!spread.drawn)     { spread.update(function() {}); }
+    if(!scatter.drawn)     { scatter.update(function() {}); }
     if(!histogram.drawn)  { histogram.draw(); }
     if(!percentage.drawn) { percentage.draw(); }
   });
