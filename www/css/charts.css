@@ -67,6 +67,23 @@
   border-radius: 50%;
   -webkit-transform: translate(-50%, -50%);
 }
+.Blobb.Legend {
+  position: relative; 
+  display: inline-block; 
+  -webkit-transform: none;
+  position: relative;
+  margin: 0 6px;
+}
+.Blobb.LegendMin {
+  width: 5px;
+  height: 5px;
+  top: -3px;
+}
+.Blobb.LegendMax {
+  width: 20px;
+  height: 20px;
+  top: 3px;
+}
 
 .Bars {
   height: 100%;
