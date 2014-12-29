@@ -24,7 +24,7 @@ var ChartsController = function($scope) {
   $scope.updateHistogramTime = function(newHistogramTime) {
     $scope.histogramTime = newHistogramTime;
     histogram.nofDaysHistory = $scope.histogramTime.key;
-    histogram.update();
+    histogram.update(function() {$scope.$apply();});
   }
 
   $scope.percentageTimes = [{key: 7,  name: "1 week"},
@@ -35,7 +35,7 @@ var ChartsController = function($scope) {
   $scope.updatePercentageTime = function(newpercentageTime) {
     $scope.percentageTime = newpercentageTime;
     percentage.nofDaysHistory = $scope.percentageTime.key;
-    percentage.update();
+    percentage.update(function() {$scope.$apply();});
   }
 
   $scope.$on("loaded", function (event, args) {

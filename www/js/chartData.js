@@ -83,10 +83,11 @@ var histogram = {
     this.drawn = true;
   },
 
-  update: function() {
+  update: function(doneCB) {
     histogram._fillHours(function () {
       histogram.chartData.datasets[0].data = histogram.hours;
       histogram.chart.Bar(histogram.chartData, histogram.chartOptions);
+      doneCB();
     })
   },
 
@@ -179,12 +180,13 @@ var percentage = {
     this.drawn = true;
   },
 
-  update: function() {
+  update: function(doneCB) {
     percentage._fillData(function () {
       percentage.chartData.datasets[0].data = percentage.suppliers['L'];
       percentage.chartData.datasets[1].data = percentage.suppliers['R'];
       percentage.chartData.datasets[2].data = percentage.suppliers['B'];
       percentage.chart.Line(percentage.chartData, percentage.chartOptions);
+      doneCB();
     })
   },
 
