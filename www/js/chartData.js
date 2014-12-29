@@ -1,3 +1,55 @@
+var scatter = {
+
+  nofDaysHistory: 14,
+  drawn: false,
+  items: new Array(),
+  getItems: function() {
+    return scatter.items;
+  },
+
+  _heightOfDay: function(date) {
+    var timezoneCompensated = (date.getTime() - parseInt(util.getToday(0))) % util.msInDay;
+    if(timezoneCompensated < 0) {
+      timezoneCompensated += util.msInDay;
+    }
+    return 100 - (100 * timezoneCompensated / util.msInDay) + "%";
+  },
+
+  _dayPos: function(date, nofDays) {
+    var daysFromToday = util.getDaysFromToday(date);
+    return  Math.round(100 * (nofDays - daysFromToday) / nofDays )  + "%";
+  },
+
+  _size: function(row) {
+    var size = 5;
+    if (row.supplier === 'B') {
+      size += Math.ceil(15 * row.volume / 300);
+    } else {
+      size += Math.ceil(15 * row.duration / (MAX_TIME_MINUTES * 60 * 1000));
+    }
+    return Math.min(20, size) + "px";
+  },
+
+  update: function(doneCB) {
+    console.log("updating scatter. Looking back " + scatter.nofDaysHistory + " days.");
+    storage.getRowsOlderThan(util.getToday(-scatter.nofDaysHistory), function(rows) {
+      var date;
+      scatter.items.length = 0;
+      console.log("update scatter plows through " + rows.length + " start times");
+      for(var i=0; i<rows.length; i++) {
+        date = new Date(parseInt(rows[i].startTime));
+        var item = {};
+        item['size'] = scatter._size(rows[i]);
+        item['height'] = scatter._heightOfDay(date);
+        item['day'] = scatter._dayPos(date, scatter.nofDaysHistory);
+        scatter.items.push(item);
+      }
+      doneCB();
+    });
+  },
+}
+
+
 var histogram = {
   hours: new Array(24),
   drawn: false,

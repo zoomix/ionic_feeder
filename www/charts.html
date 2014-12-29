@@ -6,6 +6,47 @@
 
 
     <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
+      <ion-slide>
+        <div class="ChartAndTitle">
+
+          <div class="ScatterChart">
+            <div class="Bars">
+              <div class="VerticalBar {{bar}}" ng-repeat="bar in scatterTime.vbars track by $index"
+                   style="width: {{scatterVerticalBarWidth()}}" ></div>
+            </div>
+            <div class="Bars">
+              <div class="HorizontalBar"></div>
+              <div class="HorizontalBar Bold">21:00</div>
+              <div class="HorizontalBar">18:00</div>
+              <div class="HorizontalBar Bold">15:00</div>
+              <div class="HorizontalBar">12:00</div>
+              <div class="HorizontalBar Bold">9:00</div>
+              <div class="HorizontalBar">6:00</div>
+              <div class="HorizontalBar Bold">3:00</div>
+            </div>
+            <div class="Blobb" style="width: {{item.size}}; height: {{item.size}}; top: {{item.height}}; left: {{item.day}}" ng-repeat="item in scatter.items"></div>
+          </div>
+
+          <div class="SelectWorkaround">
+            <select ng-model="scatterTime" ng-options="time.name for time in scatterTimes" ng-change="updateSpreadTime(scatterTime)">
+            </select>
+            <i class="ion-android-dropdown"></i>
+          </div>
+
+          <h3>Times of feeding by day</h3>
+          <p class="chartDescText">Shows each feeding by day and time. Follow the horizontal lines to try and figure out what times of day your baby is feeding the most. Today is on the rightmost edge.</p>
+
+        </div>
+
+        <hr>
+        <div class="chartDescContent">
+          <div class="chartDescHead">Legend</div>
+          <div class="chartDescText">
+            Feeding sizes represented as balls. It ranges from <div class="Blobb Legend LegendMin"></div>, which is 0 minutes or 0 ml, to <div class="Blobb Legend LegendMax"></div> which is 30 minutes, 300ml or over.
+          </div>
+        </div>
+      </ion-slide>
+
       <ion-slide> 
         <div class="ChartAndTitle">
           <canvas id="myHistogram"></canvas>

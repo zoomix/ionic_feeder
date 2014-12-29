@@ -1,4 +1,4 @@
-.Charts canvas{
+.Charts canvas, .Charts .ScatterChart {
   width: 100% !important;
   height: auto !important;
   margin-top: 40px;
@@ -53,6 +53,65 @@
 .chartDescContent .tag .leftColor   { border-color: rgba(252,193,8,1);}
 .chartDescContent .tag .rightColor  { border-color: rgba(6,224,198,1);}
 .chartDescContent .tag .bottleColor { border-color: rgba(255,255,255,1);}
+
+.Charts .ScatterChart {
+  height: 300px !important;
+  position: relative;
+  margin: 2em 0em;
+  overflow: hidden;
+  border-top: 1px solid gray;
+}
+.Blobb {
+  position: absolute;
+  background-color: #06E0C6;
+  border-radius: 50%;
+  -webkit-transform: translate(-50%, -50%);
+}
+.Blobb.Legend {
+  position: relative; 
+  display: inline-block; 
+  -webkit-transform: none;
+  position: relative;
+  margin: 0 6px;
+}
+.Blobb.LegendMin {
+  width: 5px;
+  height: 5px;
+  top: -3px;
+}
+.Blobb.LegendMax {
+  width: 20px;
+  height: 20px;
+  top: 3px;
+}
+
+.Bars {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  overflow: hidden;
+}
+.Bars .HorizontalBar {
+  border-bottom: 1px dashed gray;
+  height: 12.5%;
+  font-size: 8px;
+  text-align: right;
+  padding: 0 1em 0 0;
+}
+.Bars .Bold {
+  border-bottom-style: solid !important;
+  border-right-style: solid !important;
+}
+.Bars .Hidden {
+  visibility: hidden !important;
+}
+.Bars .VerticalBar {
+  border-right: 1px dashed gray;
+  height: 100%;
+  display: inline-block;
+}
 
 @media all and (min-width: 1000px) {
   .ChartAndTitle {
