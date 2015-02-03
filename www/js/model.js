@@ -107,6 +107,10 @@ var storage = {
   db: null,
   tableName: "",
 
+  thereIsDb: function() {
+    return typeof window.openDatabase == 'function';
+  },
+
   initialize: function(initializedCB) {
     try {
       this.db = window.openDatabase("Database", "1.0", "PhoneGap Demo", 200000);

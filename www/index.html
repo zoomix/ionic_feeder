@@ -31,6 +31,20 @@
     <script src="js/config.js"></script>
     <script src="js/protos.js"></script>
     <script src="js/model.js"></script>
+    <script type="text/javascript">
+    function bail() {
+      window.location.href="../error_browser_support.html";
+    }
+    try {
+      if(storage.thereIsDb()) {
+        console.log("Found db");
+      } else {
+        bail();
+      }
+    } catch (exception) {
+      bail();
+    }
+    </script>
     <script src="js/menuController.js"></script>
     <script src="js/counterController.js"></script>
     <script src="js/listController.js"></script>
