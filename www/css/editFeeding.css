@@ -33,13 +33,15 @@
 }
 
 #pickedDate {
-  display: inline-block;
-  width: 320px;
+  display: block;
+  width: 256px;
+  margin-left: auto;
+  margin-right: auto;
 }
 .pika-single {
   background: transparent;
   border: 0;
 }
-.pika-label, .pika-button {
+.pika-label, .pika-button, .pika-select {
   background-color: transparent;
 }

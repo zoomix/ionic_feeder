@@ -161,7 +161,8 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
       templateUrl: 'editFeeding.html',
       scope: $scope,
       buttons: [
-        { text: 'Cancel' },
+        { text: 'Cancel', onTap: function(e) { $scope.datePikaday = null; }
+        },
         { text: 'Save', 
           onTap: function (e) {
             var reloadDays = $scope.editedFeedingModel.timeChanged && [$scope.editedFeedingOrig.startTime, $scope.editedFeedingModel.startTime]
@@ -171,6 +172,7 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
             $scope.editedFeedingOrig.startTime= $scope.editedFeedingModel.startTime;
             $scope.editedFeedingOrig.updatedAt= new Date().getTime();
             storage.storeAndSync($scope.editedFeedingOrig);
+            $scope.datePikaday = null;
             if(reloadDays) {
               reloadDays = [util.getDaysFromToday(reloadDays[0]), util.getDaysFromToday(reloadDays[1])];
               $scope.loadData(HISTORY_DAYS - reloadDays[0]);
@@ -187,36 +189,14 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
 
   $scope.editDate = function() {
     var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'date', maxDate:new Date()};
-    if(typeof datePicker !== "undefined") {
-      datePicker.show(options, function(time){
-        if(time && !isNaN(time.getTime())) {
-          $scope.editedFeedingModel.timeChanged = true;
-          $scope.editedFeedingModel.editDate = time;
-          $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
-          $scope.$digest();
-        }
-      });
-    } else {
-      if(!$scope.datePikaday || typeof $scope.datePikaday === "undefined") {
-        var field = document.getElementById('pickedDate');
-        $scope.datePikaday = new Pikaday({
-          onSelect: function() {
-            var time = this.getDate();
-            if(time && !isNaN(time.getTime())) {
-              $scope.editedFeedingModel.timeChanged = true;
-              $scope.editedFeedingModel.editDate = time;
-              $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
-              $scope.$digest();
-            }
-            $scope.datePikaday.hide();
-            field.innerHTML = "";
-            $scope.datePikaday = null;
-          }
-        });
-        field.appendChild($scope.datePikaday.el);
+    datePicker.show(options, function(time){
+      if(time && !isNaN(time.getTime())) {
+        $scope.editedFeedingModel.timeChanged = true;
+        $scope.editedFeedingModel.editDate = time;
+        $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
+        $scope.$digest();
       }
-      $scope.datePikaday.show();
-    }
+    });
   }
   $scope.editTime = function() {
     var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'time', maxDate:new Date()};
@@ -229,6 +209,34 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
       }
     });
   }
+  $scope.browserTime = function() {
+    if(!$scope.datePikaday || typeof $scope.datePikaday === "undefined") {
+      var field = document.getElementById('pickedDate');
+      $scope.datePikaday = new Pikaday({
+        showTime: true,
+        showSeconds: false,
+        use24hour: true,
+        minDate: new Date(2010, 0, 1),
+        maxDate: new Date(2037, 0, 1),
+        defaultDate: new Date($scope.editedFeedingModel.editDate),
+        setDefaultDate: true,
+        onSelect: $scope.updateBrowserEditTime
+      });
+      field.appendChild($scope.datePikaday.el);
+    }
+    $scope.datePikaday.show();
+  }
+  $scope.updateBrowserEditTime = function() {
+    var time = this.getDate();
+    if(time && !isNaN(time.getTime())) {
+      $scope.editedFeedingModel.timeChanged = true;
+      $scope.editedFeedingModel.editDate = time;
+      $scope.editedFeedingModel.editTime = time;
+      $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
+      $scope.$digest();
+    }
+  }
+
 
   $scope.getToday = function(day) {
     return util.getToday(day);

@@ -6,9 +6,6 @@
   },
   "dependencies": {
     "chartjs": "~0.2.0",
-    "pikaday": "1.3.0"
-  },
-  "resolutions": {
-    "pikaday": "~1.3.1"
+    "pikaday-time": "~1.3.0"
   }
 }

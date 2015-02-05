@@ -7,14 +7,14 @@
   </div>
 
   <span class="row editDateAndTimeOuter">
-    <span class="col" ng-click="editDate()">
+    <span class="col" ng-click="browserTime()">
       <div class="datepickerButton">
         <span class="editDay">{{editedFeedingModel.editDate | date:'EEEE' }}</span><br>
         <span class="editDate">{{editedFeedingModel.editDate | date:'dd MMM' }}</span>
         <i class="ion-android-dropdown"></i>
       </div>
     </span>
-    <span class="col" ng-click="editTime()">
+    <span class="col" ng-click="browserTime()">
       <div class="datepickerButton">
         <span class="editTime">
           {{editedFeedingModel.editTime | date:'HH:mm' }}
