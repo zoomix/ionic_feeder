@@ -187,14 +187,36 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
 
   $scope.editDate = function() {
     var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'date', maxDate:new Date()};
-    datePicker.show(options, function(time){
-      if(time && !isNaN(time.getTime())) {
-        $scope.editedFeedingModel.timeChanged = true;
-        $scope.editedFeedingModel.editDate = time;
-        $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
-        $scope.$digest();
+    if(typeof datePicker !== "undefined") {
+      datePicker.show(options, function(time){
+        if(time && !isNaN(time.getTime())) {
+          $scope.editedFeedingModel.timeChanged = true;
+          $scope.editedFeedingModel.editDate = time;
+          $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
+          $scope.$digest();
+        }
+      });
+    } else {
+      if(!$scope.datePikaday || typeof $scope.datePikaday === "undefined") {
+        var field = document.getElementById('pickedDate');
+        $scope.datePikaday = new Pikaday({
+          onSelect: function() {
+            var time = this.getDate();
+            if(time && !isNaN(time.getTime())) {
+              $scope.editedFeedingModel.timeChanged = true;
+              $scope.editedFeedingModel.editDate = time;
+              $scope.editedFeedingModel.startTime = util.getCombinedTimeInMs($scope.editedFeedingModel.editDate, $scope.editedFeedingModel.editTime);
+              $scope.$digest();
+            }
+            $scope.datePikaday.hide();
+            field.innerHTML = "";
+            $scope.datePikaday = null;
+          }
+        });
+        field.appendChild($scope.datePikaday.el);
       }
-    });
+      $scope.datePikaday.show();
+    }
   }
   $scope.editTime = function() {
     var options = {date: new Date($scope.editedFeedingModel.startTime), mode:'time', maxDate:new Date()};

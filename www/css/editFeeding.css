@@ -31,3 +31,15 @@
   right: 0px;
   bottom: 0px;
 }
+
+#pickedDate {
+  display: inline-block;
+  width: 320px;
+}
+.pika-single {
+  background: transparent;
+  border: 0;
+}
+.pika-label, .pika-button {
+  background-color: transparent;
+}
