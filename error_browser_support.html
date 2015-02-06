@@ -5,31 +5,47 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <title>Ionic Baby Feeder</title>
 
-    <link href="www/lib/ionic/css/ionic.css" rel="stylesheet">
-    <link href="www/css/style.css" rel="stylesheet">
-    <link href="www/css/editFeeding.css" rel="stylesheet">
-    <link href="www/css/charts.css" rel="stylesheet">
+    <link href='http://fonts.googleapis.com/css?family=Roboto+Slab:400,300|Roboto:300' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" type="text/css" href="stylesheets/default.css" />
+    <link rel='stylesheet' media='screen and (max-width: 801px)' href='stylesheets/narrow.css' />
+    <title>Ionic Baby Feeder</title>
     <!-- ionic/angularjs js -->
     <script src="www/lib/ionic/js/ionic.bundle.js"></script>
     <style type="text/css">
-    body {
-      text-align: center; 
-      padding: 6em 0;
-      margin: 0 auto;
-    }
-    p  { padding: 3em 0 0 0; }
-    h3 { margin:  2em 0 0 0; }
+    /*p  { padding: 2em 0 0 0; }*/
+    h3 { margin:  1em 0 0 0; font-size: 22px; color: #666; }
     .bigger { font-size: 200% }
+    h1.sub { width: 100%; padding-top: 11px; padding-bottom: 11px}
+    section .content p { color: #666; font-size: 16px }
     </style>
   </head>
 
   <body>
+    <div id="container">
+      <div class="inner">
+        <header>
+          <h1>😕</h1>
+          <h1 class="sub">Well <u>that</u> was disappointing</h1>
+        </header>
 
-  <h1>Well that was disappointing &#x1F623;</h1>
 
-  <p>For this app to work effectively it needs to store some data in your browser's database. Unfortunatelly - I can't seem to access your database. <span class="bigger">&#x1F631;</span></p>
+        <section>
+          <div class="content">
+            <p>For this app to work effectively it needs to store some data in your browser's database. Unfortunatelly - I can't seem to access your database.</p>
+            <span class="bigger">😱</span></p>
+            <h3>It should work on Chrome or Safari though.. Maybe try one of them, yes?</h3>
+          </div>
+        </section>
 
-  <h3>It should work on Chrome or Safari though.. Maybe try one of them, yes?</h3>
 
-  </body>
+        <footer>
+          <p>Built using <a href="http://ionicframework.com/">Ionic framework</a>.</p>
+          <p>Special thanks to <a href="http://docs.phonegap.com/en/3.4.0/index.html">Cordova / PhoneGap</a>, <a href="http://github.com">Github</a></dt> and <a href="http://heroku.com/">Heroku</a>
+          </p>
+          <p>Ionic baby feeder is maintained by <a href="https://github.com/zoomix">zoomix</a>. &copy;2015.</p>
+        </footer>
+        
+      </div>
+    </div>
 </html>
