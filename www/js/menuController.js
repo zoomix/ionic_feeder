@@ -28,8 +28,14 @@ var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate
 
   $scope.share = function() {
     var userId = storage.getUserId();
+    var message = "Copy-paste this code into the 'Connect Devices' -> 'Enter code' menu in Ionic Baby Feeder: \n" + userId;
     if (window.plugins && window.plugins.socialsharing) {
-      window.plugins.socialsharing.share("Copy-paste this code into the 'Connect Devices' -> 'Enter code' menu in Ionic Baby Feeder: \n" + userId, "Ionic Baby Feeder share code");
+      window.plugins.socialsharing.share(message, "Ionic Baby Feeder share code");
+    } else {
+      var confirmPopup = $ionicPopup.alert({
+        template: '<div class="ionicPopupShareMessage">' + message + '</div>',
+        title: 'Could not send email',
+      });
     }
   }
 
