@@ -513,6 +513,10 @@ input[type="range"]::-webkit-slider-thumb:before {
   background-color: #242730;
 }
 
+.ionicPopupShareMessage {
+  padding: 6px 10px;
+}
+
 @media (min-width: 680px) {
   .modal {
     top: 2%;
