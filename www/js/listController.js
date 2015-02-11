@@ -258,6 +258,14 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
     $scope.showInfoOverlay = !storage.isInfoOverlayShown();
     if($scope.showInfoOverlay) {
       $ionicSideMenuDelegate.canDragContent(false);
+      if(window.innerHeight < 440) {
+        if(!$scope.movedIGetItButton) {
+          $scope.movedIGetItButton = document.createElement('style');
+          document.body.appendChild($scope.movedIGetItButton);
+        }
+
+        $scope.movedIGetItButton.innerHTML = ".infoOverlay .buttonContainer { top: 41px }";
+      }
     }
   }
 
