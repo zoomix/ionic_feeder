@@ -33,8 +33,8 @@ var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate
       window.plugins.socialsharing.share(message, "Ionic Baby Feeder share code");
     } else {
       var confirmPopup = $ionicPopup.alert({
-        template: '<p>Please send this message to your other devices. You can copy-paste it into an email or use IM/facebook. Do note that it is your secret key, so don\'t post it in like twitter or anything public.</p><textarea class="ionicPopupShareMessage">' + message + '</textarea>',
-        title: 'Share your code with someone',
+        template: '<p>Please send this message to your other devices. You can copy-paste it into an email or use IM/Facebook. Do note that it is your secret key, so don\'t post it on like twitter or anything public.</p><textarea class="ionicPopupShareMessage">' + message + '</textarea>',
+        title: 'Share your code',
       });
     }
   }

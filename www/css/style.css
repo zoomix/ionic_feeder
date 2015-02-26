@@ -515,6 +515,7 @@ input[type="range"]::-webkit-slider-thumb:before {
 
 .ionicPopupShareMessage {
   padding: 6px 10px;
+  height: 88px;
 }
 
 @media (min-width: 680px) {
