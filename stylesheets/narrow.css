@@ -11,10 +11,10 @@ header {
 }
 
 header h1 { font-size: 47px }
-header h2 { font-size: 21px; margin-top: 4px; }
+header h2 { font-size: 21px; margin-top: 4px; margin-bottom: 12px }
 
-a.button {
-  margin: 33px 0 45px;
+a.button, a.button:hover {
+  margin: 12px 16px 12px;
   font-size: 18px;
 }
 

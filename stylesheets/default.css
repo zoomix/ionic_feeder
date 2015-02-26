@@ -156,7 +156,7 @@ a.button, a.button:hover {
   color: white;
   text-decoration: none;;
   padding: 8px 16px;
-  margin: 46px;
+  margin: 46px 16px 12px;
   display: inline-block;
   font-weight: 300;
 }
