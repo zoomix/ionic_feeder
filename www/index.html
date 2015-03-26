@@ -86,7 +86,7 @@
           </div>
         </div>  
 
-        <div class="loadingIndicator" ng-show="loading > 0"><img src="img/499.GIF"></div>
+        <div class="loadingIndicator" ng-show="loading > 0"><ion-spinner icon="dots"></ion-spinner></div>
 
         <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="false" active-slide="activeSlide">
           <ion-slide ng-repeat="feedingDay in feedingDays.slice(0,feedingDays.length - 1) track by $index" class="feedingSlide">
