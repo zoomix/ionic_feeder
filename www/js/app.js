@@ -5,6 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 angular.module('starter', ['ionic'])
 
+.config(function($ionicConfigProvider) {
+  //Enable native scrolling. 
+  $ionicConfigProvider.scrolling.jsScrolling(false);
+})
+
 .run(function($ionicPlatform, $ionicSlideBoxDelegate, $ionicSideMenuDelegate, $ionicNavBarDelegate) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
