@@ -11,23 +11,27 @@ storage.dumpDB = function(succesCB) {
   }, this.errorCB);
 }
 
+storage.setupFeedings = function(feeding1, feeding2, feeding3, done) {
+  storage.initialize(function() {
+    storage.dumpDB(function() {
+      storage.store(feeding1, false, function() {
+        storage.store(feeding2, false, function() {
+          storage.store(feeding3, false, done);
+        });
+      });
+    });
+  });
+}
+
 describe("charts test", function () {
 
   var feeding_L, feeding_R, feeding_B, feedings;
   before(function(done) {
-    feeding_L = {"id":"feeding_L","startTime":new Date().getTime() - 1000000, "supplier":"L","duration":8645,"volume":0,"ongoing":false,"updatedAt":null};
-    feeding_R = {"id":"feeding_R","startTime":new Date().getTime() -  999000, "supplier":"R","duration":0,"volume":0,"ongoing":false,"updatedAt":null};
-    feeding_B = {"id":"feeding_B","startTime":new Date().getTime() -   10000, "supplier":"B","duration":0,"volume":1230,"ongoing":false,"updatedAt":null};
+    feeding_L = {"id":"feeding_L","startTime":new Date().getTime() - 10000000, "supplier":"L","duration":8645,"volume":0,"ongoing":false,"updatedAt":null};
+    feeding_R = {"id":"feeding_R","startTime":new Date().getTime() -  1000000, "supplier":"R","duration":0,"volume":0,"ongoing":false,"updatedAt":null};
+    feeding_B = {"id":"feeding_B","startTime":new Date().getTime() -   100000, "supplier":"B","duration":0,"volume":1230,"ongoing":false,"updatedAt":null};
     feedings = [feeding_L, feeding_R, feeding_B];
-    storage.initialize(function() {
-      storage.dumpDB(function() {
-        storage.store(feeding_L, false, function() {
-          storage.store(feeding_R, false, function() {
-            storage.store(feeding_B, false, done);
-          });
-        });
-      });
-    });
+    storage.setupFeedings(feeding_L, feeding_R, feeding_B, done);
   });
 
 
@@ -45,11 +49,44 @@ describe("charts test", function () {
       histogram.draw(function() {
         try { 
           var arraySum = histogram.chartData.datasets[0].data.sum();
-          expect(arraySum).to.be.eql(3);
+          expect(arraySum).to.be.eql(feedings.length);
         } catch (err) { done(err) }
         done();
       });
     });
+
+    it('drawing reads all items, combining very close ones', function(done) {
+      feeding_L.startTime = new Date().getTime() - 1000000;
+      feeding_R.startTime = new Date().getTime() -  999000;
+      storage.setupFeedings(feeding_L, feeding_R, feeding_B, function() {
+        histogram.draw(function() {
+          try { 
+            var arraySum = histogram.chartData.datasets[0].data.sum();
+            expect(arraySum).to.be.eql(2);
+          } catch (err) { done(err) }
+          done();
+        });
+      });
+    });
+
+
+    it('drawing reads all items, combining very close ones. Noting the duration of feedings as well.', function(done) {
+      feeding_L.startTime = new Date().getTime() - 10000000;
+      feeding_R.startTime = feeding_L.startTime + 6 * 60 * 1000;
+      feeding_L.duration  = 60 * 1000 + 10;
+
+      storage.setupFeedings(feeding_L, feeding_R, feeding_B, function() {
+        histogram.draw(function() {
+          try { 
+            var arraySum = histogram.chartData.datasets[0].data.sum();
+            expect(arraySum).to.be.eql(2);
+          } catch (err) { done(err) }
+          done();
+        });
+      });
+    });
+
+
   });
 
   describe("percentage", function() {

@@ -57,6 +57,7 @@ var histogram = {
   peakHour: 0,
   peakTimes: 0,
   chart: null,
+  combinedTimeThreshold: 5*60*1000,
   chartOptions: { responsive: true, 
                   animation: false,
                   scaleSteps: 4,
@@ -96,13 +97,17 @@ var histogram = {
 
   _fillHours: function(doneCB) {
     storage.getRowsOlderThan(util.getToday(-this.nofDaysHistory), function(rows) {
-      var date, hour;
+      var date, hour, prevDate, prevDuration;
       console.log("_fillHours plows through " + rows.length + " start times");
       histogram.hours = Array.apply(null, new Array(24)).map(Number.prototype.valueOf,0);
       for(var i=0; i<rows.length; i++) {
         date = new Date(parseInt(rows[i].startTime));
-        hour = date.getHours();
-        histogram.hours[hour] = (histogram.hours[hour] || 0) + 1
+        if (!prevDate || date.getTime() - prevDate.getTime() - prevDuration > histogram.combinedTimeThreshold) {
+          hour = date.getHours();
+          histogram.hours[hour] = (histogram.hours[hour] || 0) + 1
+        } 
+        prevDate = date;
+        prevDuration = parseInt(rows[i].duration);
       }
       histogram._setPeaks();
       doneCB();
