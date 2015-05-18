@@ -1,0 +1,24 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="mocha.css" />
+</head>
+<body>
+  <canvas style="display: none" id="myHistogram" height="450" width="600"></canvas>
+  <canvas style="display: none" id="myPercentage" height="450" width="600"></canvas>
+  <div id="mocha"></div>
+  <script src="expect.js"></script>
+  <script src="mocha.js"></script>
+  <script>mocha.setup('bdd')</script>
+  <script src="../www/lib/chartjs/Chart.js"></script>
+  <script src="../www/js/protos.js"></script>
+  <script src="../www/js/model.js"></script>
+  <script src="../www/js/chartData.js"></script>
+  <script src="charts.js"></script>
+  <script>
+    mocha.checkLeaks();
+    mocha.run();
+  </script>
+</body>
+</html>

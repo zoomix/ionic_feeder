@@ -66,3 +66,6 @@ Date.prototype.format = function(f) {
     }
   );
 };
+Array.prototype.sum = function() {
+  return this.reduce(function(previousValue, currentValue) { return previousValue + currentValue; });
+}

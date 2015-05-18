@@ -78,9 +78,12 @@ var histogram = {
               ]
             },
 
-  draw: function() {
-    histogram._fillHours(histogram._makeGraph);
-    this.drawn = true;
+  draw: function(callback) {
+    histogram._fillHours(function() {
+      histogram._makeGraph();
+      histogram.drawn = true;
+      callback && callback();
+    });
   },
 
   update: function(doneCB) {
@@ -175,9 +178,12 @@ var percentage = {
                   scaleLabel : "<%if(value%2==0) {%><%=Math.round(value)%><%} else {%><%=''%><%}%>",
                   pointDot : false },
 
-  draw: function() {
-    this._fillData(this._makeGraph);
-    this.drawn = true;
+  draw: function(callback) {
+    this._fillData( function() {
+      percentage._makeGraph();
+      percentage.drawn = true;
+      callback && callback();
+    });
   },
 
   update: function(doneCB) {

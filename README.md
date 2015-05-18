@@ -5,7 +5,7 @@ Ionic Baby Feeder
 
 ## Tests
 
-    load test/model.html in chrome browser. Preferably in a private window
+    load test/model.html || test/charts.html in chrome browser. Preferably in a private window. Wouldn't want to mess up your database.
 
 
 ##BUGS:
