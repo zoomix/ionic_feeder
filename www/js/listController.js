@@ -72,7 +72,7 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
   }
 
   $scope.postSync = function(needReloading, ongoingFeeding) {
-    ongoingFeeding && $scope.continue(ongoingFeeding);
+    ongoingFeeding && $scope.$$childHead.continue(ongoingFeeding);
     $scope.setTimeSinceLast();
     $scope.$$childHead.setPredictedSupplier();
     if (needReloading) {
