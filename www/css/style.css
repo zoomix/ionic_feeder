@@ -514,6 +514,15 @@ input[type="range"]::-webkit-slider-thumb:before {
   left: -151px;
 }
 
+.totals {
+  height: 24px;
+}
+
+.totals .left   {  position: absolute; top 0px; left: 0;}
+.totals .bottle {  position: absolute; top 0px; width: 100%; text-align: center; }
+.totals .right  {  position: absolute; top 0px; right: 0;}
+
+
 .view {
   background-color: #242730;
 }

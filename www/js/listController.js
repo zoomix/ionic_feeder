@@ -216,6 +216,20 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
     return util.getToday(slideIndex - HISTORY_DAYS);
   }
 
+  $scope.getDailyTotal = function(feedings, supplier) {
+    var duration = 0;
+    var volume = 0;
+    if (feedings) {
+      for (var i = 0; i < feedings.length; i++) {
+        if(feedings[i].supplier === supplier) {
+          duration += parseInt(feedings[i].duration);
+          volume += parseInt(feedings[i].volume);
+        }
+      };
+    }
+    return Math.max(duration, volume);
+  }
+
   $scope.hideInfoOverlay = function() {
     $scope.showInfoOverlay = false;
     $ionicSideMenuDelegate.canDragContent(true);
