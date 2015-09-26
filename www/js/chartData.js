@@ -239,3 +239,100 @@ var percentage = {
   }
 
 }
+
+
+var quantity = {
+  nofDaysHistory: 14,
+  suppliers: {'L': new Array(this.nofDaysHistory),
+              'R': new Array(this.nofDaysHistory),
+              'B': new Array(this.nofDaysHistory)},
+  drawn: false,
+  chart: null,
+  chartData: {
+      labels: [],
+      datasets: [
+        {
+        label: "Left",
+        fillColor: "rgba(252,193,8,0.2)",
+        strokeColor: "rgba(252,193,8,1)",
+        data: []
+        },
+        {
+        label: "Right",
+        fillColor: "rgba(6,224,198,0.2)",
+        strokeColor: "rgba(6,224,198,1)",
+        data: []
+        },
+        {
+        label: "Bottle",
+        fillColor: "rgba(255,255,255,0.2)",
+        strokeColor: "rgba(255,255,255,1)",
+        data: []
+        }
+      ]},
+  chartOptions: { responsive: true,
+                  scaleSteps: 4, 
+                  scaleGridLineWidth : 1,
+                  barValueSpacing: 2,
+                  scaleFontSize: 8,
+                  showTooltips: false,
+                  animation: false,
+                  scaleLabel : "<%if(value%2==0) {%><%=Math.round(value)%><%} else {%><%=''%><%}%>",
+                  pointDot : false },
+
+  draw: function(callback) {
+    this._fillData( function() {
+      quantity._makeGraph();
+      quantity.drawn = true;
+      callback && callback();
+    });
+  },
+
+  update: function(doneCB) {
+    quantity._fillData(function () {
+      quantity.chartData.datasets[0].data = quantity.suppliers['L'];
+      quantity.chartData.datasets[1].data = quantity.suppliers['R'];
+      quantity.chartData.datasets[2].data = quantity.suppliers['B'];
+      quantity.chart.Line(quantity.chartData, quantity.chartOptions);
+      doneCB();
+    })
+  },
+
+  _fillData: function(doneCB) {
+    storage.getRowsOlderThan(util.getToday(-this.nofDaysHistory), function(rows) {
+      var supplier;
+      console.log("_fillData plows through " + rows.length + " start times");
+      quantity.suppliers = {'L': Array.apply(null, new Array(quantity.nofDaysHistory+1)).map(Number.prototype.valueOf,0),
+                            'R': Array.apply(null, new Array(quantity.nofDaysHistory+1)).map(Number.prototype.valueOf,0),
+                            'B': Array.apply(null, new Array(quantity.nofDaysHistory+1)).map(Number.prototype.valueOf,0)};
+      quantity.chartData.labels = new Array();
+      var partitionMod = quantity.nofDaysHistory / 4;
+      for(var i=0; i<quantity.nofDaysHistory; i++) {
+        if(i%partitionMod == 0) {
+          var date = new Date(parseInt(util.getToday(-quantity.nofDaysHistory + i)));
+          quantity.chartData.labels.push(date.format("dd MMM"));
+        } else {
+          quantity.chartData.labels.push('');
+        }
+      }
+      quantity.chartData.labels.push('Today');
+      var day = 0;
+      for(var i=0; i<rows.length; i++) {
+        day = quantity.nofDaysHistory - util.getDaysFromToday(parseInt(rows[i].startTime));
+        supplier = rows[i].supplier;
+        quantity.suppliers[supplier][day] = (quantity.suppliers[supplier][day] || 0) + parseInt(rows[i].duration) / 60 / 1000 + parseInt(rows[i].volume);
+      }
+      doneCB();
+    });
+  },
+
+  _makeGraph: function() {
+    var ctx = document.getElementById("myQuantity").getContext("2d");
+    quantity.chart = new Chart(ctx);
+    quantity.chartData.datasets[0].data = quantity.suppliers['L'];
+    quantity.chartData.datasets[1].data = quantity.suppliers['R'];
+    quantity.chartData.datasets[2].data = quantity.suppliers['B'];
+    quantity.chart.Line(quantity.chartData, quantity.chartOptions);
+  }
+
+}
