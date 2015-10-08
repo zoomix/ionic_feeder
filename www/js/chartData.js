@@ -247,6 +247,10 @@ var quantity = {
               'Bottle': new Array(this.nofDaysHistory)},
   drawn: false,
   chart: null,
+  valsAtPeriodBegin: {},
+  valsAtPeriodEnd: {},
+  maxBottle: 1,
+  maxBreast: 1,
   chartData: {
       labels: [],
       datasets: [
@@ -270,7 +274,7 @@ var quantity = {
                   scaleFontSize: 8,
                   showTooltips: false,
                   animation: false,
-                  scaleLabel : "<%if(value%2==0) {%><%=Math.round(value)%><%} else {%><%=''%><%}%>",
+                  scaleLabel : "<%if(value%2==0) {%><%=Math.round(value)+'%'%><%} else {%><%=''%><%}%>",
                   pointDot : false },
 
   draw: function(callback) {
@@ -292,33 +296,60 @@ var quantity = {
 
   _fillData: function(doneCB) {
     storage.getRowsOlderThan(util.getToday(-this.nofDaysHistory), function(rows) {
-      var supplier;
-      console.log("_fillData plows through " + rows.length + " start times");
+      quantity._setLabels();
       quantity.suppliers = {'Breast': Array.apply(null, new Array(quantity.nofDaysHistory+1)).map(Number.prototype.valueOf,0),
                             'Bottle': Array.apply(null, new Array(quantity.nofDaysHistory+1)).map(Number.prototype.valueOf,0)};
-      quantity.chartData.labels = new Array();
-      var partitionMod = quantity.nofDaysHistory / 4;
-      for(var i=0; i<quantity.nofDaysHistory; i++) {
-        if(i%partitionMod == 0) {
-          var date = new Date(parseInt(util.getToday(-quantity.nofDaysHistory + i)));
-          quantity.chartData.labels.push(date.format("dd MMM"));
-        } else {
-          quantity.chartData.labels.push('');
-        }
-      }
-      quantity.chartData.labels.push('Today');
+      quantity.maxBottle = 1;
+      quantity.maxBreast = 1;
+      var supplier;
       var day = 0;
       for(var i=0; i<rows.length; i++) {
         day = quantity.nofDaysHistory - util.getDaysFromToday(parseInt(rows[i].startTime));
         supplier = rows[i].supplier;
         if (supplier === 'B') {
           quantity.suppliers['Bottle'][day] = (quantity.suppliers['Bottle'][day] || 0) + parseInt(rows[i].volume);
+          quantity.maxBottle = Math.max(quantity.suppliers['Bottle'][day], quantity.maxBottle);
         } else {
           quantity.suppliers['Breast'][day] = (quantity.suppliers['Breast'][day] || 0) + parseInt(rows[i].duration) / 60 / 1000;
+          quantity.maxBreast = Math.max(quantity.suppliers['Breast'][day], quantity.maxBreast);
         }
       }
+      quantity._setBeginEndQuantities();
+      quantity._normalize();
       doneCB();
     });
+  },
+
+  _setLabels: function() {
+    quantity.chartData.labels = new Array();
+    var partitionMod = quantity.nofDaysHistory / 4;
+    for(var i=0; i<quantity.nofDaysHistory; i++) {
+      if(i%partitionMod == 0) {
+        var date = new Date(parseInt(util.getToday(-quantity.nofDaysHistory + i)));
+        quantity.chartData.labels.push(date.format("dd MMM"));
+      } else {
+        quantity.chartData.labels.push('');
+      }
+    }
+    quantity.chartData.labels.push('Today');
+  },
+
+  _setBeginEndQuantities: function() {
+    quantity.valsAtPeriodBegin['Breast'] = quantity.suppliers['Breast'][0];
+    quantity.valsAtPeriodBegin['Bottle'] = quantity.suppliers['Bottle'][0];
+    if(quantity.valsAtPeriodBegin['Breast'] > 0 || quantity.valsAtPeriodBegin['Bottle']) {
+      quantity.valsAtPeriodEnd['Breast'] = quantity.suppliers['Breast'][quantity.suppliers['Breast'].length - 1];
+      quantity.valsAtPeriodEnd['Bottle'] = quantity.suppliers['Bottle'][quantity.suppliers['Bottle'].length - 1];
+    }
+  },
+
+  _normalize: function() {
+    for (var i = 0; i < quantity.suppliers['Bottle'].length; i++) {
+      quantity.suppliers['Bottle'][i] = quantity.suppliers['Bottle'][i] / quantity.maxBottle;
+    };
+    for (var i = 0; i < quantity.suppliers['Breast'].length; i++) {
+      quantity.suppliers['Breast'][i] = quantity.suppliers['Breast'][i] / quantity.maxBreast;
+    };
   },
 
   _makeGraph: function() {

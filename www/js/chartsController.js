@@ -78,14 +78,13 @@ var ChartsController = function($scope) {
 
 
   $scope.quantityBeginDistro = function(supplier) {
-    return quantity.suppliers[supplier][0];
+    return quantity.valsAtPeriodBegin[supplier];
   }
   $scope.quantityHasDataAtBegin = function(supplier) {
-    return $scope.quantityBeginDistro('Breast') > 0 ||
-           $scope.quantityBeginDistro('Bottle');
+    return quantity.valsAtPeriodBegin['Breast'] > 0 || quantity.valsAtPeriodBegin['Bottle'] > 0;
   }
   $scope.quantityEndDistro = function(supplier) {
-    return quantity.suppliers[supplier][quantity.suppliers[supplier].length - 1];
+    return quantity.valsAtPeriodEnd[supplier];
   }
 
 
