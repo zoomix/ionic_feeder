@@ -7,3 +7,7 @@ platforms/android/ant-build
 platforms/android/src
 plugins
 www/lib
+platforms
+oldIcon
+newIcon
+newIcon_shadow
