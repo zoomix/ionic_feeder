@@ -516,14 +516,17 @@ input[type="range"]::-webkit-slider-thumb:before {
 
 .totals {
   height: 24px;
-  color: #666;
+  color: #999;
   text-align: center;
   margin-bottom: 32px;
 }
 
-.totals .left   { position: relative; display: inline; color: #666; }
-.totals .bottle { position: relative; display: inline; color: #666; }
-.totals .right  { position: relative; display: inline; color: #666; }
+.totals>div { 
+  position: relative; 
+  display: inline; 
+  color: #999;
+}
+
 .totals .supplierB .ion-waterdrop { background-color: transparent;}
 
 .totals .supplier { 
@@ -533,7 +536,7 @@ input[type="range"]::-webkit-slider-thumb:before {
     font-size: 8px;
     left: 0;
     top: -2px;
-    background-color: #666;
+    background-color: #777;
     position: relative;
     margin-right: 2px;
     margin-left: 5px;
