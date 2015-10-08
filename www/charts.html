@@ -6,6 +6,34 @@
 
 
     <ion-slide-box on-slide-changed="slideHasChanged($index)" show-pager="true" active-slide="activeSlide">
+
+
+      <ion-slide> 
+        <div class="ChartAndTitle">
+          <canvas id="myQuantity"></canvas>
+          <div class="SelectWorkaround">
+            <select ng-model="quantityTime" ng-options="time.name for time in quantityTimes" ng-change="updateQuantityTime(quantityTime)">
+            </select>
+            <i class="ion-android-dropdown"></i>
+          </div>
+          <h3>Feeding quantity</h3>
+          <p class="chartDescText">This chart shows the volume of feedings by source. You see <span class="leftColor">breast-feeding</span> in minutes and <span class="bottleColor">bottle feedings</span> in ml per day.</p>
+        </div>
+        
+        <hr>
+        <div class="chartDescContent">
+          <div class="chartDescHead">Today</div>
+          <span class="tag"><span class="leftColor">{{quantityEndDistro('L')}}</span>left</span>
+          <span class="tag"><span class="bottleColor">{{quantityEndDistro('B')}}</span>bottle</span>
+        </div>
+        <div class="chartDescContent" ng-show="quantityHasDataAtBegin()">
+          <div class="chartDescHead">{{quantityTime.name}} ago</div>
+          <span class="tag"><span class="leftColor">{{quantityBeginDistro('L')}}</span>left</span>
+          <span class="tag"><span class="bottleColor">{{quantityBeginDistro('B')}}</span>bottle</span>
+        </div>
+
+      </ion-slide>
+    
       <ion-slide>
         <div class="ChartAndTitle">
 
@@ -100,33 +128,6 @@
       </ion-slide>
 
 
-      <ion-slide> 
-        <div class="ChartAndTitle">
-          <canvas id="myQuantity"></canvas>
-          <div class="SelectWorkaround">
-            <select ng-model="quantityTime" ng-options="time.name for time in quantityTimes" ng-change="updateQuantityTime(quantityTime)">
-            </select>
-            <i class="ion-android-dropdown"></i>
-          </div>
-          <h3>Feeding quantity</h3>
-          <p class="chartDescText">This chart shows the volume of feedings by source. You see <span class="leftColor">breast-feeding</span> in minutes and <span class="bottleColor">bottle feedings</span> in ml per day.</p>
-        </div>
-        
-        <hr>
-        <div class="chartDescContent">
-          <div class="chartDescHead">Today</div>
-          <span class="tag"><span class="leftColor">{{quantityEndDistro('L')}}</span>left</span>
-          <span class="tag"><span class="bottleColor">{{quantityEndDistro('B')}}</span>bottle</span>
-          <span class="tag"><span class="rightColor">{{quantityEndDistro('R')}}</span>right</span>
-        </div>
-        <div class="chartDescContent" ng-show="quantityHasDataAtBegin()">
-          <div class="chartDescHead">{{quantityTime.name}} ago</div>
-          <span class="tag"><span class="leftColor">{{quantityBeginDistro('L')}}</span>left</span>
-          <span class="tag"><span class="bottleColor">{{quantityBeginDistro('B')}}</span>bottle</span>
-          <span class="tag"><span class="rightColor">{{quantityBeginDistro('R')}}</span>right</span>
-        </div>
-
-      </ion-slide>
     </ion-slide-box>
 
   </ion-content>
