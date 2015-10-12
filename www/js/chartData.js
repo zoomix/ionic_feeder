@@ -337,10 +337,8 @@ var quantity = {
   _setBeginEndQuantities: function() {
     quantity.valsAtPeriodBegin['Breast'] = quantity.suppliers['Breast'][0];
     quantity.valsAtPeriodBegin['Bottle'] = quantity.suppliers['Bottle'][0];
-    if(quantity.valsAtPeriodBegin['Breast'] > 0 || quantity.valsAtPeriodBegin['Bottle']) {
-      quantity.valsAtPeriodEnd['Breast'] = quantity.suppliers['Breast'][quantity.suppliers['Breast'].length - 1];
-      quantity.valsAtPeriodEnd['Bottle'] = quantity.suppliers['Bottle'][quantity.suppliers['Bottle'].length - 1];
-    }
+    quantity.valsAtPeriodEnd['Breast'] = quantity.suppliers['Breast'][quantity.suppliers['Breast'].length - 1];
+    quantity.valsAtPeriodEnd['Bottle'] = quantity.suppliers['Bottle'][quantity.suppliers['Bottle'].length - 1];
   },
 
   _normalize: function() {
