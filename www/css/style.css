@@ -195,7 +195,7 @@ h1, h2, h3, h4 { color: #fff;}
 .day {
   text-align: center;
 	margin: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 7px;
   text-transform: uppercase;
 }
 
@@ -230,7 +230,7 @@ h1, h2, h3, h4 { color: #fff;}
   line-height: 10px;
 }
 .timeSinceLast p { color: #999 ;}
-.timeSinceLast { height: 68px; text-align: center; }
+.timeSinceLast { text-align: center; }
 .timeSinceLast .verticalLine {
   margin-top: 10px;
 }
@@ -513,6 +513,35 @@ input[type="range"]::-webkit-slider-thumb:before {
   top: 130px;
   left: -151px;
 }
+
+.totals {
+  height: 24px;
+  color: #999;
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.totals>div { 
+  position: relative; 
+  display: inline; 
+  color: #999;
+}
+
+.totals .supplierB .ion-waterdrop { background-color: transparent;}
+
+.totals .supplier { 
+    height: 16px;
+    width: 16px;
+    line-height: 16px;
+    font-size: 8px;
+    left: 0;
+    top: -2px;
+    background-color: #777;
+    position: relative;
+    margin-right: 2px;
+    margin-left: 5px;
+}
+
 
 .view {
   background-color: #242730;

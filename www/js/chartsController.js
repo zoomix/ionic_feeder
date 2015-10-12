@@ -38,10 +38,22 @@ var ChartsController = function($scope) {
     percentage.update(function() {$scope.$apply();});
   }
 
+  $scope.quantityTimes = [ {key: 7,  name: "1 week"},
+                           {key: 14, name: "2 weeks"},
+                           {key: 28, name: "4 weeks"},
+                           {key: 56, name: "8 weeks"} ]
+  $scope.quantityTime = $scope.quantityTimes[1];
+  $scope.updateQuantityTime = function(newquantityTime) {
+    $scope.quantityTime = newquantityTime;
+    quantity.nofDaysHistory = $scope.quantityTime.key;
+    quantity.update(function() {$scope.$apply();});
+  }
+
   $scope.$on("loaded", function (event, args) {
-    if(!scatter.drawn)     { scatter.update(function() {}); }
+    if(!scatter.drawn)    { scatter.update(function() {}); }
     if(!histogram.drawn)  { histogram.draw(); }
     if(!percentage.drawn) { percentage.draw(); }
+    if(!quantity.drawn)   { quantity.draw(); }
   });
 
   $scope.histogramPeakTimes = function() {
@@ -62,6 +74,17 @@ var ChartsController = function($scope) {
   }
   $scope.percentageEndDistro = function(supplier) {
     return percentage.suppliers[supplier][percentage.suppliers[supplier].length - 1];
+  }
+
+
+  $scope.quantityBeginDistro = function(supplier) {
+    return quantity.valsAtPeriodBegin[supplier];
+  }
+  $scope.quantityHasDataAtBegin = function(supplier) {
+    return quantity.valsAtPeriodBegin['Breast'] > 0 || quantity.valsAtPeriodBegin['Bottle'] > 0;
+  }
+  $scope.quantityEndDistro = function(supplier) {
+    return quantity.valsAtPeriodEnd[supplier];
   }
 
 

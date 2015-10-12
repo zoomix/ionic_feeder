@@ -50,6 +50,9 @@
   font-weight: normal;
   font-size: 22px;
 }
+.chartDescContent .tag .quantity {
+  font-size: 16px !important;
+}
 .chartDescContent .tag .leftColor   { border-color: rgba(252,193,8,1);}
 .chartDescContent .tag .rightColor  { border-color: rgba(6,224,198,1);}
 .chartDescContent .tag .bottleColor { border-color: rgba(255,255,255,1);}

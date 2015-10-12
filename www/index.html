@@ -96,6 +96,12 @@
                 {{getDayForSlide($index) | date:'EEEE d MMM'}}
                 <i class="ion-arrow-right-b"></i>
               </div>
+              <div class="totals">
+                Total
+                <div class="left"  ><span class="supplier supplierL">L</span>{{getDailyTotal(feedingDay,'L')| date:'m'}}&nbsp;min</div>
+                <div class="bottle"><span class="supplier supplierB"><i class="ion-waterdrop"></i></span>{{getDailyTotal(feedingDay,'B')}}&nbsp;ml</div>
+                <div class="right" ><span class="supplier supplierR">R</span>{{getDailyTotal(feedingDay,'R')| date:'m'}}&nbsp;min</div>
+              </div>
               <div ng-show="feedingDay && feedingDay.length" ng-repeat="feeding in feedingDay"><ng-include src="'list.html'" /></div>
               <div ng-show="!feedingDay || !feedingDay.length" class="noFeedings">No feedings this day</div>
             </ion-list>
@@ -103,6 +109,12 @@
           <ion-slide class="feedingSlide"> <!-- today is a bit of a special case -->
             <ion-list ng-show="!showInfoOverlay">
               <div class="day"><i class="ion-arrow-left-b" ng-show="feedingDays[feedingDays.length-2]"></i> Today</div>
+              <div class="totals">
+                Total
+                <div class="left"  ><span class="supplier supplierL">L</span>{{getDailyTotal(feedingDays[feedingDays.length-1],'L')| date:'m'}}&nbsp;min</div>
+                <div class="bottle"><span class="supplier supplierB"><i class="ion-waterdrop"></i></span>{{getDailyTotal(feedingDays[feedingDays.length-1],'B')}}&nbsp;ml</div>
+                <div class="right" ><span class="supplier supplierR">R</span>{{getDailyTotal(feedingDays[feedingDays.length-1],'R')| date:'m'}}&nbsp;min</div>
+              </div>
               <div ng-show="mostRecentFinishedFeeding" class="times timeSinceLast" ng-show="timeSinceLast">
                 <span class="time">{{timeSinceLast}}</span>
                 <p>since last feeding</p>
