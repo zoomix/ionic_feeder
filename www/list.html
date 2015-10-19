@@ -19,7 +19,7 @@
       <div class="feeding" ng-click="editFeeding(feeding)" ng-show="feeding.supplier !== 'B'">
         <span class="supplier supplier{{feeding.supplier}}">{{feeding.supplier}}</span>
         <div class="feedingInfo">{{feeding.startTime | date:'HH:mm'}}&nbsp;-&nbsp;{{endTime(feeding) | date:'HH:mm'}}</div>
-        <div class="feedingInfo duration">{{feeding.duration | date:'m'}}&nbsp;min</div>
+        <div class="feedingInfo duration">{{feeding.duration | date:'m':'UTC'}}&nbsp;min</div>
       </div>
    </span>
   </span>

@@ -227,7 +227,7 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
         }
       };
     }
-    return Math.max(duration, volume);
+    return Math.round(Math.max(duration, volume)/1000/60);
   }
 
   $scope.hideInfoOverlay = function() {
