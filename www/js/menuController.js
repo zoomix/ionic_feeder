@@ -24,7 +24,7 @@ var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate
     })
   }
 
-  $scope.version = "1.1.1";
+  $scope.version = "1.1.2";
 
   $scope.share = function() {
     var userId = storage.getUserId();
