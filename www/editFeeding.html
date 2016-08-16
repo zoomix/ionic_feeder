@@ -29,12 +29,12 @@
   <div class="newFeedingVolume" ng-show="editedFeedingModel.supplier === 'B'">
     <div class="header">Volume</div>
     <div>{{editedFeedingModel.volume}}0 ml</div>
-    <div class="range"><input type="range" min="0" max="30" value="{{editedFeedingModel.volume}}" ng-model="editedFeedingModel.volume"></div>
+    <div class="range"><input type="range" min="0" max="59" value="{{editedFeedingModel.volume}}" ng-model="editedFeedingModel.volume"></div>
   </div>
   <div class="newFeedingDuration" ng-show="editedFeedingModel.supplier !== 'B'">
     <div class="header">Duration</div>
     <div>{{editedFeedingModel.duration}} min</div>
-    <div class="range"><input type="range" min="0" max="30" value="{{editedFeedingModel.duration}}" ng-model="editedFeedingModel.duration"></div>
+    <div class="range"><input type="range" min="0" max="59" value="{{editedFeedingModel.duration}}" ng-model="editedFeedingModel.duration"></div>
   </div>
 
   <div class="deleteButtonContainer">
