@@ -1,5 +1,5 @@
 function errorHandler(error) {
-  console.log("file errorHandler got " + error);
+  console.log("file errorHandler got " + JSON.stringify(error));
 }
 
 function exportCsv(csvContent) {

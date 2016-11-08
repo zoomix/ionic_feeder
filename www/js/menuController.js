@@ -28,6 +28,7 @@ var MenuCtrl = function($scope, $ionicModal, $ionicPopup, $ionicSideMenuDelegate
 
   $scope.share = function() {
     var userId = storage.getUserId();
+    console.log(".share() -> window.plugins: " + window.plugins);
     if (window.plugins && window.plugins.socialsharing) {
       window.plugins.socialsharing.share("Copy-paste this code into the 'Connect Devices' -> 'Enter code' menu in Ionic Baby Feeder: \n" + userId, "Ionic Baby Feeder share code");
     }
