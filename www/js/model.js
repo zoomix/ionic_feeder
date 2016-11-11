@@ -201,20 +201,6 @@ var storage = {
     }, this.errorCB);
   },
 
-  getIdsOlderThan: function(startTime, resultCB) {
-    this.db.transaction(function(tx) {
-      tx.executeSql('SELECT id FROM ' + storage.tableName + ' where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
-        var ids = [];
-        var len = results.rows.length;
-        for (var i = 0; i < len; i++) {
-          var row = results.rows.item(i);
-          ids.push(row.id);
-        }
-        resultCB(ids);
-      }, this.errorCB);
-    }, this.errorCB);
-  },
-
   getRowsOlderThan: function(startTime, resultCB) {
     this.db.transaction(function(tx) {
       tx.executeSql('SELECT * FROM ' + storage.tableName + ' where deleted <> "true" and startTime >= ?', ["" + startTime], function(tx, results) {
@@ -339,30 +325,30 @@ var storage = {
     } else {
       var needReloading = false;
       var ongoingFeeding = false;
-      storage.getIdsOlderThan(newItems[0].startTime, function(feedingIds) {
-        console.log("We've got " + feedingIds + " older than " + newItems[0].startTime);
-        var feeding = false;
+      storage.getRowsOlderThan(newItems[0].startTime, function(alreadyStoredFeedings) {
+        console.log("We've got " + alreadyStoredFeedings + " older than " + newItems[0].startTime);
         for (var i = 0; i < newItems.length; i++) {
-          feeding = newItems[i];
-          var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0
+          var feeding = newItems[i];
+          var alreadyStoredFeeding = alreadyStoredFeedings.find(function(element) {return element && element.id && element.id === feeding.id; });
+          var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0;
+          var feedingOngoingDiffers = alreadyStoredFeeding && feeding.ongoing !== alreadyStoredFeeding.ongoing;
           if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
-            if ( feedingIds.has(feeding.id) ) {
+            if ( alreadyStoredFeeding ) {
               console.log("ongoing feeding we already have: " + feeding.id);
-              storage.getFeedingById(feeding.id, function(storedFeeding) {
-                storedFeeding.updatedAt = new Date().getTime();
-                storage.store(storedFeeding, true);
-              })
+              alreadyStoredFeeding.updatedAt = new Date().getTime();
+              storage.store(alreadyStoredFeeding, true);
             } else {
               console.log("ongoing feeding: " + feeding.id);
               ongoingFeeding = feeding;
             }
-          } else if( !feedingIds.has(feeding.id) || feedingUpdated) {
+          } else if( !alreadyStoredFeeding || feedingUpdated || feedingOngoingDiffers) {
             var feedingDeleted = feeding.deleted === 'true' || feeding.deleted === true
             needReloading = needReloading || !feedingDeleted;
             storage.store(feeding);
           }
         }
-        postSyncCB(needReloading, ongoingFeeding);
+        var feedingStoppedByOtherParty = feedingOngoingDiffers && feeding;
+        postSyncCB(needReloading, ongoingFeeding, feedingStoppedByOtherParty);
       });
     }
   },

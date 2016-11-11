@@ -71,10 +71,13 @@ var ListCtrl = function($scope, $ionicPopup, $timeout, $filter, $ionicSideMenuDe
     });
   }
 
-  $scope.postSync = function(needReloading, ongoingFeeding) {
+  $scope.postSync = function(needReloading, ongoingFeeding, feedingStoppedByOtherParty) {
     ongoingFeeding && $scope.$$childHead.continue(ongoingFeeding);
     $scope.setTimeSinceLast();
     $scope.$$childHead.setPredictedSupplier();
+    if (feedingStoppedByOtherParty) {
+      $scope.$$childHead.finnish(feedingStoppedByOtherParty.supplier);
+    }
     if (needReloading) {
       $scope.reloadActivePage();
       $scope.fetchAndSetTimeSinceLast();

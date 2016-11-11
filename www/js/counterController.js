@@ -23,7 +23,7 @@ var CounterCtrl = function($scope, $timeout, $ionicPopup) {
 
   $scope.toggleFeeding = function(supplier) {
     if($scope.currentFeeding) {
-      $scope.finnish(supplier);
+      $scope.finnish(supplier, function(clonedFeeding) {storage.storeAndSync(clonedFeeding);});
     } else {
       $scope.begin(supplier);
     }
@@ -47,14 +47,14 @@ var CounterCtrl = function($scope, $timeout, $ionicPopup) {
     $scope.rClass = "";
   }
 
-  $scope.finnish = function(supplier) {
+  $scope.finnish = function(supplier, finishedCB) {
     var clonedFeeding = storage.rowFromDbItem($scope.currentFeeding);
     $scope.currentFeeding = false;
     clonedFeeding.ongoing = false;
     $scope.todaysFeedings().unshift(clonedFeeding);
     util.populateTimeBetween($scope.getFeedingDay(HISTORY_DAYS), []);
     $scope.mostRecentFinishedFeeding = clonedFeeding;
-    storage.storeAndSync(clonedFeeding);
+    finishedCB && finishedCB(clonedFeeding);
     $scope.fetchAndSetTimeSinceLast();
     vibrations.reset();
     $scope.setPredictedSupplier([clonedFeeding]);
