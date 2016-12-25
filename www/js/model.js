@@ -20,6 +20,7 @@ var DATE_FORMAT = "yyyy-MM-dd HH:mm";
 var MAX_TIME_MINUTES = 59;
 var STOP_SIGN="<i class='ion-stop'></i>";
 var VIBRATE_INTERVAL = 5 * 60 * 1000;
+var REFRESH_EXTRA = 24 * 60 * 60 * 1000;
 var HISTORY_DAYS=14;
 
 var TABLE_NAME_DEMO = "FEEDINGS_DEMO";
@@ -380,7 +381,7 @@ var storage = {
 var app = {
   getNewFeedings: function(latestFeedingStartTime, postSyncCB) {
     if(latestFeedingStartTime) {
-      var fromTime = latestFeedingStartTime - 4 * 3600 * 1000; //Allways refetch a bit
+      var fromTime = latestFeedingStartTime - REFRESH_EXTRA; //Allways refetch a bit
       app.downloadNewFeedings(fromTime, postSyncCB);
     } else {
       storage.getMostRecentFinishedFeeding(function(row) {
