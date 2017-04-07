@@ -331,7 +331,7 @@ var storage = {
         for (var i = 0; i < newItems.length; i++) {
           var feeding = newItems[i];
           var alreadyStoredFeeding = alreadyStoredFeedings.find(function(element) {return element && element.id && element.id === feeding.id; });
-          var feedingUpdated = feeding.updatedAt && parseInt(feeding.updatedAt) > 0;
+          var feedingUpdated = feeding.updatedAt && alreadyStoredFeeding && parseInt(feeding.updatedAt) > alreadyStoredFeeding.updatedAt;
           var feedingOngoingDiffers = alreadyStoredFeeding && feeding.ongoing !== alreadyStoredFeeding.ongoing;
           if( feeding.ongoing === 'true' || feeding.ongoing === true ) {
             if ( alreadyStoredFeeding ) {
